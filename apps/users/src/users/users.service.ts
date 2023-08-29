@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserInput } from './dto/create-user.input';
-import { UpdateUserInput } from './dto/update-user.input';
+import { CreateUserInput, UpdateUserInput } from './graphql/user.schema';
+import { GraphQLObjectID } from 'graphql-scalars';
 
 @Injectable()
 export class UsersService {
@@ -16,7 +16,7 @@ export class UsersService {
     return `This action returns a #${id} user`;
   }
 
-  update(id: number, updateUserInput: UpdateUserInput) {
+  update(id: typeof GraphQLObjectID, updateUserInput: UpdateUserInput) {
     return `This action updates a #${id} user`;
   }
 

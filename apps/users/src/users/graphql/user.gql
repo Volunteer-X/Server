@@ -1,3 +1,7 @@
+scalar DateTime
+scalar Email
+scalar ObjectID
+
 enum Role {
   ADMIN
   USER
@@ -12,33 +16,42 @@ type Name {
 }
 
 type User {
-  id: ID!
+  id: ObjectID!
   email: String!
   username: String!
-  role: [Role!]!
+  role: Role!
   name: Name
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 input CreateUserInput {
-  usename: String!
-  email: String!
-  name: Name
+  username: String!
+  email: Email!
+  firstName: String!
+  lastName: String!
   role: Role!
 }
 
 input UpdateUserInput {
+  id: ObjectID!
   usename: String
   email: String
-  name: Name
+  firstName: String
+  lastName: String
 }
 
 type Query {
   users: [User]!
-  user(id: Int!): User
+  getUserByID(id: ObjectID!): User
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
-  removeUser(id: Int!): User
+  removeUser(id: ObjectID!): User
+}
+
+type Subscription {
+  watchUsernameAvailability(username: String!): Boolean!
 }
