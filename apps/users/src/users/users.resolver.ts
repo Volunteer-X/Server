@@ -1,7 +1,6 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Subscription } from '@nestjs/graphql';
 import { UsersService } from './users.service';
-import { CreateUserInput } from './dto/create-user.input';
-import { UpdateUserInput } from './dto/update-user.input';
+import { CreateUserInput, UpdateUserInput } from './graphql/user.schema';
 
 @Resolver('User')
 export class UsersResolver {
@@ -31,4 +30,8 @@ export class UsersResolver {
   remove(@Args('id') id: number) {
     return this.usersService.remove(id);
   }
+
+  @Subscription()
+  
+
 }
