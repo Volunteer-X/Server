@@ -8,7 +8,7 @@ export class UsersResolver {
 
   @Mutation('createUser')
   create(@Args('createUserInput') createUserInput: CreateUserInput) {
-    return this.usersService.create(createUserInput);
+    return this.usersService.createUser(createUserInput);
   }
 
   @Query('users')
@@ -16,9 +16,14 @@ export class UsersResolver {
     return this.usersService.findAll();
   }
 
-  @Query('user')
+  @Query('getUserByIDs')
   findOne(@Args('id') id: number) {
     return this.usersService.findOne(id);
+  }
+
+  @Query('isUsernameAvailable')
+  isUsernameAvailable(@Args('username') username: string) {
+    return this.usersService.isUsernameAvailable(username);
   }
 
   @Mutation('updateUser')
@@ -30,8 +35,4 @@ export class UsersResolver {
   remove(@Args('id') id: number) {
     return this.usersService.remove(id);
   }
-
-  @Subscription()
-  
-
 }

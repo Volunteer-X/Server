@@ -11,6 +11,7 @@ import {
   ObjectIDResolver,
 } from 'graphql-scalars';
 
+import { PrismaModule } from '@app/prisma';
 import { UsersService } from './users.service';
 import { UsersResolver } from './users.resolver';
 
@@ -21,15 +22,13 @@ import { UsersResolver } from './users.resolver';
       typePaths: ['./**/*.gql'],
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
-      subscriptions: {
-        'graphql-ws': true,
-      },
       resolvers: {
         DataTime: DateTimeResolver,
         Email: EmailAddressResolver,
         ObjectID: ObjectIDResolver,
       },
     }),
+    PrismaModule.register({ logQueries: false }),
   ],
   providers: [UsersResolver, UsersService],
 })

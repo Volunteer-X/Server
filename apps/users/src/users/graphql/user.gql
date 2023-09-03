@@ -30,6 +30,7 @@ input CreateUserInput {
   email: Email!
   firstName: String!
   lastName: String!
+  middleName: String
   role: Role!
 }
 
@@ -44,6 +45,7 @@ input UpdateUserInput {
 type Query {
   users: [User]!
   getUserByID(id: ObjectID!): User
+  isUsernameAvailable(username: String!): Boolean!
 }
 
 type Mutation {
@@ -52,6 +54,6 @@ type Mutation {
   removeUser(id: ObjectID!): User
 }
 
-type Subscription {
-  watchUsernameAvailability(username: String!): Boolean!
-}
+# type Subscription {
+#   watchUsernameAvailability(username: String!): Boolean!
+# }

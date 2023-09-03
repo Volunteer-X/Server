@@ -6,6 +6,12 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "prebuild": "rimraf dist",
+    "prisma:push:users": "prisma db push --schema ./prisma/users/users.schema.prisma",
+    "prisma:push": "npm prisma:push:users",
+    "prisma:gen:users": "prisma generate --schema ./prisma/users/users.schema.prisma",
+    "prisma:gen": "npm prisma:gen:users",
+    "postinstall": "npm prisma:gen",
     "generate-typings:users": "ts-node ./generate-typings.ts",
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
@@ -35,6 +41,7 @@
     "@prisma/client": "^5.2.0",
     "graphql": "^16.8.0",
     "graphql-scalars": "^1.22.2",
+    "prisma-query-log": "^3.2.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1"
   },
@@ -80,7 +87,11 @@
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",
     "roots": [
-      "<rootDir>/apps/"
-    ]
+      "<rootDir>/apps/",
+      "<rootDir>/libs/"
+    ],
+    "moduleNameMapper": {
+      "^@app/prisma(|/.*)$": "<rootDir>/libs/prisma/src/$1"
+    }
   }
 }
