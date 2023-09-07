@@ -16,6 +16,7 @@ model User {
   username  String    @unique
   name      Name
   role      Role      @default(USER)
+  picture   String?
   createdAt DateTime  @default(now())
   updatedAt DateTime?
 }

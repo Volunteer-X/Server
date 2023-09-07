@@ -21,6 +21,7 @@ type User {
   username: String!
   role: Role!
   name: Name
+  picture: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -32,6 +33,7 @@ input CreateUserInput {
   lastName: String!
   middleName: String
   role: Role!
+  picture: String
 }
 
 input UpdateUserInput {
@@ -40,6 +42,7 @@ input UpdateUserInput {
   email: String
   firstName: String
   lastName: String
+  middleName: String
 }
 
 type Query {
