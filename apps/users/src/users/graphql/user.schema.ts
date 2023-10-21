@@ -19,21 +19,23 @@ export enum Role {
 
 export interface CreateUserInput {
     username: string;
-    email: Email;
+    email: EmailAddress;
     firstName: string;
     lastName: string;
     middleName?: Nullable<string>;
     role: Role;
     picture?: Nullable<string>;
+    picks: Nullable<string>[];
 }
 
 export interface UpdateUserInput {
     id: ObjectID;
     usename?: Nullable<string>;
-    email?: Nullable<string>;
+    email?: Nullable<EmailAddress>;
     firstName?: Nullable<string>;
     lastName?: Nullable<string>;
     middleName?: Nullable<string>;
+    picks?: Nullable<Nullable<string>[]>;
 }
 
 export interface Name {
@@ -44,18 +46,21 @@ export interface Name {
 
 export interface User {
     id: ObjectID;
-    email: string;
+    email: EmailAddress;
     username: string;
     role: Role;
     name?: Nullable<Name>;
     picture?: Nullable<string>;
     createdAt?: Nullable<DateTime>;
     updatedAt?: Nullable<DateTime>;
+    picks?: Nullable<Nullable<string>[]>;
+    isRegistered: boolean;
 }
 
 export interface IQuery {
     users(): Nullable<User>[] | Promise<Nullable<User>[]>;
     getUserByID(id: ObjectID): Nullable<User> | Promise<Nullable<User>>;
+    getUserByEmail(email: EmailAddress): Nullable<User> | Promise<Nullable<User>>;
     isUsernameAvailable(username: string): boolean | Promise<boolean>;
 }
 
@@ -66,6 +71,6 @@ export interface IMutation {
 }
 
 export type DateTime = typeof GraphQLDateTime;
-export type Email = typeof GraphQLEmailAddress;
+export type EmailAddress = typeof GraphQLEmailAddress;
 export type ObjectID = typeof GraphQLObjectID;
 type Nullable<T> = T | null;

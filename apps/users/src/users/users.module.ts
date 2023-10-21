@@ -24,7 +24,7 @@ import { UsersResolver } from './users.resolver';
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       resolvers: {
         DataTime: DateTimeResolver,
-        Email: EmailAddressResolver,
+        EmailAddress: EmailAddressResolver,
         ObjectID: ObjectIDResolver,
       },
     }),

@@ -1,6 +1,10 @@
 import { Resolver, Query, Mutation, Args, Subscription } from '@nestjs/graphql';
 import { UsersService } from './users.service';
-import { CreateUserInput, UpdateUserInput } from './graphql/user.schema';
+import {
+  CreateUserInput,
+  EmailAddress,
+  UpdateUserInput,
+} from './graphql/user.schema';
 
 @Resolver('User')
 export class UsersResolver {
@@ -19,6 +23,11 @@ export class UsersResolver {
   @Query('getUserByIDs')
   findOne(@Args('id') id: number) {
     return this.usersService.findOne(id);
+  }
+
+  @Query('getUserByEmail')
+  getUserByEmail(@Args('email') email: EmailAddress) {
+    return this.usersService.getUserByEmail(email);
   }
 
   @Query('isUsernameAvailable')

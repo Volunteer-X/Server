@@ -1,5 +1,5 @@
 scalar DateTime
-scalar Email
+scalar EmailAddress
 scalar ObjectID
 
 enum Role {
@@ -17,37 +17,42 @@ type Name {
 
 type User {
   id: ObjectID!
-  email: String!
+  email: EmailAddress!
   username: String!
   role: Role!
   name: Name
   picture: String
   createdAt: DateTime
   updatedAt: DateTime
+  picks: [String]
+  isRegistered: Boolean!
 }
 
 input CreateUserInput {
   username: String!
-  email: Email!
+  email: EmailAddress!
   firstName: String!
   lastName: String!
   middleName: String
   role: Role!
   picture: String
+  picks: [String]!
 }
 
 input UpdateUserInput {
   id: ObjectID!
   usename: String
-  email: String
+  email: EmailAddress
   firstName: String
   lastName: String
   middleName: String
+  picks: [String]
 }
 
 type Query {
   users: [User]!
   getUserByID(id: ObjectID!): User
+  getUserByEmail(email: EmailAddress!): User
   isUsernameAvailable(username: String!): Boolean!
 }
 

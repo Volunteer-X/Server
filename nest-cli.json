@@ -45,6 +45,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
+    },
+    "ping": {
+      "type": "application",
+      "root": "apps/ping",
+      "entryFile": "main",
+      "sourceRoot": "apps/ping/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/ping/tsconfig.app.json"
+      }
     }
   }
 }

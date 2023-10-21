@@ -1,5 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserInput, UpdateUserInput } from './graphql/user.schema';
+import {
+  CreateUserInput,
+  EmailAddress,
+  UpdateUserInput,
+} from './graphql/user.schema';
 import { GraphQLObjectID } from 'graphql-scalars';
 import { InjectRepository, PrismaService } from '@app/prisma';
 
@@ -10,11 +14,20 @@ export class UsersService {
     private readonly userRepo: PrismaService['user'],
   ) {}
 
+  /* 
+  ? Get user details by email
+  */
+  async getUserByEmail(email: EmailAddress) {
+    return await this.userRepo.findUnique({
+      where: { email: email.toString() },
+    });
+  }
+
   /*
    ? Create new user
    */
   async createUser(createUserInput: CreateUserInput) {
-    return this.userRepo.create({
+    return await this.userRepo.create({
       data: {
         email: createUserInput.email.toString(),
         username: createUserInput.username,
@@ -24,6 +37,7 @@ export class UsersService {
           lastName: createUserInput.lastName,
         },
         picture: createUserInput.picture,
+        picks: createUserInput.picks,
       },
     });
   }
@@ -42,12 +56,6 @@ export class UsersService {
         username: username,
       },
     });
-
-    console.log(
-      '🚀 ~ file: users.service.ts:36 ~ UsersService ~ isUsernameAvailable ~ username && count:',
-      username,
-      count,
-    );
 
     return count > 0 ? false : true;
   }

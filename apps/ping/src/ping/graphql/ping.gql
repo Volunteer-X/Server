@@ -1,0 +1,36 @@
+scalar ObjectID
+scalar Longitude
+scalar Latitude
+scalar URL
+scalar DateTime
+
+type Ping {
+  id: ObjectID!
+  title: String!
+  description: String
+  mediaIDs: [String]
+  userID: ObjectID!
+  longitude: Longitude!
+  latitude: Latitude!
+  url: URL
+  createdAt: DateTime
+  picks: [String!]!
+}
+
+input CreatePingInput {
+  title: String!
+  description: String
+  mediaIDs: [String]
+  userID: ObjectID!
+  longitude: Longitude!
+  latitude: Latitude!
+  url: URL
+  picks: [String!]!
+}
+
+# type Query {
+# }
+
+type Mutation {
+  createPing(createPingInput: CreatePingInput!): Ping!
+}

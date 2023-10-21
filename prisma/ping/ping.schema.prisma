@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+    output   = "../../node_modules/@prisma/db-ping"
+}
+
+datasource db {
+    provider = "mongodb"
+    url      = env("PING_DB_URL")
+}
+
+model Ping {
+    id          String   @id @default(auto()) @map("_id") @db.ObjectId
+    title       String
+    description String?
+    createdAt   DateTime @default(now())
+    url         String?
+    picks       String[]
+    userId      String   @map("user") @db.ObjectId
+    latLong     GeoJson
+    // longitude   Float
+    // latitdue    Float
+    radius      Int
+}
+
+enum GeoTypes {
+    Point
+    LineString
+    Polygon
+    MultiPoint
+    MultiLineString
+    MultiPolygon
+}
+
+type GeoJson {
+    type        GeoTypes
+    coordiantes Float[]
+}

@@ -10,7 +10,7 @@ definitionFactory.generate({
   defaultScalarType: 'unknown',
   customScalarTypeMapping: {
     DateTime: 'typeof GraphQLDateTime',
-    Email: 'typeof GraphQLEmailAddress',
+    EmailAddress: 'typeof GraphQLEmailAddress',
     ObjectID: 'typeof GraphQLObjectID',
   },
   additionalHeader:
