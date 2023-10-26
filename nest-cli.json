@@ -54,6 +54,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/ping/tsconfig.app.json"
       }
+    },
+    "deletion-service": {
+      "type": "application",
+      "root": "apps/deletion-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/deletion-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/deletion-service/tsconfig.app.json"
+      }
     }
   }
 }
