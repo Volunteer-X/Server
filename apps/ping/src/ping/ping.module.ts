@@ -12,6 +12,8 @@ import {
   ObjectIDResolver,
   URLResolver,
 } from 'graphql-scalars';
+import { PingService } from './ping.service';
+import { PingResolver } from './ping.resolver';
 
 @Module({
   imports: [
@@ -29,6 +31,6 @@ import {
       },
     }),
   ],
-  providers: [],
+  providers: [PingService, PingResolver],
 })
 export class PingModule {}

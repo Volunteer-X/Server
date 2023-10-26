@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePingInput } from './graphql/ping.schema';
-import { InjectRepository } from '@app/prisma';
+import { PingPrismaService } from '../db/prisma.service';
 
 @Injectable()
 export class PingService {
-  constructor(
-    @InjectRepository('ping')
-  ) {}
+  constructor(private readonly pingRepo: PingPrismaService['ping']) {}
 
   /* 
   ? Create new Ping
   */
-  async createPing(input: CreatePingInput) {}
+  async createPing(input: CreatePingInput) {
+    // this.pingRepo.findUnique({});
+  }
 }
