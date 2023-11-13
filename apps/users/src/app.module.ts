@@ -10,6 +10,7 @@ import { portConfig } from '@app/common';
       isGlobal: true,
       load: [portConfig],
       expandVariables: true,
+      envFilePath: ['./apps/users/.env'],
     }),
   ],
 })

@@ -1,4 +1,3 @@
-import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/dist/esm/plugin/landingPage/default';
 import {
   ApolloFederationDriver,
   ApolloFederationDriverConfig,
@@ -12,8 +11,11 @@ import {
   ObjectIDResolver,
   URLResolver,
 } from 'graphql-scalars';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+
 import { PingService } from './ping.service';
 import { PingResolver } from './ping.resolver';
+import { PingRepository } from '../db/prisma.service';
 
 @Module({
   imports: [
@@ -31,6 +33,6 @@ import { PingResolver } from './ping.resolver';
       },
     }),
   ],
-  providers: [PingService, PingResolver],
+  providers: [PingService, PingResolver, PingRepository],
 })
 export class PingModule {}

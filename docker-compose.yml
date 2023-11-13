@@ -1,0 +1,50 @@
+version: '3.4'
+
+services:
+  gateway:
+    image: gateway
+    build:
+      context: .
+      dockerfile: ./apps/gateway/Dockerfile
+      target: development
+    command: npm run start:dev
+    depends_on:
+      - users
+      - ping
+    env_file:
+      - ./apps/gateway/.env
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3500:3500'
+
+  users:
+    image: users
+    build:
+      context: .
+      dockerfile: ./apps/users/Dockerfile
+      target: development
+    command: npm run start:dev users
+    env_file:
+      - ./apps/users/.env
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3510:3510'
+
+  ping:
+    image: ping
+    build:
+      context: .
+      dockerfile: ./apps/ping/Dockerfile
+      target: development
+    command: npm run start:dev ping
+    env_file:
+      - ./apps/ping/.env
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3520:3520'

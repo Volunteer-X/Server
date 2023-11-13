@@ -17,13 +17,23 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
       },
       gateway: {
         supergraphSdl: new IntrospectAndCompose({
-          subgraphs: [{ name: 'users', url: 'http://localhost:3510/graphql' }],
+          subgraphs: [
+            {
+              name: 'users',
+              url: 'http://localhost:3510/graphql',
+            },
+            {
+              name: 'ping',
+              url: 'http://localhost:3520/graphql',
+            },
+          ],
         }),
       },
     }),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [portConfig],
+      envFilePath: './apps/gateway/.env',
       expandVariables: true,
     }),
   ],

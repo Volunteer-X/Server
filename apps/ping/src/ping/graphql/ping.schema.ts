@@ -25,7 +25,6 @@ export interface Ping {
     id: ObjectID;
     title: string;
     description?: Nullable<string>;
-    mediaIDs?: Nullable<Nullable<string>[]>;
     userID: ObjectID;
     longitude: Longitude;
     latitude: Latitude;

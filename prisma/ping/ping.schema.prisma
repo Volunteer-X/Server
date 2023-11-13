@@ -18,11 +18,9 @@ model Ping {
   createdAt   DateTime @default(now())
   url         String?
   picks       String[]
-  userId      String   @map("user") @db.ObjectId
-  latLong     GeoJson
-  // longitude   Float
-  // latitdue    Float
-  radius      Int
+  userID      String   @map("user") @db.ObjectId
+  geometry    GeoJson
+  radius      Int      @default(200)
 }
 
 enum GeoTypes {
@@ -36,5 +34,5 @@ enum GeoTypes {
 
 type GeoJson {
   type        GeoTypes
-  coordiantes Float[]
+  coordinates Float[]
 }

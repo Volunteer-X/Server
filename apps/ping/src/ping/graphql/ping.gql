@@ -8,7 +8,6 @@ type Ping {
   id: ObjectID!
   title: String!
   description: String
-  mediaIDs: [String]
   userID: ObjectID!
   longitude: Longitude!
   latitude: Latitude!
