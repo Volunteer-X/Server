@@ -48,3 +48,35 @@ services:
       - /usr/src/app/node_modules
     ports:
       - '3520:3520'
+    depends_on:
+      - users
+
+  activity:
+    image: activity
+    build:
+      context: .
+      dockerfile: ./apps/activity/Dockerfile
+      target: development
+    command: npm run start:dev activity
+    env_file:
+      - ./apps/activity/.env
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3530:3530'
+    depends_on:
+      - ping
+      - users
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq/
+    env_file:
+      - ./.env
