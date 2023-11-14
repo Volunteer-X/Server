@@ -8,6 +8,8 @@ RUN npm install
 
 COPY . .
 
+RUN npm run prisma:gen:users
+
 RUN npm run build
 
 FROM node:18-alpine AS production
@@ -25,6 +27,3 @@ RUN npm install --only=production --omit=dev
 COPY --from=development /usr/src/app/dist ./dist
 
 CMD [ "node", "dist/apps/users/main"]
-
-
-

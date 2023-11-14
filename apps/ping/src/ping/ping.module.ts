@@ -15,7 +15,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 
 import { PingService } from './ping.service';
 import { PingResolver } from './ping.resolver';
-import { PingRepository } from '../db/prisma.service';
+import { PingRepository } from '../prisma/prisma.service';
 
 @Module({
   imports: [

@@ -8,6 +8,8 @@ RUN npm install
 
 COPY . .
 
+RUN npm run prisma:gen:ping
+
 RUN npm run build
 
 FROM node:18-alpine AS production

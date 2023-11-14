@@ -18,6 +18,8 @@ services:
       - /usr/src/app/node_modules
     ports:
       - '3500:3500'
+    expose:
+      - 3500
 
   users:
     image: users
@@ -33,6 +35,8 @@ services:
       - /usr/src/app/node_modules
     ports:
       - '3510:3510'
+    expose:
+      - '3510'
 
   ping:
     image: ping
@@ -48,8 +52,11 @@ services:
       - /usr/src/app/node_modules
     ports:
       - '3520:3520'
+    expose:
+      - 3520
     depends_on:
-      - users
+      # - users
+      - rabbitmq
 
   activity:
     image: activity
@@ -65,9 +72,12 @@ services:
       - /usr/src/app/node_modules
     ports:
       - '3530:3530'
+    expose:
+      - 3530
     depends_on:
       - ping
       - users
+      - rabbitmq
 
   rabbitmq:
     image: rabbitmq:3-management-alpine

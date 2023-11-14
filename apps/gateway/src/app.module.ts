@@ -20,11 +20,11 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
           subgraphs: [
             {
               name: 'users',
-              url: 'http://localhost:3510/graphql',
+              url: 'http://users:3510/graphql',
             },
             {
               name: 'ping',
-              url: 'http://localhost:3520/graphql',
+              url: 'http://ping:3520/graphql',
             },
           ],
         }),

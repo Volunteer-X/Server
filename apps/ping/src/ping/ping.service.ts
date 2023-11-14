@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePingInput, Ping } from './graphql/ping.schema';
-import { PingRepository } from '../db/prisma.service';
+import { PingRepository } from '../prisma/prisma.service';
 
 @Injectable()
 export class PingService {
