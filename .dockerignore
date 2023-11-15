@@ -22,6 +22,7 @@
 **/secrets.dev.yaml
 **/values.dev.yaml
 **/dist
+dist
 **/.eslintrc.js
 **/.prettierrc
 LICENSE

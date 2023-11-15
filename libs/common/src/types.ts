@@ -4,6 +4,7 @@ export type IPing = {
   description?: string;
   picks: string[];
   userID: string;
+  url?: string;
   geometry: {
     type: string;
     coordinates: number[]; // [latitude, longitude]

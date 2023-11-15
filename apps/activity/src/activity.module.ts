@@ -4,6 +4,7 @@ import { RMQModule } from '@app/common';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { ActivityController } from './activity.controller';
+import { ActivityRepository } from './db/prisma.service';
 
 @Module({
   imports: [
@@ -19,6 +20,6 @@ import { ActivityController } from './activity.controller';
     }),
   ],
   controllers: [ActivityController],
-  providers: [ActivityService],
+  providers: [ActivityService, ActivityRepository],
 })
 export class ActivityModule {}

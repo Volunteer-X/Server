@@ -11,6 +11,7 @@
     "prisma:push": "npm prisma:push:users",
     "prisma:gen:users": "prisma generate --schema ./apps/users/prisma/users.schema.prisma",
     "prisma:gen:ping": "prisma generate --schema ./apps/ping/src/prisma/ping.schema.prisma",
+    "prisma:gen:activity": "prisma generate --schema ./apps/activity/prisma/activity.schema.prisma",
     "prisma:gen": "npm run prisma:gen:users && npm run prisma:gen:ping",
     "generate-typings:user": "ts-node ./libs/generate-typings/user.ts",
     "generate-typings:ping": "ts-node ./libs/generate-typings/ping.ts",

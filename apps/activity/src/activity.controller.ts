@@ -11,8 +11,8 @@ export class ActivityController {
   ) {}
 
   @EventPattern('pingCreated')
-  async handlePingCreated(@Payload() data: IPing, @Ctx() context: RmqContext) {
-    this.activityService.createActivity(data);
+  async handlePingCreated(@Payload() data: string, @Ctx() context: RmqContext) {
+    this.activityService.createActivity(JSON.parse(data) as IPing);
     this.rmqService.ack(context);
   }
 }

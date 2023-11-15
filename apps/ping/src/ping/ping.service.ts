@@ -43,9 +43,10 @@ export class PingService {
     ]);
 
     await lastValueFrom(
-      this.activityClient.emit<string, IPing>('pingCreated', {
-        ...result[0],
-      }),
+      this.activityClient.emit<string, string>(
+        'pingCreated',
+        JSON.stringify(result[0]),
+      ),
     );
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../../node_modules/@prisma/db-activity"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("ACTIVITY_DB_URL")
+}
+
+model Activity {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime
+  updatedAt   DateTime @updatedAt
+  name        String
+  description String?
+  url         String?
+  picks       String[]
+  userID      String   @map("user") @db.ObjectId
+  pingID      String   @map("ping") @db.ObjectId
+  geometry    GeoJson
+  radius      Int      @default(200)
+}
+
+enum GeoTypes {
+  Point
+  LineString
+  Polygon
+  MultiPoint
+  MultiLineString
+  MultiPolygon
+  GeometryCollection
+}
+
+type GeoJson {
+  type        GeoTypes
+  coordinates Float[]
+}
