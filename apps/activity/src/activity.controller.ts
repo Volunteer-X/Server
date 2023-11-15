@@ -12,7 +12,10 @@ export class ActivityController {
 
   @EventPattern('pingCreated')
   async handlePingCreated(@Payload() data: string, @Ctx() context: RmqContext) {
-    this.activityService.createActivity(JSON.parse(data) as IPing);
+    const activityID = this.activityService.createActivity(
+      JSON.parse(data) as IPing,
+    );
     this.rmqService.ack(context);
+    return activityID;
   }
 }

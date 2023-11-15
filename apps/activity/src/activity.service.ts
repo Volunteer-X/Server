@@ -23,5 +23,7 @@ export class ActivityService {
         },
       },
     });
+
+    return activity.id;
   }
 }
