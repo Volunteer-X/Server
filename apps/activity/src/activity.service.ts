@@ -4,8 +4,9 @@ import { ActivityRepository } from './db/prisma.service';
 
 @Injectable()
 export class ActivityService {
+  constructor(private readonly repository: ActivityRepository) {}
+
   private readonly logger = new Logger(ActivityService.name);
-  private readonly repository: ActivityRepository;
 
   async createActivity(ping: IPing) {
     this.logger.log('createActivity', ping);

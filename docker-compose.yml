@@ -16,7 +16,7 @@ services:
     env_file:
       - ./apps/gateway/.env
     volumes:
-      - ./:/usr/src/volunteerx
+      - .:/usr/src/volunteerx
       - /usr/src/volunteerx/node_modules
     ports:
       - '3500:3500'
@@ -33,7 +33,7 @@ services:
     env_file:
       - ./apps/users/.env
     volumes:
-      - ./:/usr/src/volunteerx
+      - .:/usr/src/volunteerx
       - /usr/src/volunteerx/node_modules
     ports:
       - '3510:3510'
@@ -50,7 +50,7 @@ services:
     env_file:
       - ./apps/ping/.env
     volumes:
-      - ./:/usr/src/volunteerx
+      - .:/usr/src/volunteerx
       - /usr/src/volunteerx/node_modules
     ports:
       - '3520:3520'

@@ -17,6 +17,6 @@ async function bootstrap() {
   // TCP - GraphQL
   const port = app.get(ConfigService).get('ACTIVITY_PORT');
   await app.listen(port);
-  console.log('🚀 Activity server running on port:: ', port);
+  console.log('🚀 Activity server running on port !!!:: ', port);
 }
 bootstrap();
