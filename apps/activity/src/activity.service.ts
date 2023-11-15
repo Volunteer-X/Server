@@ -1,8 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { IPing } from '@app/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 export class ActivityService {
-  getHello(): string {
-    return 'Hello World!';
+  private readonly logger = new Logger(ActivityService.name);
+
+  async createActivity(ping: IPing) {
+    this.logger.log('createActivity', ping);
   }
 }

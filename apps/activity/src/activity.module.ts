@@ -2,7 +2,8 @@ import { Module } from '@nestjs/common';
 import { ActivityService } from './activity.service';
 import { RMQModule } from '@app/common';
 import { ConfigModule } from '@nestjs/config';
-import Joi from 'joi';
+import * as Joi from 'joi';
+import { ActivityController } from './activity.controller';
 
 @Module({
   imports: [
@@ -11,13 +12,13 @@ import Joi from 'joi';
       isGlobal: true,
       envFilePath: './apps/activity/.env',
       validationSchema: Joi.object({
-        ACTIVITY_PORT: Joi.number().required(),
         RABBIT_MQ_URI: Joi.string().required(),
         RABBIT_MQ_ACTIVITY_QUEUE: Joi.string().required(),
+        ACTIVITY_PORT: Joi.number().required(),
       }),
     }),
   ],
-  controllers: [],
+  controllers: [ActivityController],
   providers: [ActivityService],
 })
 export class ActivityModule {}

@@ -1,10 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreatePingInput, Ping } from './graphql/ping.schema';
 import { PingRepository } from '../prisma/prisma.service';
+import { ACTIVITY_SERVICE } from '../constants/services';
+import { ClientProxy } from '@nestjs/microservices';
+import { lastValueFrom } from 'rxjs';
+import { IPing } from '@app/common';
 
 @Injectable()
 export class PingService {
-  constructor(private readonly pingRepo: PingRepository) {}
+  constructor(
+    private readonly repository: PingRepository,
+    @Inject(ACTIVITY_SERVICE) private activityClient: ClientProxy,
+  ) {}
 
   /* 
   ? Create new Ping
@@ -15,25 +22,34 @@ export class PingService {
     const { title, description, userID, url, picks, latitude, longitude } =
       input;
 
-    console.log('input', input);
+    // console.log('input', input);
 
-    const respond = this.pingRepo.ping.create({
-      data: {
-        title,
-        description,
-        picks,
-        userID: userID.toString(),
-        geometry: {
-          type: 'Point',
-          coordinates: [
-            parseFloat(latitude.toString()),
-            parseFloat(longitude.toString()),
-          ],
+    const result = await this.repository.$transaction([
+      this.repository.ping.create({
+        data: {
+          title,
+          description,
+          picks,
+          userID: userID.toString(),
+          geometry: {
+            type: 'Point',
+            coordinates: [
+              parseFloat(latitude.toString()),
+              parseFloat(longitude.toString()),
+            ],
+          },
         },
-      },
-    });
+      }),
+    ]);
 
-    const { geometry, radius, ...ping } = await respond;
+    await lastValueFrom(
+      this.activityClient.emit<string, IPing>('pingCreated', {
+        ...result[0],
+      }),
+    );
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { geometry, radius, ...ping } = result[0];
 
     return {
       ...ping,

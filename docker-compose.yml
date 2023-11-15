@@ -55,7 +55,7 @@ services:
     expose:
       - 3520
     depends_on:
-      # - users
+      - users
       - rabbitmq
 
   activity:

@@ -16,6 +16,8 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 import { PingService } from './ping.service';
 import { PingResolver } from './ping.resolver';
 import { PingRepository } from '../prisma/prisma.service';
+import { RMQModule } from '@app/common';
+import { ACTIVITY_SERVICE } from '../constants/services';
 
 @Module({
   imports: [
@@ -32,6 +34,7 @@ import { PingRepository } from '../prisma/prisma.service';
         Latitude: LatitudeResolver,
       },
     }),
+    RMQModule.register({ name: ACTIVITY_SERVICE }),
   ],
   providers: [PingService, PingResolver, PingRepository],
 })

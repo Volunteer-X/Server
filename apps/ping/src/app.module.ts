@@ -8,8 +8,8 @@ import { PingModule } from './ping/ping.module';
     PingModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [portConfig],
       expandVariables: true,
+      envFilePath: './apps/ping/.env',
     }),
   ],
 })
