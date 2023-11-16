@@ -10,6 +10,8 @@ services:
       target: development
     command: npm run start:dev
     depends_on:
+      - rabbitmq
+      - neo4j
       - users
       - ping
       - activity
@@ -26,6 +28,24 @@ services:
       - WATCHPACK_POLLING=true
     restart: always
 
+  neo4j:
+    image: neo4j-service
+    build:
+      context: .
+      dockerfile: ./apps/neo4j/Dockerfile
+      target: development
+    command: npm run start:dev neo4j
+    env_file:
+      - ./apps/neo4j/.env
+    volumes:
+      - .:/usr/src/volunteerx
+      - /usr/src/volunteerx/node_modules
+    depends_on:
+      - rabbitmq
+    environment:
+      - WATCHPACK_POLLING=true
+    restart: always
+
   users:
     image: users
     build:
@@ -38,6 +58,9 @@ services:
     volumes:
       - .:/usr/src/volunteerx
       - /usr/src/volunteerx/node_modules
+    depends_on:
+      - rabbitmq
+      - neo4j
     ports:
       - '3510:3510'
     expose:
@@ -64,6 +87,7 @@ services:
       - 3520
     depends_on:
       - users
+      - neo4j
       - rabbitmq
     environment:
       - WATCHPACK_POLLING=true
@@ -86,9 +110,9 @@ services:
     expose:
       - 3530
     depends_on:
+      - rabbitmq
       - ping
       - users
-      - rabbitmq
     environment:
       - WATCHPACK_POLLING=true
     restart: always
