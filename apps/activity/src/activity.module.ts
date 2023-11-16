@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ActivityService } from './activity.service';
-import { RMQModule } from '@app/common';
+import { RmqModule } from '@app/common';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { ActivityController } from './activity.controller';
@@ -8,7 +8,7 @@ import { ActivityRepository } from './db/prisma.service';
 
 @Module({
   imports: [
-    RMQModule,
+    RmqModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: './apps/activity/.env',

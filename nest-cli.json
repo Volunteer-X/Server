@@ -73,13 +73,13 @@
         "tsConfigPath": "apps/activity/tsconfig.app.json"
       }
     },
-    "neo4j": {
+    "neo4j-common": {
       "type": "library",
-      "root": "libs/neo4j",
+      "root": "libs/neo4j-common",
       "entryFile": "index",
-      "sourceRoot": "libs/neo4j/src",
+      "sourceRoot": "libs/neo4j-common/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/neo4j/tsconfig.lib.json"
+        "tsConfigPath": "libs/neo4j-common/tsconfig.lib.json"
       }
     },
     "broadcast-service": {
@@ -89,6 +89,15 @@
       "sourceRoot": "apps/broadcast-service/src",
       "compilerOptions": {
         "tsConfigPath": "apps/broadcast-service/tsconfig.app.json"
+      }
+    },
+    "neo4j": {
+      "type": "application",
+      "root": "apps/neo4j",
+      "entryFile": "main",
+      "sourceRoot": "apps/neo4j/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/neo4j/tsconfig.app.json"
       }
     }
   }

@@ -15,16 +15,6 @@ export class UsersResolver {
     return this.usersService.createUser(createUserInput);
   }
 
-  @Query('users')
-  findAll() {
-    return this.usersService.findAll();
-  }
-
-  @Query('getUserByIDs')
-  findOne(@Args('id') id: number) {
-    return this.usersService.findOne(id);
-  }
-
   @Query('getUserByEmail')
   getUserByEmail(@Args('email') email: EmailAddress) {
     return this.usersService.getUserByEmail(email);
@@ -38,10 +28,5 @@ export class UsersResolver {
   @Mutation('updateUser')
   update(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
     return this.usersService.update(updateUserInput.id, updateUserInput);
-  }
-
-  @Mutation('removeUser')
-  remove(@Args('id') id: number) {
-    return this.usersService.remove(id);
   }
 }

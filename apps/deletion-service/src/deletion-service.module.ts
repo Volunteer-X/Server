@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { DeletionServiceController } from './deletion-service.controller';
 import { DeletionServiceService } from './deletion-service.service';
-import { RMQModule } from '@app/common';
+import { RmqModule } from '@app/common';
 
 @Module({
-  imports: [RMQModule],
+  imports: [RmqModule],
   controllers: [DeletionServiceController],
   providers: [DeletionServiceService],
 })

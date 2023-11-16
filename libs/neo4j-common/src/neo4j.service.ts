@@ -4,7 +4,7 @@ import { Neo4jConfig } from './neo4j-config.interface';
 import { NEO4J_CONFIG, NEO4J_DRIVER } from './neo4j.constants';
 
 @Injectable()
-export class Neo4jService implements OnApplicationShutdown {
+export class Neo4jCommonService implements OnApplicationShutdown {
   constructor(
     @Inject(NEO4J_CONFIG) private readonly config: Neo4jConfig,
     @Inject(NEO4J_DRIVER) private readonly driver: Driver,

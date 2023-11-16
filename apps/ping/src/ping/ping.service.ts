@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreatePingInput, Ping } from './graphql/ping.schema';
+import { CreatePingInput } from './graphql/ping.schema';
 import { PingRepository } from '../prisma/prisma.service';
 import { ACTIVITY_SERVICE } from '../constants/services';
 import { ClientProxy } from '@nestjs/microservices';

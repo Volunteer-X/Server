@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import {
   CreateUserInput,
   EmailAddress,
@@ -27,7 +27,7 @@ export class UsersService {
    ? Create new user
    */
   async createUser(createUserInput: CreateUserInput) {
-    return await this.userRepo.create({
+    const user = await this.userRepo.create({
       data: {
         email: createUserInput.email.toString(),
         username: createUserInput.username,
@@ -40,14 +40,13 @@ export class UsersService {
         picks: createUserInput.picks,
       },
     });
-  }
 
-  findAll() {
-    return `This action returns all users`;
-  }
+    // this.neo4jService.createUserNode({
+    //   id: user.id,
+    //   picks: user.picks,
+    // });
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+    return user;
   }
 
   async isUsernameAvailable(username: string) {
@@ -62,9 +61,5 @@ export class UsersService {
 
   update(id: typeof GraphQLObjectID, updateUserInput: UpdateUserInput) {
     return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
   }
 }
