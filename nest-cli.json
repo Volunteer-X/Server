@@ -81,6 +81,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/neo4j/tsconfig.lib.json"
       }
+    },
+    "broadcast-service": {
+      "type": "application",
+      "root": "apps/broadcast-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/broadcast-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/broadcast-service/tsconfig.app.json"
+      }
     }
   }
 }
