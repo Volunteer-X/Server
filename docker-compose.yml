@@ -22,6 +22,9 @@ services:
       - '3500:3500'
     expose:
       - 3500
+    environment:
+      - WATCHPACK_POLLING=true
+    restart: always
 
   users:
     image: users
@@ -39,6 +42,9 @@ services:
       - '3510:3510'
     expose:
       - '3510'
+    environment:
+      - WATCHPACK_POLLING=true
+    restart: always
 
   ping:
     image: ping
@@ -59,6 +65,9 @@ services:
     depends_on:
       - users
       - rabbitmq
+    environment:
+      - WATCHPACK_POLLING=true
+    restart: always
 
   activity:
     image: activity
@@ -70,7 +79,7 @@ services:
     env_file:
       - ./apps/activity/.env
     volumes:
-      - ./:/usr/src/volunteerx
+      - .:/usr/src/volunteerx
       - /usr/src/volunteerx/node_modules
     ports:
       - '3530:3530'
@@ -80,6 +89,9 @@ services:
       - ping
       - users
       - rabbitmq
+    environment:
+      - WATCHPACK_POLLING=true
+    restart: always
 
   rabbitmq:
     image: rabbitmq:3-management-alpine

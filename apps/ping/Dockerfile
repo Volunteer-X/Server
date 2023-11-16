@@ -1,5 +1,7 @@
 FROM node:18-alpine As base
 
+RUN apk add --no-cache libc6-compat
+
 WORKDIR /usr/src/volunteerx
 
 FROM base AS development

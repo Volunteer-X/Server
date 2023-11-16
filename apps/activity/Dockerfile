@@ -1,12 +1,14 @@
 FROM node:18-alpine As base
 
+RUN apk add --no-cache libc6-compat
+
 WORKDIR /usr/src/volunteerx
 
 FROM base AS development
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm ci && npm cache clean --force
 
 COPY . .
 
@@ -19,8 +21,6 @@ FROM base AS production
 ARG NODE_ENV=production
 
 ENV NODE_ENV=${NODE_ENV}
-
-# WORKDIR /usr/src/app
 
 COPY package*.json ./
 
