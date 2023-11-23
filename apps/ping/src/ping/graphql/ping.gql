@@ -12,6 +12,7 @@ type Ping {
   longitude: Longitude!
   latitude: Latitude!
   url: URL
+  radius: Float
   createdAt: DateTime
   picks: [String!]!
 }

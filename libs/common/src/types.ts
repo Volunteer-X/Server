@@ -22,6 +22,8 @@ export type UserNode = {
 
 export type PingNode = {
   id: string;
-  picks?: string[];
-  location?: string;
+  userID: string;
+  picks: string[];
+  location: number[];
+  radius?: number;
 };
