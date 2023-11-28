@@ -99,6 +99,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/neo4j/tsconfig.app.json"
       }
+    },
+    "file-flow-engine": {
+      "type": "application",
+      "root": "apps/file-flow-engine",
+      "entryFile": "main",
+      "sourceRoot": "apps/file-flow-engine/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/file-flow-engine/tsconfig.app.json"
+      }
     }
   }
 }
