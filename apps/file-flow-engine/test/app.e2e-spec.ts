@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { FileFlowEngineModule } from './../src/file-flow-engine.module';
+import { FileFlowEngineModule } from '../src/file-flow-engine.module';
 
 describe('FileFlowEngineController (e2e)', () => {
   let app: INestApplication;
