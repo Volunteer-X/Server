@@ -1,19 +1,20 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { CreatePingInput } from './graphql/ping.schema';
 import { PingRepository } from '../prisma/prisma.service';
 import { ACTIVITY_SERVICE, NEO4J_SERVICE } from '../constants/services';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
-import { CustomSnawflake } from 'libs/utils/snowflake';
+import { TwitterSnowflake as Snowflake } from '@sapphire/snowflake';
 
 @Injectable()
 export class PingService {
-  snowflake = new CustomSnawflake();
   constructor(
     private readonly repository: PingRepository,
     @Inject(ACTIVITY_SERVICE) private activityClient: ClientProxy,
     @Inject(NEO4J_SERVICE) private neo4jClient: ClientProxy,
   ) {}
+
+  private readonly logger = new Logger(PingService.name);
 
   /* 
   ? Create new Ping
@@ -24,13 +25,16 @@ export class PingService {
     const { title, description, userID, picks, latitude, longitude, url } =
       input;
 
+    // hello
+
     const result = await this.repository.$transaction([
       this.repository.ping.create({
         data: {
+          id: Snowflake.generate().toString(),
           title,
           description,
           picks,
-          url: url.toString(),
+          url: url?.toString(),
           userID: userID.toString(),
           geometry: {
             type: 'Point',
