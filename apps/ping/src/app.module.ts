@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { portConfig } from '@app/common';
+// import { portConfig } from '@app/common';
 import { PingModule } from './ping/ping.module';
 
 @Module({
