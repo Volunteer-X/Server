@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { CreatePingInput } from './graphql/ping.schema';
+import { CreatePingInput, Media } from './graphql/ping.schema';
 import { PingRepository } from '../prisma/prisma.service';
 import { ACTIVITY_SERVICE, NEO4J_SERVICE } from '../constants/services';
 import { ClientProxy } from '@nestjs/microservices';
@@ -22,8 +22,16 @@ export class PingService {
   * @returns {Ping}
   */
   async createPing(input: CreatePingInput) {
-    const { title, description, userID, picks, latitude, longitude, url } =
-      input;
+    const {
+      title,
+      description,
+      userID,
+      picks,
+      latitude,
+      longitude,
+      url,
+      radius,
+    } = input;
 
     // hello
 
@@ -36,6 +44,7 @@ export class PingService {
           picks,
           url: url?.toString(),
           userID: userID.toString(),
+          radius,
           geometry: {
             type: 'Point',
             coordinates: [
@@ -71,7 +80,7 @@ export class PingService {
     );
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { geometry, radius, ...ping } = result[0];
+    const { geometry, ...ping } = result[0];
 
     return {
       ...ping,
@@ -80,4 +89,18 @@ export class PingService {
       radius,
     };
   }
+
+  async updateMedia(pingID: string, media: Array<Media>) {
+    const result = await this.repository.ping.update({
+      where: {
+        id: pingID,
+      },
+      data: {
+        media,
+      },
+    });
+
+    return result;
+  }
+
 }

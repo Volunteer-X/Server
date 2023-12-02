@@ -19,13 +19,20 @@ export class AWSService {
   }
 
   //   Create Presigned Url for upload
-  async createPresignedUrl({ key }: { key: string }): Promise<string> {
+  async createPresignedUrl() {
+    const Key = Snowflake.generate().toString();
+
     const command = new PutObjectCommand({
       Bucket: this.configService.get<string>('AWS_BUCKET'),
-      Key: Snowflake.generate().toString(),
+      Key,
       ContentType: 'application/octet-stream',
       // ACL: 'bucket-owner-full-control',
     });
-    return await getSignedUrl(this.s3Client, command, { expiresIn: 90000 });
+
+    const signedUrl = await getSignedUrl(this.s3Client, command, {
+      expiresIn: 60,
+    });
+
+    return { Key, signedUrl };
   }
 }

@@ -11,30 +11,38 @@
 import { GraphQLDateTime, GraphQLObjectID, GraphQLLatitude, GraphQLLongitude, GraphQLURL } from 'graphql-scalars'
 
 export interface CreatePingInput {
-    title: string;
-    description?: Nullable<string>;
-    mediaIDs?: Nullable<Nullable<string>[]>;
     userID: ObjectID;
+    title: string;
+    picks: string[];
     longitude: Longitude;
     latitude: Latitude;
+    description?: Nullable<string>;
     url?: Nullable<URL>;
-    picks: string[];
+    radius?: Nullable<number>;
 }
 
 export interface Ping {
-    id: ObjectID;
+    id: string;
     title: string;
-    description?: Nullable<string>;
     userID: ObjectID;
     longitude: Longitude;
     latitude: Latitude;
-    url?: Nullable<URL>;
-    createdAt?: Nullable<DateTime>;
     picks: string[];
+    description?: Nullable<string>;
+    url?: Nullable<URL>;
+    radius?: Nullable<number>;
+    createdAt?: Nullable<DateTime>;
+    media?: Nullable<Nullable<Media>[]>;
+}
+
+export interface Media {
+    Key: string;
+    type: string;
 }
 
 export interface IMutation {
     createPing(createPingInput: CreatePingInput): Ping | Promise<Ping>;
+    updateMedia(pingID: string, media: Media[]): Ping | Promise<Ping>;
 }
 
 export type ObjectID = typeof GraphQLObjectID;

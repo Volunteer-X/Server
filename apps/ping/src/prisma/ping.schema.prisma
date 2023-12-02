@@ -21,6 +21,12 @@ model Ping {
   userID      String   @map("user") @db.ObjectId
   geometry    GeoJson
   radius      Int      @default(200)
+  media       Media[]
+}
+
+type Media {
+  Key  String
+  type String
 }
 
 enum GeoTypes {

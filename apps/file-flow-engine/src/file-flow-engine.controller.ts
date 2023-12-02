@@ -11,14 +11,14 @@ export class FileFlowEngineController {
 
   private readonly logger = new Logger(FileFlowEngineController.name);
 
-  @Get(':key')
+  @Get('signedUrl')
   @Header('Content-Type', 'application/octet-stream')
-  async getAWSPresignedUrl(@Param('key') key) {
-    const signedUrl = await this.awsService.createPresignedUrl({ key });
+  async getAWSPresignedUrl() {
+    const { Key, signedUrl } = await this.awsService.createPresignedUrl();
 
     return {
       signedUrl,
-      fileKey: key,
+      Key,
     };
   }
 }
