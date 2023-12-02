@@ -1,10 +1,12 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { CreatePingInput, Media } from './graphql/ping.schema';
+import { CreatePingInput, Media, UpdatePingInput } from './graphql/ping.schema';
 import { PingRepository } from '../prisma/prisma.service';
 import { ACTIVITY_SERVICE, NEO4J_SERVICE } from '../constants/services';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 import { TwitterSnowflake as Snowflake } from '@sapphire/snowflake';
+import { number } from 'joi';
+import { GraphQLLatitude, GraphQLLongitude } from 'graphql-scalars';
 
 @Injectable()
 export class PingService {
@@ -33,8 +35,6 @@ export class PingService {
       radius,
     } = input;
 
-    // hello
-
     const result = await this.repository.$transaction([
       this.repository.ping.create({
         data: {
@@ -48,8 +48,8 @@ export class PingService {
           geometry: {
             type: 'Point',
             coordinates: [
-              parseFloat(latitude.toString()),
-              parseFloat(longitude.toString()),
+              GraphQLLatitude.parseValue(latitude),
+              GraphQLLongitude.parseValue(longitude),
             ],
           },
         },
@@ -90,17 +90,32 @@ export class PingService {
     };
   }
 
-  async updateMedia(pingID: string, media: Array<Media>) {
+  async updatePing(input: UpdatePingInput) {
+    const { latitude, longitude } = input;
+
     const result = await this.repository.ping.update({
       where: {
-        id: pingID,
+        id: input.id,
       },
       data: {
-        media,
+        title: input.title,
+        description: input.description,
+        picks: input.picks,
+        url: input.url.toString(),
+        geometry: {
+          type: 'Point',
+          coordinates: [
+            GraphQLLatitude.parseValue(latitude),
+            GraphQLLongitude.parseValue(longitude),
+          ],
+        },
+        radius: input.radius,
+        media: input.media,
       },
     });
 
+    // update activity
+
     return result;
   }
-
 }

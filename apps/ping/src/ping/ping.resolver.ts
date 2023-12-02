@@ -1,6 +1,6 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { PingService } from './ping.service';
-import { CreatePingInput, Media } from './graphql/ping.schema';
+import { CreatePingInput, Media, UpdatePingInput } from './graphql/ping.schema';
 
 @Resolver('Ping')
 export class PingResolver {
@@ -12,10 +12,7 @@ export class PingResolver {
   }
 
   @Mutation('updateMedia')
-  updateMedia(
-    @Args('pingID') pingID: string,
-    @Args('media') media: Array<Media>,
-  ) {
-    return this.pingService.updateMedia(pingID, media);
+  updateMedia(@Args('updatePingInput') input: UpdatePingInput) {
+    return this.pingService.updatePing(input);
   }
 }

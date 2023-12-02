@@ -5,9 +5,9 @@ scalar URL
 scalar DateTime
 
 type Ping {
-  id: String!
+  id: ID!
   title: String!
-  userID: ObjectID!
+  userID: ID!
   longitude: Longitude!
   latitude: Latitude!
   picks: [String!]!
@@ -19,7 +19,7 @@ type Ping {
 }
 
 input CreatePingInput {
-  userID: ObjectID!
+  userID: ID!
   title: String!
   picks: [String!]!
   longitude: Longitude!
@@ -27,6 +27,18 @@ input CreatePingInput {
   description: String
   url: URL
   radius: Float
+}
+
+type UpdatePingInput {
+  id: ID!
+  title: String
+  picks: [String!]
+  longitude: Longitude
+  latitude: Latitude
+  description: String
+  url: URL
+  radius: Float
+  media: [Media]
 }
 
 # type Query {
@@ -38,6 +50,6 @@ type Media {
 }
 
 type Mutation {
-  createPing(createPingInput: CreatePingInput!): Ping!
-  updateMedia(pingID: String!, media: [Media!]!): Ping!
+  createPing(createPingInput: CreatePingInput!): ID!
+  updatePing(updatePingInput: UpdatePingInput!): ID!
 }
