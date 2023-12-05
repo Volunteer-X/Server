@@ -28,11 +28,6 @@ services:
       - volunteerx
     environment:
       - WATCHPACK_POLLING=true
-    healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:3500/health']
-      interval: 10s
-      timeout: 30s
-      retries: 5
     restart: on-failure
 
   neo4j:
@@ -80,6 +75,11 @@ services:
       - volunteerx
     environment:
       - WATCHPACK_POLLING=true
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3510/health']
+      interval: 10s
+      timeout: 30s
+      retries: 5
     restart: always
 
   ping:
@@ -102,6 +102,8 @@ services:
       - users
       - neo4j
       - rabbitmq
+    networks:
+      - volunteerx
     environment:
       - WATCHPACK_POLLING=true
     restart: always
