@@ -1,6 +1,6 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { PingService } from './ping.service';
-import { CreatePingInput, Media, UpdatePingInput } from './graphql/ping.schema';
+import { CreatePingInput, UpdatePingInput } from './graphql/ping.schema';
 
 @Resolver('Ping')
 export class PingResolver {

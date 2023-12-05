@@ -56,28 +56,28 @@ export class PingService {
       }),
     ]);
 
-    await lastValueFrom(
-      this.activityClient.emit<string, string>(
-        'pingCreated',
-        JSON.stringify(result[0]),
-      ),
-    );
+    // await lastValueFrom(
+    //   this.activityClient.emit<string, string>(
+    //     'pingCreated',
+    //     JSON.stringify(result[0]),
+    //   ),
+    // );
 
-    await lastValueFrom(
-      this.neo4jClient.emit<string, string>(
-        'pingCreated',
-        JSON.stringify({
-          id: result[0].id,
-          userID: result[0].userID,
-          picks: result[0].picks,
-          location: [
-            result[0].geometry.coordinates[0],
-            result[0].geometry.coordinates[1],
-          ],
-          radius: result[0].radius,
-        }),
-      ),
-    );
+    // await lastValueFrom(
+    //   this.neo4jClient.emit<string, string>(
+    //     'pingCreated',
+    //     JSON.stringify({
+    //       id: result[0].id,
+    //       userID: result[0].userID,
+    //       picks: result[0].picks,
+    //       location: [
+    //         result[0].geometry.coordinates[0],
+    //         result[0].geometry.coordinates[1],
+    //       ],
+    //       radius: result[0].radius,
+    //     }),
+    //   ),
+    // );
 
     return result[0].id;
   }
