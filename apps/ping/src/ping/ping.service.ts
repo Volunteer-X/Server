@@ -79,15 +79,7 @@ export class PingService {
       ),
     );
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { geometry, ...ping } = result[0];
-
-    return {
-      ...ping,
-      latitude: geometry.coordinates[0],
-      longitude: geometry.coordinates[1],
-      radius,
-    };
+    return result[0].id;
   }
 
   async updatePing(input: UpdatePingInput) {

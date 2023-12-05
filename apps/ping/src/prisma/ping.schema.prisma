@@ -12,7 +12,7 @@ datasource db {
 }
 
 model Ping {
-  id          String   @id @map("_id")
+  id          String   @id @map("_id") @db.ObjectId
   title       String
   description String?
   // createdAt   DateTime @default(now())
@@ -25,7 +25,7 @@ model Ping {
 }
 
 type Media {
-  Key  String
+  key  String
   type String
 }
 

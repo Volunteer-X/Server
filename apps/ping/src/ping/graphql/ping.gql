@@ -4,6 +4,11 @@ scalar Latitude
 scalar URL
 scalar DateTime
 
+type Media {
+  key: String!
+  type: String!
+}
+
 type Ping {
   id: ID!
   title: String!
@@ -29,7 +34,7 @@ input CreatePingInput {
   radius: Float
 }
 
-type UpdatePingInput {
+input UpdatePingInput {
   id: ID!
   title: String
   picks: [String!]
@@ -38,16 +43,16 @@ type UpdatePingInput {
   description: String
   url: URL
   radius: Float
-  media: [Media]
+  media: [MediaInput]
+}
+
+input MediaInput {
+  key: String!
+  type: String!
 }
 
 # type Query {
 # }
-
-type Media {
-  Key: String!
-  type: String!
-}
 
 type Mutation {
   createPing(createPingInput: CreatePingInput!): ID!

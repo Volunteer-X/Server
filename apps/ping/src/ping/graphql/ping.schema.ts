@@ -21,6 +21,28 @@ export interface CreatePingInput {
     radius?: Nullable<number>;
 }
 
+export interface UpdatePingInput {
+    id: string;
+    title?: Nullable<string>;
+    picks?: Nullable<string[]>;
+    longitude?: Nullable<Longitude>;
+    latitude?: Nullable<Latitude>;
+    description?: Nullable<string>;
+    url?: Nullable<URL>;
+    radius?: Nullable<number>;
+    media?: Nullable<Nullable<MediaInput>[]>;
+}
+
+export interface MediaInput {
+    key: string;
+    type: string;
+}
+
+export interface Media {
+    key: string;
+    type: string;
+}
+
 export interface Ping {
     id: string;
     title: string;
@@ -33,23 +55,6 @@ export interface Ping {
     radius?: Nullable<number>;
     createdAt?: Nullable<DateTime>;
     media?: Nullable<Nullable<Media>[]>;
-}
-
-export interface UpdatePingInput {
-    id: string;
-    title?: Nullable<string>;
-    picks?: Nullable<string[]>;
-    longitude?: Nullable<Longitude>;
-    latitude?: Nullable<Latitude>;
-    description?: Nullable<string>;
-    url?: Nullable<URL>;
-    radius?: Nullable<number>;
-    media?: Nullable<Nullable<Media>[]>;
-}
-
-export interface Media {
-    Key: string;
-    type: string;
 }
 
 export interface IMutation {

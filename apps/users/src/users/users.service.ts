@@ -18,9 +18,15 @@ export class UsersService {
   ? Get user details by email
   */
   async getUserByEmail(email: EmailAddress) {
-    return await this.userRepo.findUnique({
+    console.log('email', email);
+
+    const user = await this.userRepo.findUnique({
       where: { email: email.toString() },
     });
+
+    console.log('user', user);
+
+    return user;
   }
 
   /*

@@ -21,6 +21,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
             {
               name: 'users',
               url: 'http://users:3510/graphql',
+              // url: 'http://localhost:3510/graphql',
             },
             {
               name: 'ping',
