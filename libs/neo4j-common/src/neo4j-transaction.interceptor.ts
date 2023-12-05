@@ -6,11 +6,11 @@ import {
 } from '@nestjs/common';
 import { Transaction } from 'neo4j-driver';
 import { Observable, catchError, tap } from 'rxjs';
-import { Neo4jService } from './neo4j.service';
+import { Neo4jCommonService } from './neo4j.service';
 
 @Injectable()
 export class Neo4jTransactionInterceptor implements NestInterceptor {
-  constructor(private readonly neo4jService: Neo4jService) {}
+  constructor(private readonly neo4jService: Neo4jCommonService) {}
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const transaction: Transaction = this.neo4jService.beginTransaction();
 

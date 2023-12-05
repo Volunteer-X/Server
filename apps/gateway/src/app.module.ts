@@ -6,6 +6,7 @@ import { IntrospectAndCompose } from '@apollo/gateway';
 import { ConfigModule } from '@nestjs/config';
 import { portConfig } from '@app/common';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -23,10 +24,10 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
               url: 'http://users:3510/graphql',
               // url: 'http://localhost:3510/graphql',
             },
-            {
-              name: 'ping',
-              url: 'http://ping:3520/graphql',
-            },
+            // {
+            //   name: 'ping',
+            //   url: 'http://ping:3520/graphql',
+            // },
           ],
         }),
       },
@@ -37,6 +38,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
       envFilePath: './apps/gateway/.env',
       expandVariables: true,
     }),
+    HealthModule,
   ],
   providers: [AppService],
 })
