@@ -33,7 +33,24 @@ export class RmqModule {
 
     return {
       module: RmqModule,
-      imports: [ClientsModule.registerAsync(getImports(name))],
+      imports: [
+        ClientsModule.registerAsync(
+          //   [
+          //   {
+          //     name: name,
+          //     useFactory: (configService: ConfigService) => ({
+          //       transport: Transport.RMQ,
+          //       options: {
+          //         urls: [configService.get<string>('RABBITMQ_URI')],
+          //         queue: configService.get<string>(`RABBITMQ_${name}_QUEUE`),
+          //       },
+          //     }),
+          //     inject: [ConfigService],
+          //   },
+          // ]
+          getImports(name),
+        ),
+      ],
       exports: [ClientsModule],
     };
   }

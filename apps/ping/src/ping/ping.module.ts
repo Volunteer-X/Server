@@ -16,8 +16,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 import { PingService } from './ping.service';
 import { PingResolver } from './ping.resolver';
 import { PingRepository } from '../prisma/prisma.service';
-import { RmqModule } from '@app/common';
-import { ACTIVITY_SERVICE, NEO4J_SERVICE } from '../constants/services';
+import { ACTIVITY_SERVICE, NEO4J_SERVICE, RmqModule } from '@app/common';
 
 @Module({
   imports: [

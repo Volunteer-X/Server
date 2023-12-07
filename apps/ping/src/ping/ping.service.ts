@@ -1,11 +1,11 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { CreatePingInput, Media, UpdatePingInput } from './graphql/ping.schema';
 import { PingRepository } from '../prisma/prisma.service';
-import { ACTIVITY_SERVICE, NEO4J_SERVICE } from '../constants/services';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 import { TwitterSnowflake as Snowflake } from '@sapphire/snowflake';
-import { GraphQLLatitude, GraphQLLongitude } from 'graphql-scalars';
+import { GraphQLLatitude, GraphQLLongitude, GraphQLURL } from 'graphql-scalars';
+import { ACTIVITY_SERVICE, NEO4J_SERVICE } from '@app/common';
 
 @Injectable()
 export class PingService {
@@ -79,38 +79,60 @@ export class PingService {
         ),
       );
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error('Neo4j error');
     }
 
     return result[0].id;
   }
 
   async updatePing(input: UpdatePingInput) {
-    const { latitude, longitude } = input;
+    const {
+      id,
+      url,
+      title,
+      description,
+      picks,
+      radius,
+      media,
+      latitude,
+      longitude,
+    } = input;
 
     const result = await this.repository.ping.update({
       where: {
-        id: input.id,
+        id,
       },
       data: {
-        title: input.title,
-        description: input.description,
-        picks: input.picks,
-        url: input.url.toString(),
-        geometry: {
-          type: 'Point',
-          coordinates: [
-            GraphQLLatitude.parseValue(latitude),
-            GraphQLLongitude.parseValue(longitude),
-          ],
-        },
-        radius: input.radius,
-        media: input.media,
+        title,
+        description,
+        picks,
+        url: url && GraphQLURL.parseValue(url),
+        geometry: latitude &&
+          longitude && {
+            type: 'Point',
+            coordinates: [
+              GraphQLLatitude.parseValue(latitude),
+              GraphQLLongitude.parseValue(longitude),
+            ],
+          },
+        radius,
+        media,
       },
     });
 
     // update activity
 
-    return result;
+    try {
+      await lastValueFrom(
+        this.activityClient.emit<string, string>(
+          'pingUpdated',
+          JSON.stringify(result),
+        ),
+      );
+    } catch (error) {
+      throw new Error(`Activity service error: ${error.message}`);
+    }
+
+    return result.id;
   }
 }

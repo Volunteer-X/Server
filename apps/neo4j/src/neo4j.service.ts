@@ -32,12 +32,15 @@ export class Neo4jService {
   // hydrate ping
   async createPing(ping: PingNode) {
     const cypher = `
-      CREATE (p:Ping {id: $id, userID: $userID, location: $location, picks: $picks})
+      MERGE (u:User {id: $userID})
+      MERGE (p:Ping {id: $id, location: $location, picks: $picks})
+      MERGE (u)-[:CREATED]->(p)
       RETURN p
     `;
 
     const result = await this.neo4jCommon.write(cypher, {
       id: ping.id,
+      userID: ping.userID,
       location: `POINT(${ping.location[0]}, ${ping.location[1]})`,
       picks: ping.picks,
     });

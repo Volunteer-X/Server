@@ -2,7 +2,7 @@ import { Controller, Get, Header, Logger, Param } from '@nestjs/common';
 import { FileFlowEngineService } from './file-flow-engine.service';
 import { AWSService } from './aws-s3/aws.service';
 
-@Controller()
+@Controller('api/v1/')
 export class FileFlowEngineController {
   constructor(
     private readonly fileFlowEngineService: FileFlowEngineService,
@@ -11,10 +11,11 @@ export class FileFlowEngineController {
 
   private readonly logger = new Logger(FileFlowEngineController.name);
 
-  @Get('signedUrl')
-  @Header('Content-Type', 'application/octet-stream')
-  async getAWSPresignedUrl() {
-    const { Key, signedUrl } = await this.awsService.createPresignedUrl();
+  @Get(':mimeType')
+  @Header('Content-Type', 'application/json')
+  async getAWSPresignedUrl(@Param('mimeType') type: string) {
+    console.log(type);
+    const { Key, signedUrl } = await this.awsService.createPresignedUrl(type);
 
     return {
       signedUrl,

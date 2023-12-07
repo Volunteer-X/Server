@@ -19,13 +19,15 @@ export class AWSService {
   }
 
   //   Create Presigned Url for upload
-  async createPresignedUrl() {
-    const Key = Snowflake.generate().toString();
+  async createPresignedUrl(type: string) {
+    const _Key = Snowflake.generate().toString();
+
+    const Key = `${_Key}.${type.split('/')[1]}`;
 
     const command = new PutObjectCommand({
       Bucket: this.configService.get<string>('AWS_BUCKET'),
       Key,
-      ContentType: 'application/octet-stream',
+      ContentType: type,
       // ACL: 'bucket-owner-full-control',
     });
 

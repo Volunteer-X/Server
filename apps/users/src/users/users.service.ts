@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import {
   CreateUserInput,
   EmailAddress,
@@ -6,12 +6,17 @@ import {
 } from './graphql/user.schema';
 import { GraphQLObjectID } from 'graphql-scalars';
 import { InjectRepository, PrismaService } from '@app/prisma';
+import { lastValueFrom } from 'rxjs';
+
+import { ClientProxy } from '@nestjs/microservices';
+import { NEO4J_SERVICE } from '@app/common';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository('user')
     private readonly userRepo: PrismaService['user'],
+    @Inject(NEO4J_SERVICE) private readonly neo4jClient: ClientProxy,
   ) {}
 
   /* 
@@ -51,6 +56,15 @@ export class UsersService {
     //   id: user.id,
     //   picks: user.picks,
     // });
+
+    try {
+      await lastValueFrom(
+        this.neo4jClient.emit<string, string>(
+          'newUserCreated',
+          JSON.stringify({ id: user.id, picks: user.picks }),
+        ),
+      );
+    } catch (error) {}
 
     return user;
   }

@@ -14,6 +14,7 @@ import {
 import { PrismaModule } from '@app/prisma';
 import { UsersService } from './users.service';
 import { UsersResolver } from './users.resolver';
+import { NEO4J_SERVICE, RmqModule } from '@app/common';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { UsersResolver } from './users.resolver';
       },
     }),
     PrismaModule.register({ logQueries: false }),
+    RmqModule.register({ name: [NEO4J_SERVICE] }),
   ],
   providers: [UsersResolver, UsersService],
 })

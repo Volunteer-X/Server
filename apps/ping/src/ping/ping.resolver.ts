@@ -11,7 +11,7 @@ export class PingResolver {
     return this.pingService.createPing(input);
   }
 
-  @Mutation('updateMedia')
+  @Mutation('updatePing')
   updateMedia(@Args('updatePingInput') input: UpdatePingInput) {
     return this.pingService.updatePing(input);
   }

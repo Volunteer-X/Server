@@ -55,6 +55,7 @@ services:
       - 3510
     networks:
       - volunteerx
+      - rabbitmq
     environment:
       - WATCHPACK_POLLING=true
     healthcheck:
@@ -87,6 +88,7 @@ services:
         condition: service_healthy
     networks:
       - volunteerx
+      - rabbitmq
     environment:
       - WATCHPACK_POLLING=true
     healthcheck:
@@ -138,7 +140,7 @@ services:
       rabbitmq:
         condition: service_healthy
     networks:
-      - volunteerx
+      - rabbitmq
     ports:
       - 7687:7687
     expose:
@@ -166,7 +168,7 @@ services:
     env_file:
       - ./.env
     networks:
-      - volunteerx
+      - rabbitmq
     healthcheck:
       test: rabbitmq-diagnostics -q ping
       interval: 10s

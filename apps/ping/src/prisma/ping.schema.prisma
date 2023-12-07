@@ -20,7 +20,7 @@ model Ping {
   picks       String[]
   userID      String   @map("user") @db.ObjectId
   geometry    GeoJson
-  radius      Int      @default(200)
+  radius      Float?   @default(200)
   media       Media[]
 }
 
