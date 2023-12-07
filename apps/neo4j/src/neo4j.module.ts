@@ -6,9 +6,11 @@ import * as Joi from 'joi';
 import { Neo4jConfig, Neo4jScheme } from '@app/neo4j/neo4j-config.interface';
 import { Neo4jCommonModule } from '@app/neo4j';
 import { RmqModule } from '@app/common';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
+    HealthModule,
     RmqModule,
     ConfigModule.forRoot({
       isGlobal: true,

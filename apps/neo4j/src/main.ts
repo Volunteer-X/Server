@@ -7,8 +7,14 @@ async function bootstrap() {
 
   const rmqService = app.get<RMQService>(RMQService);
 
+  console.log('rmqService', rmqService.getOptions('NEO4J'));
+
   app.connectMicroservice(rmqService.getOptions('NEO4J'));
 
   await app.startAllMicroservices();
+
+  await app.listen(7687);
+
+  console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();

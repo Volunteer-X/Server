@@ -13,8 +13,8 @@ import { ActivityRepository } from './db/prisma.service';
       isGlobal: true,
       envFilePath: './apps/activity/.env',
       validationSchema: Joi.object({
-        RABBIT_MQ_URI: Joi.string().required(),
-        RABBIT_MQ_ACTIVITY_QUEUE: Joi.string().required(),
+        RABBITMQ_URI: Joi.string().required(),
+        RABBITMQ_ACTIVITY_QUEUE: Joi.string().required(),
         ACTIVITY_PORT: Joi.number().required(),
       }),
     }),

@@ -5,7 +5,6 @@ import { ACTIVITY_SERVICE, NEO4J_SERVICE } from '../constants/services';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 import { TwitterSnowflake as Snowflake } from '@sapphire/snowflake';
-import { number } from 'joi';
 import { GraphQLLatitude, GraphQLLongitude } from 'graphql-scalars';
 
 @Injectable()
@@ -44,7 +43,7 @@ export class PingService {
           picks,
           url: url?.toString(),
           userID: userID.toString(),
-          radius,
+          radius: radius ? radius : 200,
           geometry: {
             type: 'Point',
             coordinates: [
@@ -63,21 +62,25 @@ export class PingService {
     //   ),
     // );
 
-    // await lastValueFrom(
-    //   this.neo4jClient.emit<string, string>(
-    //     'pingCreated',
-    //     JSON.stringify({
-    //       id: result[0].id,
-    //       userID: result[0].userID,
-    //       picks: result[0].picks,
-    //       location: [
-    //         result[0].geometry.coordinates[0],
-    //         result[0].geometry.coordinates[1],
-    //       ],
-    //       radius: result[0].radius,
-    //     }),
-    //   ),
-    // );
+    try {
+      await lastValueFrom(
+        this.neo4jClient.emit<string, string>(
+          'pingCreated',
+          JSON.stringify({
+            id: result[0].id,
+            userID: result[0].userID,
+            picks: result[0].picks,
+            location: [
+              result[0].geometry.coordinates[0],
+              result[0].geometry.coordinates[1],
+            ],
+            radius: result[0].radius,
+          }),
+        ),
+      );
+    } catch (error) {
+      throw new Error(error.message);
+    }
 
     return result[0].id;
   }

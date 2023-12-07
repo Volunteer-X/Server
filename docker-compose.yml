@@ -34,28 +34,6 @@ services:
       - WATCHPACK_POLLING=true
     restart: on-failure
 
-  # neo4j:
-  #   image: neo4j-service
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/neo4j/Dockerfile
-  #     target: development
-  #   command: npm run start:dev neo4j
-  #   env_file:
-  #     - ./apps/neo4j/.env
-  #   volumes:
-  #     - .:/usr/src/volunteerx
-  #     - /usr/src/volunteerx/node_modules
-  #   depends_on:
-  #     - rabbitmq
-  #   ports:
-  #     - 7687:7687
-  #   expose:
-  #     - 7687
-  #   environment:
-  #     - WATCHPACK_POLLING=true
-  #   restart: always
-
   users:
     image: users
     build:
@@ -68,9 +46,9 @@ services:
     volumes:
       - .:/usr/src/volunteerx
       - /usr/src/volunteerx/node_modules
-    # depends_on:
-    # - rabbitmq
-    # - neo4j
+    depends_on:
+      neo4j:
+        condition: service_healthy
     ports:
       - '3510:3510'
     expose:
@@ -105,9 +83,8 @@ services:
     expose:
       - 3520
     depends_on:
-      - users
-      # - neo4j
-      # - rabbitmq
+      users:
+        condition: service_healthy
     networks:
       - volunteerx
     environment:
@@ -145,18 +122,61 @@ services:
   #     - WATCHPACK_POLLING=true
   #   restart: always
 
-  # rabbitmq:
-  #   image: rabbitmq:3-management-alpine
-  #   container_name: rabbitmq
-  #   ports:
-  #     - '5672:5672'
-  #     - '15672:15672'
-  #   volumes:
-  #     - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-  #     - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq/
-  #   env_file:
-  #     - ./.env
+  neo4j:
+    image: neo4j-service
+    build:
+      context: .
+      dockerfile: ./apps/neo4j/Dockerfile
+      target: development
+    command: npm run start:dev neo4j
+    env_file:
+      - ./apps/neo4j/.env
+    volumes:
+      - .:/usr/src/volunteerx
+      - /usr/src/volunteerx/node_modules
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - volunteerx
+    ports:
+      - 7687:7687
+    expose:
+      - 7687
+    environment:
+      - WATCHPACK_POLLING=true
+    healthcheck:
+      test:
+        ['CMD-SHELL', 'wget --spider -q http://localhost:7687/health || exit 1']
+      interval: 10s
+      timeout: 30s
+      start_period: 30s
+      retries: 10
+    restart: always
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq/
+    env_file:
+      - ./.env
+    networks:
+      - volunteerx
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 30s
+      start_period: 30s
+      retries: 10
+    restart: always
 
 networks:
   volunteerx:
+    driver: bridge
+  rabbitmq:
     driver: bridge

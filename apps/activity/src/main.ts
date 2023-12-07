@@ -9,7 +9,10 @@ async function bootstrap() {
   // Microservice
   // RMQ
   const rmqService = app.get<RMQService>(RMQService);
+
   app.connectMicroservice(rmqService.getOptions('ACTIVITY'));
+
+  console.log('rmqService', rmqService.getOptions('ACTIVITY'));
 
   // Microservice - Run
   await app.startAllMicroservices();
