@@ -9,25 +9,20 @@ export class Neo4jService {
   // Add a new user to the database
   async createUser(user: UserNode) {
     const cypher = `
-      CREATE (u:User {id: $id, picks: $picks})
+      CREATE (u:User {id: $id, picks: $picks}, location: $location)
       RETURN u
     `;
 
     const result = await this.neo4jCommon.write(cypher, {
       id: user.id,
       picks: user.picks,
+      location: `POINT(${user.latitude}, ${user.longitude})`,
     });
 
     if (result.records.length === 0) {
       throw new Error('User not created');
     }
   }
-
-  // update a user's picks
-  async updateUserPicks(newData: UserNode) {}
-
-  // update a user's location
-  async updateUserLocation(newData: UserNode) {}
 
   // hydrate ping
   async createPing(ping: PingNode) {
@@ -49,12 +44,4 @@ export class Neo4jService {
       throw new Error('Ping not created');
     }
   }
-
-  /* 
-  * Ping
-  get all users 
-  within a certain radius of a location 
-  with similar picks
-  */
-  async getUsersByLocationAndPicks(location: string, picks: string[]) {}
 }

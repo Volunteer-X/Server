@@ -23,9 +23,7 @@ type User {
   name: Name
   picture: String
   createdAt: DateTime
-  updatedAt: DateTime
   picks: [String]
-  isRegistered: Boolean!
 }
 
 input CreateUserInput {
@@ -37,6 +35,8 @@ input CreateUserInput {
   role: Role!
   picture: String
   picks: [String]!
+  latitude: Float
+  longitude: Float
 }
 
 input UpdateUserInput {

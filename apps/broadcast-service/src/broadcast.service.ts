@@ -6,6 +6,12 @@ import { Injectable } from '@nestjs/common';
 export class BroadcastService {
   constructor(private readonly neo4jClient: Neo4jCommonService) {}
 
+  /* 
+  * Ping
+  get all users 
+  within a certain radius of a location 
+  with similar picks
+  */
   async broadcastPing(ping: PingNode) {
     // send to Neo4j get users and broadcast to them
 

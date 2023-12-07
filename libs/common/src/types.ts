@@ -7,7 +7,7 @@ export type IPing = {
   url?: string;
   geometry: {
     type: string;
-    coordinates: number[]; // [latitude, longitude]
+    coordinates: number[]; // * [latitude, longitude]
   };
   radius?: number;
   createdAt: Date;
@@ -17,13 +17,14 @@ export type IPing = {
 export type UserNode = {
   id: string;
   picks?: string[];
-  location?: string;
+  latitude?: number;
+  longitude?: number;
 };
 
 export type PingNode = {
   id: string;
   userID: string;
   picks: string[];
-  location: number[];
+  location: number[]; // * [latitude, longitude]
   radius?: number;
 };

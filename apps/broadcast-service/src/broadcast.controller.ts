@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { BroadcastService } from './broadcast.service';
 import { PingNode, RMQService } from '@app/common';
 import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';

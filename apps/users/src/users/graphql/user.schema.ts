@@ -26,6 +26,8 @@ export interface CreateUserInput {
     role: Role;
     picture?: Nullable<string>;
     picks: Nullable<string>[];
+    latitude?: Nullable<number>;
+    longitude?: Nullable<number>;
 }
 
 export interface UpdateUserInput {
@@ -52,9 +54,7 @@ export interface User {
     name?: Nullable<Name>;
     picture?: Nullable<string>;
     createdAt?: Nullable<DateTime>;
-    updatedAt?: Nullable<DateTime>;
     picks?: Nullable<Nullable<string>[]>;
-    isRegistered: boolean;
 }
 
 export interface IQuery {

@@ -4,12 +4,13 @@ import {
   EmailAddress,
   UpdateUserInput,
 } from './graphql/user.schema';
-import { GraphQLObjectID } from 'graphql-scalars';
+import { GraphQLEmailAddress, GraphQLObjectID } from 'graphql-scalars';
 import { InjectRepository, PrismaService } from '@app/prisma';
 import { lastValueFrom } from 'rxjs';
 
 import { ClientProxy } from '@nestjs/microservices';
 import { NEO4J_SERVICE } from '@app/common';
+import { TwitterSnowflake } from '@sapphire/snowflake';
 
 @Injectable()
 export class UsersService {
@@ -37,31 +38,44 @@ export class UsersService {
   /*
    ? Create new user
    */
-  async createUser(createUserInput: CreateUserInput) {
+  async createUser(input: CreateUserInput) {
+    const {
+      email,
+      username,
+      role,
+      firstName,
+      lastName,
+      picks,
+      picture,
+      latitude,
+      longitude,
+    } = input;
+
     const user = await this.userRepo.create({
       data: {
-        email: createUserInput.email.toString(),
-        username: createUserInput.username,
-        role: createUserInput.role,
+        id: TwitterSnowflake.generate().toString(),
+        email: GraphQLEmailAddress.parseValue(email),
+        username,
+        role: role,
         name: {
-          firstName: createUserInput.firstName,
-          lastName: createUserInput.lastName,
+          firstName,
+          lastName,
         },
-        picture: createUserInput.picture,
-        picks: createUserInput.picks,
+        picture,
+        picks,
       },
     });
-
-    // this.neo4jService.createUserNode({
-    //   id: user.id,
-    //   picks: user.picks,
-    // });
 
     try {
       await lastValueFrom(
         this.neo4jClient.emit<string, string>(
           'newUserCreated',
-          JSON.stringify({ id: user.id, picks: user.picks }),
+          JSON.stringify({
+            id: user.id,
+            picks: picks,
+            longitude,
+            latitude,
+          }),
         ),
       );
     } catch (error) {}
