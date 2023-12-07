@@ -7,14 +7,16 @@ async function bootstrap() {
 
   const rmqService = app.get<RMQService>(RMQService);
 
-  console.log('rmqService', rmqService.getOptions('NEO4J'));
+  // console.log('rmqService', rmqService.getOptions('NEO4J'));
 
   app.connectMicroservice(rmqService.getOptions('NEO4J'));
 
   await app.startAllMicroservices();
 
-  await app.listen(7687);
+  const port = app.get('ConfigService').get('PORT');
 
-  console.log(`Application is running on: ${await app.getUrl()}`);
+  await app.listen(port);
+
+  console.log('🚀 Ping server running successfully on port:', port);
 }
 bootstrap();

@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { BroadcastModule } from './broadcast.module';
-import { Neo4jErrorFilter } from '@neo4j/neo4j-error.filter';
-import { Neo4jTypeInterceptor } from '@neo4j/neo4j-type.interceptor';
+import { Neo4jErrorFilter, Neo4jTypeInterceptor } from '@app/neo4j';
+import { RMQService } from '@app/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(BroadcastModule);
@@ -11,6 +11,16 @@ async function bootstrap() {
   app.useGlobalInterceptors(new Neo4jTypeInterceptor());
   app.useGlobalFilters(new Neo4jErrorFilter());
 
-  await app.listen(4852);
+  const rmqService = app.get<RMQService>(RMQService);
+
+  app.connectMicroservice(rmqService.getOptions('BROADCAST'));
+
+  await app.startAllMicroservices();
+
+  const port = app.get('ConfigService').get('PORT');
+
+  await app.listen(port);
+
+  console.log('🚀 Ping server running successfully on port:', port);
 }
 bootstrap();

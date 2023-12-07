@@ -2,16 +2,30 @@ import { Module } from '@nestjs/common';
 import { BroadcastController } from './broadcast.controller';
 import { BroadcastService } from './broadcast.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Neo4jModule } from '@neo4j/neo4j.module';
-import { Neo4jConfig, Neo4jScheme } from '@neo4j/neo4j-config.interface';
+import { Neo4jCommonModule, Neo4jConfig, Neo4jScheme } from '@app/neo4j';
+import * as Joi from 'joi';
+import { RmqModule } from '@app/common';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
+    HealthModule,
+    RmqModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: './.env',
+      envFilePath: './apps/broadcast-service/.env',
+      validationSchema: Joi.object({
+        NEO4J_SCHEME: Joi.string().required(),
+        NEO4J_HOST: Joi.string().required(),
+        NEO4J_PORT: Joi.number().required(),
+        NEO4J_USERNAME: Joi.string().required(),
+        NEO4J_PASSWORD: Joi.string().required(),
+        NEO4J_DATABASE: Joi.string(),
+        RABBITMQ_URI: Joi.string().required(),
+        RABBITMQ_BROADCAST_QUEUE: Joi.string().required(),
+      }),
     }),
-    Neo4jModule.forRootAsync({
+    Neo4jCommonModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService): Neo4jConfig => ({
