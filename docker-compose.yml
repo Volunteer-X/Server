@@ -55,7 +55,6 @@ services:
       - 3510
     networks:
       - volunteerx
-      - rabbitmq
     environment:
       - WATCHPACK_POLLING=true
     healthcheck:
@@ -88,7 +87,6 @@ services:
         condition: service_healthy
     networks:
       - volunteerx
-      - rabbitmq
     environment:
       - WATCHPACK_POLLING=true
     healthcheck:
@@ -139,8 +137,8 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
-    networks:
-      - rabbitmq
+    # networks:
+    # - rabbitmq
     ports:
       - 7687:7687
     expose:
@@ -167,8 +165,8 @@ services:
       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq/
     env_file:
       - ./.env
-    networks:
-      - rabbitmq
+    # networks:
+    # - rabbitmq
     healthcheck:
       test: rabbitmq-diagnostics -q ping
       interval: 10s
@@ -180,5 +178,5 @@ services:
 networks:
   volunteerx:
     driver: bridge
-  rabbitmq:
-    driver: bridge
+  # rabbitmq:
+  #   driver: bridge

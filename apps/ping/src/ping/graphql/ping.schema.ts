@@ -21,8 +21,7 @@ export interface CreatePingInput {
     radius?: Nullable<number>;
 }
 
-export interface UpdatePingInput {
-    id: string;
+export interface UPingInput {
     title?: Nullable<string>;
     picks?: Nullable<string[]>;
     longitude?: Nullable<Longitude>;
@@ -47,6 +46,7 @@ export interface Ping {
     id: string;
     title: string;
     userID: string;
+    user?: Nullable<User>;
     longitude: Longitude;
     latitude: Latitude;
     picks: string[];
@@ -57,12 +57,20 @@ export interface Ping {
     media?: Nullable<Nullable<Media>[]>;
 }
 
-export interface IMutation {
-    createPing(createPingInput: CreatePingInput): string | Promise<string>;
-    updatePing(updatePingInput: UpdatePingInput): string | Promise<string>;
+export interface IQuery {
+    getPing(id: string): Ping | Promise<Ping>;
 }
 
-export type ObjectID = typeof GraphQLObjectID;
+export interface User {
+    id: string;
+    pings?: Nullable<Nullable<Ping>[]>;
+}
+
+export interface IMutation {
+    createPing(payload: CreatePingInput): Ping | Promise<Ping>;
+    updatePing(id: string, payload: UPingInput): string | Promise<string>;
+}
+
 export type Longitude = typeof GraphQLLongitude;
 export type Latitude = typeof GraphQLLatitude;
 export type URL = typeof GraphQLURL;

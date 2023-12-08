@@ -1,7 +1,7 @@
-import { GraphQLDefinitionsFactory } from '@nestjs/graphql';
+import { GraphQLFederationDefinitionsFactory } from '@nestjs/graphql';
 import { join } from 'path';
 
-const definitionFactory = new GraphQLDefinitionsFactory();
+const definitionFactory = new GraphQLFederationDefinitionsFactory();
 
 definitionFactory.generate({
   typePaths: ['./apps/users/src/users/graphql/*.gql'],
@@ -13,6 +13,7 @@ definitionFactory.generate({
     EmailAddress: 'typeof GraphQLEmailAddress',
     ObjectID: 'typeof GraphQLObjectID',
   },
+  watch: true,
   additionalHeader:
     "import { GraphQLDateTime, GraphQLEmailAddress, GraphQLObjectID } from 'graphql-scalars'",
 });

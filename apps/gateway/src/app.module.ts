@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloGatewayDriver, ApolloGatewayDriverConfig } from '@nestjs/apollo';
@@ -17,16 +17,17 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
       },
       gateway: {
         supergraphSdl: new IntrospectAndCompose({
+          logger: console,
+          subgraphHealthCheck: true,
           subgraphs: [
             {
               name: 'users',
-              url: 'http://users:3510/graphql',
-              // url: 'http://localhost:3510/graphql',
+              url: 'http://localhost:3510/graphql',
             },
-            {
-              name: 'ping',
-              url: 'http://ping:3520/graphql',
-            },
+            // {
+            //   name: 'ping',
+            //   url: 'http://localhost:3520/graphql',
+            // },
           ],
         }),
       },

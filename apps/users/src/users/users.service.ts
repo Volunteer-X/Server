@@ -11,6 +11,7 @@ import { lastValueFrom } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
 import { NEO4J_SERVICE } from '@app/common';
 import { TwitterSnowflake } from '@sapphire/snowflake';
+import { ID } from '@nestjs/graphql';
 
 @Injectable()
 export class UsersService {
@@ -42,7 +43,6 @@ export class UsersService {
     const {
       email,
       username,
-      role,
       firstName,
       lastName,
       picks,
@@ -56,7 +56,6 @@ export class UsersService {
         id: TwitterSnowflake.generate().toString(),
         email: GraphQLEmailAddress.parseValue(email),
         username,
-        role: role,
         name: {
           firstName,
           lastName,
@@ -66,19 +65,19 @@ export class UsersService {
       },
     });
 
-    try {
-      await lastValueFrom(
-        this.neo4jClient.emit<string, string>(
-          'newUserCreated',
-          JSON.stringify({
-            id: user.id,
-            picks: picks,
-            longitude,
-            latitude,
-          }),
-        ),
-      );
-    } catch (error) {}
+    // try {
+    //   await lastValueFrom(
+    //     this.neo4jClient.emit<string, string>(
+    //       'newUserCreated',
+    //       JSON.stringify({
+    //         id: user.id,
+    //         picks: picks,
+    //         longitude,
+    //         latitude,
+    //       }),
+    //     ),
+    //   );
+    // } catch (error) {}
 
     return user;
   }
@@ -93,7 +92,17 @@ export class UsersService {
     return count > 0 ? false : true;
   }
 
-  update(id: typeof GraphQLObjectID, updateUserInput: UpdateUserInput) {
+  update(id: string, payload: UpdateUserInput) {
     return `This action updates a #${id} user`;
+  }
+
+  async findOne(id: string) {
+    console.log('id', id);
+
+    return this.userRepo.findUnique({
+      where: {
+        id: id,
+      },
+    });
   }
 }

@@ -2,6 +2,8 @@ FROM node:18-alpine As base
 
 RUN apk add --no-cache libc6-compat
 
+ENV NODE_OPTIONS=--max-old-space-size=8192
+
 WORKDIR /usr/src/volunteerx
 
 FROM base AS development

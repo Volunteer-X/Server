@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { CreatePingInput, Media, UpdatePingInput } from './graphql/ping.schema';
+import { CreatePingInput, Ping, UPingInput } from './graphql/ping.schema';
 import { PingRepository } from '../prisma/prisma.service';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
@@ -22,7 +22,7 @@ export class PingService {
   * @param {CreatePingInput} input
   * @returns {Ping}
   */
-  async createPing(input: CreatePingInput) {
+  async createPing(payload: CreatePingInput) {
     const {
       title,
       description,
@@ -32,7 +32,7 @@ export class PingService {
       longitude,
       url,
       radius,
-    } = input;
+    } = payload;
 
     const result = await this.repository.$transaction([
       this.repository.ping.create({
@@ -62,32 +62,45 @@ export class PingService {
     //   ),
     // );
 
-    try {
-      await lastValueFrom(
-        this.neo4jClient.emit<string, string>(
-          'pingCreated',
-          JSON.stringify({
-            id: result[0].id,
-            userID: result[0].userID,
-            picks: result[0].picks,
-            location: [
-              result[0].geometry.coordinates[0],
-              result[0].geometry.coordinates[1],
-            ],
-            radius: result[0].radius,
-          }),
-        ),
-      );
-    } catch (error) {
-      throw new Error('Neo4j error');
-    }
+    // try {
+    //   await lastValueFrom(
+    //     this.neo4jClient.emit<string, string>(
+    //       'pingCreated',
+    //       JSON.stringify({
+    //         id: result[0].id,
+    //         userID: result[0].userID,
+    //         picks: result[0].picks,
+    //         location: [
+    //           result[0].geometry.coordinates[0],
+    //           result[0].geometry.coordinates[1],
+    //         ],
+    //         radius: result[0].radius,
+    //       }),
+    //     ),
+    //   );
+    // } catch (error) {
+    //   throw new Error('Neo4j error');
+    // }
 
-    return result[0].id;
+    const ping = {
+      id: result[0].id,
+      title: result[0].title,
+      description: result[0].description,
+      picks: result[0].picks,
+      url: result[0].url,
+      radius: result[0].radius,
+      latitude: result[0].geometry.coordinates[0],
+      longitude: result[0].geometry.coordinates[1],
+      media: result[0].media,
+      userID: result[0].userID,
+      user: { __typename: 'User', id: result[0].userID },
+    };
+
+    return ping;
   }
 
-  async updatePing(input: UpdatePingInput) {
+  async updatePing(id: string, payload: UPingInput) {
     const {
-      id,
       url,
       title,
       description,
@@ -96,7 +109,7 @@ export class PingService {
       media,
       latitude,
       longitude,
-    } = input;
+    } = payload;
 
     const result = await this.repository.ping.update({
       where: {

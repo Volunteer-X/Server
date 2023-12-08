@@ -1,7 +1,7 @@
-import { GraphQLDefinitionsFactory } from '@nestjs/graphql';
+import { GraphQLFederationDefinitionsFactory } from '@nestjs/graphql';
 import { join } from 'path';
 
-const definitionFactory = new GraphQLDefinitionsFactory();
+const definitionFactory = new GraphQLFederationDefinitionsFactory();
 
 definitionFactory.generate({
   typePaths: ['./apps/ping/src/ping/graphql/*.gql'],
@@ -10,11 +10,11 @@ definitionFactory.generate({
   defaultScalarType: 'unknown',
   customScalarTypeMapping: {
     DateTime: 'typeof GraphQLDateTime',
-    ObjectID: 'typeof GraphQLObjectID',
     Longitude: 'typeof GraphQLLongitude',
     Latitude: 'typeof GraphQLLatitude',
     URL: 'typeof GraphQLURL',
   },
+  watch: true,
   additionalHeader:
     "import { GraphQLDateTime, GraphQLObjectID, GraphQLLatitude, GraphQLLongitude, GraphQLURL } from 'graphql-scalars'",
 });

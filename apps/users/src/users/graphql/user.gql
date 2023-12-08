@@ -1,13 +1,5 @@
 scalar DateTime
 scalar EmailAddress
-scalar ObjectID
-
-enum Role {
-  ADMIN
-  USER
-  ACTIVITY_OWNER
-  FORUM_MODERATOR
-}
 
 type Name {
   firstName: String!
@@ -15,15 +7,20 @@ type Name {
   lastName: String!
 }
 
-type User {
-  id: ObjectID!
+type User @key(fields: "id") {
+  id: ID!
   email: EmailAddress!
   username: String!
-  role: Role!
   name: Name
   picture: String
   createdAt: DateTime
   picks: [String]
+  pings: [Ping]
+}
+
+extend type Ping @key(fields: "id") {
+  id: ID!
+  user: User
 }
 
 input CreateUserInput {
@@ -32,7 +29,6 @@ input CreateUserInput {
   firstName: String!
   lastName: String!
   middleName: String
-  role: Role!
   picture: String
   picks: [String]!
   latitude: Float
@@ -40,7 +36,7 @@ input CreateUserInput {
 }
 
 input UpdateUserInput {
-  id: ObjectID!
+  id: ID!
   usename: String
   email: EmailAddress
   firstName: String
@@ -49,17 +45,16 @@ input UpdateUserInput {
   picks: [String]
 }
 
-type Query {
-  users: [User]!
-  getUserByID(id: ObjectID!): User
+extend type Query {
+  getUser(id: ID!): User!
   getUserByEmail(email: EmailAddress!): User
   isUsernameAvailable(username: String!): Boolean!
 }
 
-type Mutation {
-  createUser(createUserInput: CreateUserInput!): User!
-  updateUser(updateUserInput: UpdateUserInput!): User!
-  removeUser(id: ObjectID!): User
+extend type Mutation {
+  createUser(payload: CreateUserInput!): User!
+  updateUser(payload: UpdateUserInput!): User!
+  removeUser(id: ID!): User
 }
 
 # type Subscription {

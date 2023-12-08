@@ -10,20 +10,12 @@
 
 import { GraphQLDateTime, GraphQLEmailAddress, GraphQLObjectID } from 'graphql-scalars'
 
-export enum Role {
-    ADMIN = "ADMIN",
-    USER = "USER",
-    ACTIVITY_OWNER = "ACTIVITY_OWNER",
-    FORUM_MODERATOR = "FORUM_MODERATOR"
-}
-
 export interface CreateUserInput {
     username: string;
     email: EmailAddress;
     firstName: string;
     lastName: string;
     middleName?: Nullable<string>;
-    role: Role;
     picture?: Nullable<string>;
     picks: Nullable<string>[];
     latitude?: Nullable<number>;
@@ -31,7 +23,7 @@ export interface CreateUserInput {
 }
 
 export interface UpdateUserInput {
-    id: ObjectID;
+    id: string;
     usename?: Nullable<string>;
     email?: Nullable<EmailAddress>;
     firstName?: Nullable<string>;
@@ -47,30 +39,33 @@ export interface Name {
 }
 
 export interface User {
-    id: ObjectID;
+    id: string;
     email: EmailAddress;
     username: string;
-    role: Role;
     name?: Nullable<Name>;
     picture?: Nullable<string>;
     createdAt?: Nullable<DateTime>;
     picks?: Nullable<Nullable<string>[]>;
+    pings?: Nullable<Nullable<Ping>[]>;
 }
 
 export interface IQuery {
-    users(): Nullable<User>[] | Promise<Nullable<User>[]>;
-    getUserByID(id: ObjectID): Nullable<User> | Promise<Nullable<User>>;
+    getUser(id: string): User | Promise<User>;
     getUserByEmail(email: EmailAddress): Nullable<User> | Promise<Nullable<User>>;
     isUsernameAvailable(username: string): boolean | Promise<boolean>;
 }
 
+export interface Ping {
+    id: string;
+    user?: Nullable<User>;
+}
+
 export interface IMutation {
-    createUser(createUserInput: CreateUserInput): User | Promise<User>;
-    updateUser(updateUserInput: UpdateUserInput): User | Promise<User>;
-    removeUser(id: ObjectID): Nullable<User> | Promise<Nullable<User>>;
+    createUser(payload: CreateUserInput): User | Promise<User>;
+    updateUser(payload: UpdateUserInput): User | Promise<User>;
+    removeUser(id: string): Nullable<User> | Promise<Nullable<User>>;
 }
 
 export type DateTime = typeof GraphQLDateTime;
 export type EmailAddress = typeof GraphQLEmailAddress;
-export type ObjectID = typeof GraphQLObjectID;
 type Nullable<T> = T | null;

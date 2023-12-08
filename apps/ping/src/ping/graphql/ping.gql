@@ -1,4 +1,3 @@
-scalar ObjectID
 scalar Longitude
 scalar Latitude
 scalar URL
@@ -9,10 +8,11 @@ type Media {
   type: String!
 }
 
-type Ping {
+type Ping @key(fields: "id") {
   id: ID!
   title: String!
   userID: ID!
+  user: User
   longitude: Longitude!
   latitude: Latitude!
   picks: [String!]!
@@ -21,6 +21,11 @@ type Ping {
   radius: Float
   createdAt: DateTime
   media: [Media]
+}
+
+extend type User @key(fields: "id") {
+  id: ID! @external
+  pings: [Ping]
 }
 
 input CreatePingInput {
@@ -34,8 +39,7 @@ input CreatePingInput {
   radius: Float
 }
 
-input UpdatePingInput {
-  id: ID!
+input UPingInput {
   title: String
   picks: [String!]
   longitude: Longitude
@@ -51,10 +55,11 @@ input MediaInput {
   type: String!
 }
 
-# type Query {
-# }
+extend type Query {
+  getPing(id: ID!): Ping!
+}
 
-type Mutation {
-  createPing(createPingInput: CreatePingInput!): ID!
-  updatePing(updatePingInput: UpdatePingInput!): ID!
+extend type Mutation {
+  createPing(payload: CreatePingInput!): Ping!
+  updatePing(id: ID!, payload: UPingInput!): ID!
 }
