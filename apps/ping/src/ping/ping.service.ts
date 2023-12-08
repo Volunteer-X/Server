@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { CreatePingInput, Ping, UPingInput } from './graphql/ping.schema';
-import { PingRepository } from '../prisma/prisma.service';
+import { PingRepository } from '../service/prisma.service';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 import { TwitterSnowflake as Snowflake } from '@sapphire/snowflake';

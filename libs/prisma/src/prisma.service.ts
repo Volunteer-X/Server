@@ -5,12 +5,12 @@ import {
   Logger,
   OnModuleInit,
 } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { UserClient } from '@app/prisma';
 import { PRIMSA_OPTIONS, PrismaModuleOptions } from './prisma.provider';
 import { createPrismaQueryEventHandler } from 'prisma-query-log';
 
 @Injectable()
-export class PrismaService extends PrismaClient implements OnModuleInit {
+export class PrismaService extends UserClient implements OnModuleInit {
   private readonly logger = new Logger();
 
   constructor(@Inject(PRIMSA_OPTIONS) options: PrismaModuleOptions) {

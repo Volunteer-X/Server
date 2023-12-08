@@ -10,8 +10,6 @@ import { lastValueFrom } from 'rxjs';
 
 import { ClientProxy } from '@nestjs/microservices';
 import { NEO4J_SERVICE } from '@app/common';
-import { TwitterSnowflake } from '@sapphire/snowflake';
-import { ID } from '@nestjs/graphql';
 
 @Injectable()
 export class UsersService {
@@ -53,7 +51,6 @@ export class UsersService {
 
     const user = await this.userRepo.create({
       data: {
-        id: TwitterSnowflake.generate().toString(),
         email: GraphQLEmailAddress.parseValue(email),
         username,
         name: {
@@ -99,10 +96,14 @@ export class UsersService {
   async findOne(id: string) {
     console.log('id', id);
 
-    return this.userRepo.findUnique({
+    const user = await this.userRepo.findUnique({
       where: {
         id: id,
       },
     });
+
+    console.log('user', user);
+
+    return user;
   }
 }

@@ -10,7 +10,7 @@
     "prisma:push:user": "prisma db push --schema ./prisma/users/users.schema.prisma",
     "prisma:push": "npm prisma:push:users",
     "prisma:gen:users": "prisma generate --schema ./apps/users/prisma/users.schema.prisma",
-    "prisma:gen:ping": "prisma generate --schema ./apps/ping/src/prisma/ping.schema.prisma",
+    "prisma:gen:ping": "prisma generate --schema ./apps/ping/prisma/ping.schema.prisma",
     "prisma:gen:activity": "prisma generate --schema ./apps/activity/prisma/activity.schema.prisma",
     "prisma:gen": "npm run prisma:gen:users && npm run prisma:gen:ping",
     "generate-typings:user": "ts-node ./libs/generate-typings/user.ts",
@@ -29,7 +29,6 @@
     "test:e2e": "jest --config ./apps/gateway/test/jest-e2e.json"
   },
   "dependencies": {
-    "@apollo/federation": "^0.38.1",
     "@apollo/gateway": "^2.5.3",
     "@apollo/server": "^4.9.2",
     "@apollo/subgraph": "^2.5.3",
@@ -49,6 +48,7 @@
     "@sapphire/snowflake": "^3.5.1",
     "amqp-connection-manager": "^4.1.14",
     "amqplib": "^0.10.3",
+    "bson": "^6.2.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "graphql": "^16.8.0",

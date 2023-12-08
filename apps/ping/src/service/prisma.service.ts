@@ -1,8 +1,8 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { PrismaClient } from '@prisma/db-ping';
+import { PingClient } from '@app/prisma';
 
 @Injectable()
-export class PingRepository extends PrismaClient implements OnModuleInit {
+export class PingRepository extends PingClient implements OnModuleInit {
   async onModuleInit() {
     await this.$connect();
   }

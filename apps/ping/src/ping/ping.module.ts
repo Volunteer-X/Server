@@ -15,14 +15,14 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 
 import { PingService } from './ping.service';
 import { PingResolver } from './ping.resolver';
-import { PingRepository } from '../prisma/prisma.service';
+import { PingRepository } from '../service/prisma.service';
 import { ACTIVITY_SERVICE, NEO4J_SERVICE, RmqModule } from '@app/common';
 
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloFederationDriverConfig>({
       driver: ApolloFederationDriver,
-      typePaths: ['./**/*.gql'],
+      typePaths: ['./**/ping.gql'],
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       resolvers: {

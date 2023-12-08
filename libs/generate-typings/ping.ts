@@ -13,8 +13,9 @@ definitionFactory.generate({
     Longitude: 'typeof GraphQLLongitude',
     Latitude: 'typeof GraphQLLatitude',
     URL: 'typeof GraphQLURL',
+    ObjectID: 'typeof GraphQLObjectID',
   },
   watch: true,
   additionalHeader:
-    "import { GraphQLDateTime, GraphQLLatitude, GraphQLLongitude, GraphQLURL } from 'graphql-scalars'",
+    "import { GraphQLDateTime, GraphQLObjectID, GraphQLLatitude, GraphQLLongitude, GraphQLURL } from 'graphql-scalars'",
 });

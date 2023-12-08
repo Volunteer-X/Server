@@ -1,5 +1,6 @@
 scalar DateTime
 scalar EmailAddress
+scalar ObjectID
 
 type Name {
   firstName: String!
@@ -8,7 +9,7 @@ type Name {
 }
 
 type User @key(fields: "id") {
-  id: ID!
+  id: ObjectID!
   email: EmailAddress!
   username: String!
   name: Name
@@ -19,7 +20,7 @@ type User @key(fields: "id") {
 }
 
 extend type Ping @key(fields: "id") {
-  id: ID!
+  id: ObjectID! @external
   user: User
 }
 
@@ -36,7 +37,7 @@ input CreateUserInput {
 }
 
 input UpdateUserInput {
-  id: ID!
+  id: ObjectID!
   usename: String
   email: EmailAddress
   firstName: String
@@ -46,7 +47,7 @@ input UpdateUserInput {
 }
 
 extend type Query {
-  getUser(id: ID!): User!
+  getUser(id: ObjectID!): User!
   getUserByEmail(email: EmailAddress!): User
   isUsernameAvailable(username: String!): Boolean!
 }
@@ -54,7 +55,7 @@ extend type Query {
 extend type Mutation {
   createUser(payload: CreateUserInput!): User!
   updateUser(payload: UpdateUserInput!): User!
-  removeUser(id: ID!): User
+  removeUser(id: ObjectID!): User
 }
 
 # type Subscription {

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TerminusModule } from '@nestjs/terminus';
 import { HealthController } from './health.controller';
 import { HttpModule } from '@nestjs/axios';
-import { PingRepository } from '../prisma/prisma.service';
+import { PingRepository } from '../service/prisma.service';
 
 @Module({
   imports: [TerminusModule, HttpModule],

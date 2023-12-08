@@ -17,7 +17,7 @@ import { GraphQLError, GraphQLFormattedError } from 'graphql';
   imports: [
     GraphQLModule.forRoot<ApolloFederationDriverConfig>({
       driver: ApolloFederationDriver,
-      typePaths: ['./**/*.gql'],
+      typePaths: ['**/user.gql'],
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       resolvers: {

@@ -5,7 +5,7 @@ import {
   HttpHealthIndicator,
   PrismaHealthIndicator,
 } from '@nestjs/terminus';
-import { PingRepository } from '../prisma/prisma.service';
+import { PingRepository } from '../service/prisma.service';
 
 @Controller('health')
 export class HealthController {

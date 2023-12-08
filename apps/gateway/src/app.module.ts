@@ -9,29 +9,29 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 
 @Module({
   imports: [
-    // GraphQLModule.forRoot<ApolloGatewayDriverConfig>({
-    //   driver: ApolloGatewayDriver,
-    //   server: {
-    //     playground: false,
-    //     plugins: [ApolloServerPluginLandingPageLocalDefault()],
-    //   },
-    //   gateway: {
-    //     supergraphSdl: new IntrospectAndCompose({
-    //       logger: console,
-    //       subgraphHealthCheck: true,
-    //       subgraphs: [
-    //         {
-    //           name: 'users',
-    //           url: 'http://localhost:3510/graphql',
-    //         },
-    //         {
-    //           name: 'ping',
-    //           url: 'http://localhost:3520/graphql',
-    //         },
-    //       ],
-    //     }),
-    //   },
-    // }),
+    GraphQLModule.forRoot<ApolloGatewayDriverConfig>({
+      driver: ApolloGatewayDriver,
+      server: {
+        playground: false,
+        plugins: [ApolloServerPluginLandingPageLocalDefault()],
+      },
+      gateway: {
+        supergraphSdl: new IntrospectAndCompose({
+          logger: console,
+          subgraphHealthCheck: true,
+          subgraphs: [
+            {
+              name: 'users',
+              url: 'http://localhost:3510/graphql',
+            },
+            {
+              name: 'ping',
+              url: 'http://localhost:3520/graphql',
+            },
+          ],
+        }),
+      },
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [portConfig],

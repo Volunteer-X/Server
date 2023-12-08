@@ -23,7 +23,7 @@ export interface CreateUserInput {
 }
 
 export interface UpdateUserInput {
-    id: string;
+    id: ObjectID;
     usename?: Nullable<string>;
     email?: Nullable<EmailAddress>;
     firstName?: Nullable<string>;
@@ -39,7 +39,7 @@ export interface Name {
 }
 
 export interface User {
-    id: string;
+    id: ObjectID;
     email: EmailAddress;
     username: string;
     name?: Nullable<Name>;
@@ -50,22 +50,23 @@ export interface User {
 }
 
 export interface IQuery {
-    getUser(id: string): User | Promise<User>;
+    getUser(id: ObjectID): User | Promise<User>;
     getUserByEmail(email: EmailAddress): Nullable<User> | Promise<Nullable<User>>;
     isUsernameAvailable(username: string): boolean | Promise<boolean>;
 }
 
 export interface Ping {
-    id: string;
+    id: ObjectID;
     user?: Nullable<User>;
 }
 
 export interface IMutation {
     createUser(payload: CreateUserInput): User | Promise<User>;
     updateUser(payload: UpdateUserInput): User | Promise<User>;
-    removeUser(id: string): Nullable<User> | Promise<Nullable<User>>;
+    removeUser(id: ObjectID): Nullable<User> | Promise<Nullable<User>>;
 }
 
 export type DateTime = typeof GraphQLDateTime;
 export type EmailAddress = typeof GraphQLEmailAddress;
+export type ObjectID = typeof GraphQLObjectID;
 type Nullable<T> = T | null;
