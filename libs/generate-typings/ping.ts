@@ -16,5 +16,5 @@ definitionFactory.generate({
   },
   watch: true,
   additionalHeader:
-    "import { GraphQLDateTime, GraphQLObjectID, GraphQLLatitude, GraphQLLongitude, GraphQLURL } from 'graphql-scalars'",
+    "import { GraphQLDateTime, GraphQLLatitude, GraphQLLongitude, GraphQLURL } from 'graphql-scalars'",
 });

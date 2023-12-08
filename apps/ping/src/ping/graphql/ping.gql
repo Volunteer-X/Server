@@ -24,7 +24,7 @@ type Ping @key(fields: "id") {
 }
 
 extend type User @key(fields: "id") {
-  id: ID! @external
+  id: ID!
   pings: [Ping]
 }
 
