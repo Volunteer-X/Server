@@ -7,7 +7,7 @@ import {
 } from '@nestjs/graphql';
 import { PingService } from './ping.service';
 import { CreatePingInput, Ping, UPingInput } from './graphql/ping.schema';
-import { Logger } from '@nestjs/common';
+import { Logger, Query } from '@nestjs/common';
 
 @Resolver('Ping')
 export class PingResolver {
@@ -23,6 +23,8 @@ export class PingResolver {
   updateMedia(@Args('id') id: string, @Args('payload') payload: UPingInput) {
     return this.pingService.updatePing(id, payload);
   }
+
+  // @Query('getPing')
 
   @ResolveField('user')
   user(@Parent() ping: Ping) {

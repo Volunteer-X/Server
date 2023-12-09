@@ -3,8 +3,10 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../../../apps/__generated__/client/ping"
+  output   = "../../../node_modules/@prisma/client-ping"
 }
+
+// apps\ping\prisma\ping.schema.prisma
 
 datasource db {
   provider = "mongodb"

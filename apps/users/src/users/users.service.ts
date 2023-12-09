@@ -30,7 +30,7 @@ export class UsersService {
   /*
    ? Create new user
    */
-  async createUser(input: CreateUserInput): Promise<User> {
+  async createUser(input: CreateUserInput) {
     const {
       email,
       username,
@@ -55,23 +55,26 @@ export class UsersService {
       },
     });
 
-    // try {
-    //   await lastValueFrom(
-    //     this.neo4jClient.emit<string, string>(
-    //       'newUserCreated',
-    //       JSON.stringify({
-    //         id: user.id,
-    //         picks: picks,
-    //         longitude,
-    //         latitude,
-    //       }),
-    //     ),
-    //   );
-    // } catch (error) {}
+    try {
+      await lastValueFrom(
+        this.neo4jClient.emit<string, string>(
+          'newUserCreated',
+          JSON.stringify({
+            id: result.id,
+            picks: picks,
+            longitude,
+            latitude,
+          }),
+        ),
+      );
+    } catch (error) {
+      console.log('error', error);
+    }
 
-    const user: User = {
-      id: result.id as any,
-      email: result.email as any,
+    const user = {
+      createdAt: new ObjectId(result.id).getTimestamp(),
+      id: result.id,
+      email: result.email,
       username: result.username,
       name: {
         firstName: result.name.firstName,
@@ -116,12 +119,22 @@ export class UsersService {
   async findOne(id: string) {
     console.log('id', id);
 
-    const user = await this.userRepo.findUnique({
+    const result = await this.userRepo.findUnique({
       where: {
         id: GraphQLObjectID.parseValue(id),
       },
     });
 
-    return user;
+    const { id: _id, email, username, name, picks, picture } = result;
+
+    return {
+      _id,
+      email,
+      username,
+      name,
+      picks,
+      picture,
+      createdAt: new ObjectId(id).getTimestamp(),
+    };
   }
 }

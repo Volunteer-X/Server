@@ -5,12 +5,14 @@ import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 import { TwitterSnowflake as Snowflake } from '@sapphire/snowflake';
 import {
+  GraphQLDateTime,
   GraphQLLatitude,
   GraphQLLongitude,
   GraphQLObjectID,
   GraphQLURL,
 } from 'graphql-scalars';
 import { ACTIVITY_SERVICE, NEO4J_SERVICE } from '@app/common';
+import { ObjectId } from 'bson';
 
 @Injectable()
 export class PingService {
@@ -139,17 +141,34 @@ export class PingService {
 
     // update activity
 
-    try {
-      await lastValueFrom(
-        this.activityClient.emit<string, string>(
-          'pingUpdated',
-          JSON.stringify(result),
-        ),
-      );
-    } catch (error) {
-      throw new Error(`Activity service error: ${error.message}`);
-    }
+    // try {
+    //   await lastValueFrom(
+    //     this.activityClient.emit<string, string>(
+    //       'pingUpdated',
+    //       JSON.stringify(result),
+    //     ),
+    //   );
+    // } catch (error) {
+    //   throw new Error(`Activity service error: ${error.message}`);
+    // }
 
-    return result.id;
+    const createdAt = new ObjectId(result.id).getTimestamp();
+
+    const ping = {
+      id: result.id,
+      createdAt: createdAt,
+      title: result.title,
+      description: result.description,
+      picks: result.picks,
+      url: result.url && result.url,
+      radius: result.radius,
+      latitude: result.geometry.coordinates[0],
+      longitude: result.geometry.coordinates[1],
+      media: result.media,
+      userID: result.userID,
+      user: { __typename: 'User', id: result.userID },
+    };
+
+    return ping;
   }
 }

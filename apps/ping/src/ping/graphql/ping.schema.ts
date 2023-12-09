@@ -68,7 +68,7 @@ export interface User {
 
 export interface IMutation {
     createPing(payload: CreatePingInput): Ping | Promise<Ping>;
-    updatePing(id: ObjectID, payload: UPingInput): ObjectID | Promise<ObjectID>;
+    updatePing(id: ObjectID, payload: UPingInput): Ping | Promise<Ping>;
 }
 
 export type Longitude = typeof GraphQLLongitude;

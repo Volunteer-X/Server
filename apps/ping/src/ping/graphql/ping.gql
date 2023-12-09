@@ -62,5 +62,5 @@ extend type Query {
 
 extend type Mutation {
   createPing(payload: CreatePingInput!): Ping!
-  updatePing(id: ObjectID!, payload: UPingInput!): ObjectID!
+  updatePing(id: ObjectID!, payload: UPingInput!): Ping!
 }

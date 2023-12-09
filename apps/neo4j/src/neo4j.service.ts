@@ -9,7 +9,7 @@ export class Neo4jService {
   // Add a new user to the database
   async createUser(user: UserNode) {
     const cypher = `
-      CREATE (u:User {id: $id, picks: $picks}, location: $location)
+      CREATE (u:User {id: $id, picks: $picks, location: $location})
       RETURN u
     `;
 

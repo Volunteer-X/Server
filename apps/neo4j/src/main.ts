@@ -20,6 +20,6 @@ async function bootstrap() {
 
   await app.listen(port);
 
-  console.log('🚀 Ping server running successfully on port:', port);
+  console.log('🚀 Neo4j server running successfully on port:', port);
 }
 bootstrap();
