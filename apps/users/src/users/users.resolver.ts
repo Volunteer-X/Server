@@ -12,6 +12,7 @@ import {
   EmailAddress,
   UpdateUserInput,
 } from './graphql/user.schema';
+import { GraphQLObjectID } from 'graphql-scalars';
 
 @Resolver('User')
 export class UsersResolver {
@@ -35,20 +36,29 @@ export class UsersResolver {
   }
 
   @Query('getUser')
-  findOne(@Args({ name: 'id', type: () => ID }) id: string) {
-    return this.usersService.findOne(id);
+  findOne(
+    @Args({ name: 'id', type: () => GraphQLObjectID })
+    id: typeof GraphQLObjectID,
+  ) {
+    return this.usersService.findOne(GraphQLObjectID.parseValue(id));
   }
 
   @Mutation('updateUser')
   update(@Args('payload') payload: UpdateUserInput) {
-    return this.usersService.update(payload.id, payload);
+    return this.usersService.update(
+      GraphQLObjectID.parseValue(payload.id),
+      payload,
+    );
   }
 
   @ResolveReference()
-  resolveReference(reference: { __typename: string; id: string }) {
+  resolveReference(reference: {
+    __typename: string;
+    id: typeof GraphQLObjectID;
+  }) {
     console.log('reference', reference);
 
-    return this.usersService.findOne(reference.id);
+    return this.usersService.findOne(GraphQLObjectID.parseValue(reference.id));
   }
 
   // @ResolveField('Ping')

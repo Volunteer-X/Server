@@ -5,7 +5,11 @@ import {
   ApolloFederationDriverConfig,
 } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
-import { DateTimeResolver, EmailAddressResolver } from 'graphql-scalars';
+import {
+  DateTimeResolver,
+  EmailAddressResolver,
+  ObjectIDResolver,
+} from 'graphql-scalars';
 
 import { PrismaModule } from '@app/prisma';
 import { UsersService } from './users.service';
@@ -23,6 +27,7 @@ import { GraphQLError, GraphQLFormattedError } from 'graphql';
       resolvers: {
         DataTime: DateTimeResolver,
         EmailAddress: EmailAddressResolver,
+        ObjectID: ObjectIDResolver,
       },
       formatError: (error: GraphQLError) => {
         console.log(error);

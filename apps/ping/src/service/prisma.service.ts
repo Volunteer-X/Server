@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { PingClient } from '@app/prisma';
+import { PingClient } from '@generated/client';
 
 @Injectable()
 export class PingRepository extends PingClient implements OnModuleInit {

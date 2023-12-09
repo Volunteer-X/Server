@@ -75,5 +75,5 @@ export type Longitude = typeof GraphQLLongitude;
 export type Latitude = typeof GraphQLLatitude;
 export type URL = typeof GraphQLURL;
 export type DateTime = typeof GraphQLDateTime;
-export type ObjectID = unknown;
+export type ObjectID = typeof GraphQLObjectID;
 type Nullable<T> = T | null;

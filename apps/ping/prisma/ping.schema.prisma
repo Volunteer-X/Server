@@ -3,7 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../../../libs/prisma/__generated__/client/ping"
+  output   = "../../../apps/__generated__/client/ping"
 }
 
 datasource db {

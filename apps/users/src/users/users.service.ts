@@ -3,13 +3,22 @@ import {
   CreateUserInput,
   EmailAddress,
   UpdateUserInput,
+  User,
 } from './graphql/user.schema';
-import { GraphQLEmailAddress, GraphQLObjectID } from 'graphql-scalars';
+import {
+  GraphQLEmailAddress,
+  GraphQLObjectID,
+  ObjectIDMock,
+  ObjectIDResolver,
+} from 'graphql-scalars';
 import { InjectRepository, PrismaService } from '@app/prisma';
 import { lastValueFrom } from 'rxjs';
 
 import { ClientProxy } from '@nestjs/microservices';
 import { NEO4J_SERVICE } from '@app/common';
+import { ObjectId } from 'bson';
+import { number } from 'joi';
+import { GraphQLScalarType } from 'graphql';
 
 @Injectable()
 export class UsersService {
@@ -18,26 +27,10 @@ export class UsersService {
     private readonly userRepo: PrismaService['user'],
     @Inject(NEO4J_SERVICE) private readonly neo4jClient: ClientProxy,
   ) {}
-
-  /* 
-  ? Get user details by email
-  */
-  async getUserByEmail(email: EmailAddress) {
-    console.log('email', email);
-
-    const user = await this.userRepo.findUnique({
-      where: { email: email.toString() },
-    });
-
-    console.log('user', user);
-
-    return user;
-  }
-
   /*
    ? Create new user
    */
-  async createUser(input: CreateUserInput) {
+  async createUser(input: CreateUserInput): Promise<User> {
     const {
       email,
       username,
@@ -49,7 +42,7 @@ export class UsersService {
       longitude,
     } = input;
 
-    const user = await this.userRepo.create({
+    const result = await this.userRepo.create({
       data: {
         email: GraphQLEmailAddress.parseValue(email),
         username,
@@ -76,6 +69,33 @@ export class UsersService {
     //   );
     // } catch (error) {}
 
+    const user: User = {
+      id: result.id as any,
+      email: result.email as any,
+      username: result.username,
+      name: {
+        firstName: result.name.firstName,
+        lastName: result.name.lastName,
+      },
+      picture: result.picture,
+      picks: result.picks,
+    };
+
+    return user;
+  }
+
+  /* 
+  ? Get user details by email
+  */
+  async getUserByEmail(email: EmailAddress) {
+    console.log('email', email);
+
+    const user = await this.userRepo.findUnique({
+      where: { email: email.toString() },
+    });
+
+    console.log('user', user);
+
     return user;
   }
 
@@ -98,11 +118,9 @@ export class UsersService {
 
     const user = await this.userRepo.findUnique({
       where: {
-        id: id,
+        id: GraphQLObjectID.parseValue(id),
       },
     });
-
-    console.log('user', user);
 
     return user;
   }

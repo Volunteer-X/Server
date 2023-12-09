@@ -5,7 +5,7 @@ import {
   Logger,
   OnModuleInit,
 } from '@nestjs/common';
-import { UserClient } from '@app/prisma';
+import { UserClient } from '@generated/client';
 import { PRIMSA_OPTIONS, PrismaModuleOptions } from './prisma.provider';
 import { createPrismaQueryEventHandler } from 'prisma-query-log';
 

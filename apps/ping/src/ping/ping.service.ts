@@ -4,7 +4,12 @@ import { PingRepository } from '../service/prisma.service';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 import { TwitterSnowflake as Snowflake } from '@sapphire/snowflake';
-import { GraphQLLatitude, GraphQLLongitude, GraphQLURL } from 'graphql-scalars';
+import {
+  GraphQLLatitude,
+  GraphQLLongitude,
+  GraphQLObjectID,
+  GraphQLURL,
+} from 'graphql-scalars';
 import { ACTIVITY_SERVICE, NEO4J_SERVICE } from '@app/common';
 
 @Injectable()
@@ -37,12 +42,11 @@ export class PingService {
     const result = await this.repository.$transaction([
       this.repository.ping.create({
         data: {
-          id: Snowflake.generate().toString(),
           title,
           description,
           picks,
-          url: url?.toString(),
-          userID: userID.toString(),
+          url: url && url.toString(),
+          userID: GraphQLObjectID.parseValue(userID),
           radius: radius ? radius : 200,
           geometry: {
             type: 'Point',
