@@ -38,6 +38,12 @@
       ],
       "@app/neo4j/*": [
         "libs/neo4j-common/src/*"
+      ],
+      "@app/auth": [
+        "libs/auth/src"
+      ],
+      "@app/auth/*": [
+        "libs/auth/src/*"
       ]
     }
   },

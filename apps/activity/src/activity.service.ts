@@ -1,6 +1,6 @@
 import { IPing } from '@app/common';
 import { Injectable, Logger } from '@nestjs/common';
-import { ActivityRepository } from './db/prisma.service';
+import { ActivityRepository } from './service/prisma.service';
 
 @Injectable()
 export class ActivityService {
