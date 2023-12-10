@@ -17,7 +17,7 @@ export interface CreateUserInput {
     lastName: string;
     middleName?: Nullable<string>;
     picture?: Nullable<string>;
-    picks: Nullable<string>[];
+    picks: string[];
     latitude?: Nullable<number>;
     longitude?: Nullable<number>;
 }
@@ -29,7 +29,7 @@ export interface UpdateUserInput {
     firstName?: Nullable<string>;
     lastName?: Nullable<string>;
     middleName?: Nullable<string>;
-    picks?: Nullable<Nullable<string>[]>;
+    picks?: Nullable<string[]>;
 }
 
 export interface Name {
@@ -45,7 +45,7 @@ export interface User {
     name?: Nullable<Name>;
     picture?: Nullable<string>;
     createdAt?: Nullable<DateTime>;
-    picks?: Nullable<Nullable<string>[]>;
+    picks: string[];
     pings?: Nullable<Nullable<Ping>[]>;
 }
 

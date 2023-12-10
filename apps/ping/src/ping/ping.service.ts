@@ -68,25 +68,25 @@ export class PingService {
     //   ),
     // );
 
-    // try {
-    //   await lastValueFrom(
-    //     this.neo4jClient.emit<string, string>(
-    //       'pingCreated',
-    //       JSON.stringify({
-    //         id: result[0].id,
-    //         userID: result[0].userID,
-    //         picks: result[0].picks,
-    //         location: [
-    //           result[0].geometry.coordinates[0],
-    //           result[0].geometry.coordinates[1],
-    //         ],
-    //         radius: result[0].radius,
-    //       }),
-    //     ),
-    //   );
-    // } catch (error) {
-    //   throw new Error('Neo4j error');
-    // }
+    try {
+      await lastValueFrom(
+        this.neo4jClient.emit<string, string>(
+          'pingCreated',
+          JSON.stringify({
+            id: result[0].id,
+            userID: result[0].userID,
+            picks: result[0].picks,
+            point: [
+              result[0].geometry.coordinates[0],
+              result[0].geometry.coordinates[1],
+            ],
+            radius: result[0].radius,
+          }),
+        ),
+      );
+    } catch (error) {
+      throw new Error('Neo4j error');
+    }
 
     const ping = {
       id: result[0].id,

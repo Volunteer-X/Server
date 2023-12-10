@@ -12,8 +12,6 @@ export class Neo4jController {
 
   @EventPattern('newUserCreated')
   async handleUserCreated(@Payload() user: string, @Ctx() context: RmqContext) {
-    console.log('user', user);
-
     await this.neo4jService.createUser(JSON.parse(user) as UserNode);
     this.rmqService.ack(context);
   }

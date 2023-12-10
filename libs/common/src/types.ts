@@ -25,6 +25,6 @@ export type PingNode = {
   id: string;
   userID: string;
   picks: string[];
-  location: number[]; // * [latitude, longitude]
+  point: number[]; // * [latitude, longitude]
   radius?: number;
 };

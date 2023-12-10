@@ -15,7 +15,7 @@ type User @key(fields: "id") {
   name: Name
   picture: String
   createdAt: DateTime
-  picks: [String]
+  picks: [String!]!
   pings: [Ping]
 }
 
@@ -31,7 +31,7 @@ input CreateUserInput {
   lastName: String!
   middleName: String
   picture: String
-  picks: [String]!
+  picks: [String!]!
   latitude: Float
   longitude: Float
 }
@@ -43,7 +43,7 @@ input UpdateUserInput {
   firstName: String
   lastName: String
   middleName: String
-  picks: [String]
+  picks: [String!]
 }
 
 extend type Query {
