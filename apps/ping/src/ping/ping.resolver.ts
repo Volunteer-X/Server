@@ -2,14 +2,21 @@ import {
   Args,
   Mutation,
   Parent,
+  Query,
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
 import { PingService } from './ping.service';
-import { CreatePingInput, Ping, UPingInput } from './graphql/ping.schema';
+import {
+  CreatePingInput,
+  Ping,
+  PingConnection,
+  UPingInput,
+} from './graphql/ping.schema';
 import { Logger, UseGuards } from '@nestjs/common';
 import { CurrentUser, GqlAuthGuard } from '@app/auth';
 import { User } from 'libs/utils/entities';
+import { decodeFromBase64, encodeToBase64 } from 'libs/utils/helpers';
 
 @Resolver('Ping')
 export class PingResolver {
@@ -18,7 +25,7 @@ export class PingResolver {
 
   @Mutation('createPing')
   @UseGuards(GqlAuthGuard)
-  create(@Args('payload') payload: CreatePingInput, @CurrentUser() user: User) {
+  create(@Args('payload') payload: CreatePingInput) {
     return this.pingService.createPing(payload);
   }
 
@@ -27,7 +34,39 @@ export class PingResolver {
     return this.pingService.updatePing(id, payload);
   }
 
-  // @Query('getPing')
+  @Query('getPing')
+  @UseGuards(GqlAuthGuard)
+  getPing(@Args('id') id: string, @CurrentUser() user: User) {
+    return this.pingService.getPing(id, user.id);
+  }
+
+  @Query('getAllPing')
+  @UseGuards(GqlAuthGuard)
+  async getAllPing(
+    @Args('first') first: number,
+    @Args('after') after: string,
+    @CurrentUser() user: User,
+  ): Promise<PingConnection> {
+    const pings = await this.pingService.getAllPing(
+      user.id,
+      first,
+      decodeFromBase64(after),
+    );
+
+    const pingConnection: PingConnection = {
+      edges: pings.map((ping) => ({
+        node: ping,
+        cursor: encodeToBase64(ping.id),
+      })),
+      pageInfo: {
+        hasNextPage: pings.length === first,
+        endCursor:
+          pings.length > 0 ? encodeToBase64(pings[pings.length - 1].id) : null,
+      },
+    };
+
+    return pingConnection;
+  }
 
   @ResolveField('user')
   user(@Parent() ping: Ping) {

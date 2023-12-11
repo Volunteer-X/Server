@@ -169,4 +169,54 @@ export class PingService {
 
     return ping;
   }
+
+  // Get Ping by ID
+  async getPing(id: string, userID: string) {
+    const result = await this.repository.ping.findUnique({
+      where: {
+        id,
+        userID,
+      },
+    });
+
+    const createdAt = new ObjectId(result.id).getTimestamp();
+
+    const ping = {
+      id: result.id,
+      createdAt: createdAt,
+      title: result.title,
+      description: result.description,
+      picks: result.picks,
+      url: result.url && result.url,
+      radius: result.radius,
+      latitude: result.geometry.coordinates[0],
+      longitude: result.geometry.coordinates[1],
+      media: result.media,
+      userID: result.userID,
+      user: { __typename: 'User', id: result.userID },
+    };
+
+    return ping;
+  }
+
+  // Get all Pings
+  // TODO: Add pagination
+  async getAllPing(userID: string, first: number, after: string) {
+    const cursor = after ? { id: after } : undefined;
+
+    const result = await this.repository.ping.findMany({
+      where: {
+        userID,
+      },
+      take: first,
+      cursor,
+      orderBy: {
+        id: 'asc',
+      },
+    });
+
+    console.log(result);
+
+    return [];
+  }
 }

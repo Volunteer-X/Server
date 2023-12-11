@@ -56,8 +56,26 @@ input MediaInput {
   type: String!
 }
 
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean
+  startCursor: String
+  endCursor: String!
+}
+
+type PingEdge {
+  cursor: String!
+  node: Ping!
+}
+
+type PingConnection {
+  edges: [PingEdge!]!
+  pageInfo: PageInfo!
+}
+
 extend type Query {
   getPing(id: ObjectID!): Ping!
+  getAllPing(first: Int!, after: String): PingConnection!
 }
 
 extend type Mutation {

@@ -57,8 +57,26 @@ export interface Ping {
     media?: Nullable<Nullable<Media>[]>;
 }
 
+export interface PageInfo {
+    hasNextPage: boolean;
+    hasPreviousPage?: Nullable<boolean>;
+    startCursor?: Nullable<string>;
+    endCursor: string;
+}
+
+export interface PingEdge {
+    cursor: string;
+    node: Ping;
+}
+
+export interface PingConnection {
+    edges: PingEdge[];
+    pageInfo: PageInfo;
+}
+
 export interface IQuery {
     getPing(id: ObjectID): Ping | Promise<Ping>;
+    getAllPing(first: number, after?: Nullable<string>): PingConnection | Promise<PingConnection>;
 }
 
 export interface User {
