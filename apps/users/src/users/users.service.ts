@@ -3,22 +3,14 @@ import {
   CreateUserInput,
   EmailAddress,
   UpdateUserInput,
-  User,
 } from './graphql/user.schema';
-import {
-  GraphQLEmailAddress,
-  GraphQLObjectID,
-  ObjectIDMock,
-  ObjectIDResolver,
-} from 'graphql-scalars';
+import { GraphQLEmailAddress, GraphQLObjectID } from 'graphql-scalars';
 import { InjectRepository, PrismaService } from '@app/prisma';
 import { lastValueFrom } from 'rxjs';
 
 import { ClientProxy } from '@nestjs/microservices';
 import { NEO4J_SERVICE } from '@app/common';
 import { ObjectId } from 'bson';
-import { number } from 'joi';
-import { GraphQLScalarType } from 'graphql';
 
 @Injectable()
 export class UsersService {
@@ -90,11 +82,11 @@ export class UsersService {
   /* 
   ? Get user details by email
   */
-  async getUserByEmail(email: EmailAddress) {
+  async getUserByEmail(email: string) {
     console.log('email', email);
 
     const user = await this.userRepo.findUnique({
-      where: { email: email.toString() },
+      where: { email: email },
     });
 
     console.log('user', user);

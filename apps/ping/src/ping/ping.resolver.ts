@@ -7,7 +7,9 @@ import {
 } from '@nestjs/graphql';
 import { PingService } from './ping.service';
 import { CreatePingInput, Ping, UPingInput } from './graphql/ping.schema';
-import { Logger, Query } from '@nestjs/common';
+import { Logger, UseGuards } from '@nestjs/common';
+import { CurrentUser, GqlAuthGuard } from '@app/auth';
+import { User } from 'libs/utils/entities';
 
 @Resolver('Ping')
 export class PingResolver {
@@ -15,7 +17,8 @@ export class PingResolver {
   private readonly logger = new Logger(PingResolver.name);
 
   @Mutation('createPing')
-  create(@Args('payload') payload: CreatePingInput) {
+  @UseGuards(GqlAuthGuard)
+  create(@Args('payload') payload: CreatePingInput, @CurrentUser() user: User) {
     return this.pingService.createPing(payload);
   }
 

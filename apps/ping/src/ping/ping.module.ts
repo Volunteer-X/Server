@@ -17,6 +17,7 @@ import { PingService } from './ping.service';
 import { PingResolver } from './ping.resolver';
 import { PingRepository } from '../service/prisma.service';
 import { ACTIVITY_SERVICE, NEO4J_SERVICE, RmqModule } from '@app/common';
+import { AuthModule } from '@app/auth';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ACTIVITY_SERVICE, NEO4J_SERVICE, RmqModule } from '@app/common';
         Latitude: LatitudeResolver,
       },
     }),
+    AuthModule,
     RmqModule.register({ name: [ACTIVITY_SERVICE, NEO4J_SERVICE] }),
   ],
   providers: [PingService, PingResolver, PingRepository],

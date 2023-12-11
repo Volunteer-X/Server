@@ -4,7 +4,6 @@ import {
   Mutation,
   Args,
   ResolveReference,
-  ID,
 } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import {
@@ -12,7 +11,7 @@ import {
   EmailAddress,
   UpdateUserInput,
 } from './graphql/user.schema';
-import { GraphQLObjectID } from 'graphql-scalars';
+import { GraphQLEmailAddress, GraphQLObjectID } from 'graphql-scalars';
 
 @Resolver('User')
 export class UsersResolver {
@@ -27,7 +26,9 @@ export class UsersResolver {
 
   @Query('getUserByEmail')
   getUserByEmail(@Args('email') email: EmailAddress) {
-    return this.usersService.getUserByEmail(email);
+    return this.usersService.getUserByEmail(
+      GraphQLEmailAddress.parseValue(email),
+    );
   }
 
   @Query('isUsernameAvailable')
