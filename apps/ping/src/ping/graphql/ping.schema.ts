@@ -71,6 +71,7 @@ export interface PingEdge {
 
 export interface PingConnection {
     edges: PingEdge[];
+    owner: User;
     pageInfo: PageInfo;
 }
 

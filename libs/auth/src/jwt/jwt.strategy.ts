@@ -5,6 +5,7 @@ import { Strategy as BaseStrategy, ExtractJwt } from 'passport-jwt';
 import { passportJwtSecret } from 'jwks-rsa';
 import { JwtPayload } from './jwt-payload.interface';
 import { AuthService } from '../service/auth.service';
+import { User } from 'libs/utils/entities';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(BaseStrategy) {
@@ -35,7 +36,7 @@ export class JwtStrategy extends PassportStrategy(BaseStrategy) {
     });
   }
 
-  async validate(payload: JwtPayload): Promise<JwtPayload> {
+  async validate(payload: JwtPayload): Promise<User> {
     // const minimumScope = ['openid', 'profile', 'email'];
 
     // if (

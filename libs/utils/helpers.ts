@@ -1,4 +1,8 @@
-export const encodeToBase64 = (id: string) => {
+export const encodeToBase64 = (id?: string) => {
+  if (!id) {
+    return null;
+  }
+
   return Buffer.from(id).toString('base64');
 };
 

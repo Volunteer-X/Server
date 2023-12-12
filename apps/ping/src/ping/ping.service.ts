@@ -11,6 +11,7 @@ import {
 } from 'graphql-scalars';
 import { ACTIVITY_SERVICE, NEO4J_SERVICE } from '@app/common';
 import { ObjectId } from 'bson';
+import { User } from 'libs/utils/entities';
 
 @Injectable()
 export class PingService {
@@ -200,7 +201,6 @@ export class PingService {
   }
 
   // Get all Pings
-  // TODO: Add pagination
   async getAllPing(userID: string, first: number, after: string) {
     const cursor = after ? { id: after } : undefined;
 
@@ -215,8 +215,20 @@ export class PingService {
       },
     });
 
-    console.log(result);
+    const pings = result.map((item) => ({
+      id: item.id,
+      createdAt: new ObjectId(item.id).getTimestamp(),
+      title: item.title,
+      description: item.description,
+      picks: item.picks,
+      url: item.url && item.url,
+      radius: item.radius,
+      latitude: item.geometry.coordinates[0],
+      longitude: item.geometry.coordinates[1],
+      media: item.media,
+      userID: item.userID,
+    }));
 
-    return [];
+    return pings;
   }
 }

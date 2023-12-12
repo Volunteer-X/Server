@@ -46,26 +46,28 @@ export class PingResolver {
     @Args('first') first: number,
     @Args('after') after: string,
     @CurrentUser() user: User,
-  ): Promise<PingConnection> {
+    @Args('userID') userID?: string,
+  ) {
+    userID = userID ? userID : user.id;
+
     const pings = await this.pingService.getAllPing(
-      user.id,
+      userID,
       first,
       decodeFromBase64(after),
     );
 
-    const pingConnection: PingConnection = {
+    return {
       edges: pings.map((ping) => ({
         node: ping,
         cursor: encodeToBase64(ping.id),
       })),
+      owner: { __typename: 'User', id: userID },
       pageInfo: {
         hasNextPage: pings.length === first,
         endCursor:
           pings.length > 0 ? encodeToBase64(pings[pings.length - 1].id) : null,
       },
     };
-
-    return pingConnection;
   }
 
   @ResolveField('user')

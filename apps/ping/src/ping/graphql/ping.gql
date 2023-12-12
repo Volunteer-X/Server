@@ -70,6 +70,7 @@ type PingEdge {
 
 type PingConnection {
   edges: [PingEdge!]!
+  owner: User!
   pageInfo: PageInfo!
 }
 
