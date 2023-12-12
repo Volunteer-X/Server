@@ -12,19 +12,19 @@ export class GqlAuthGuard extends AuthGuard() {
     return ctx.getContext().req;
   }
 
-  handleRequest<TUser = any>(
-    err: any,
-    user: any,
-    info: any,
-    context: ExecutionContext,
-    status?: any,
-  ): TUser {
-    console.error('err', err);
-    console.log('user', user);
-    console.info('info', info);
-    console.log('context', context);
-    console.log('status', status);
+  // handleRequest<TUser = any>(
+  //   err: any,
+  //   user: any,
+  //   info: any,
+  //   context: ExecutionContext,
+  //   status?: any,
+  // ): TUser {
+  //   console.error('err', err);
+  //   console.log('user', user);
+  //   console.info('info', info);
+  //   console.log('context', context);
+  //   console.log('status', status);
 
-    return super.handleRequest(err, user, info, context, status);
-  }
+  //   return super.handleRequest(err, user, info, context, status);
+  // }
 }

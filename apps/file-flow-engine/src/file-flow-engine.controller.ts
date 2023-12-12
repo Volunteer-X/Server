@@ -1,6 +1,15 @@
-import { Controller, Get, Header, Logger, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Header,
+  Logger,
+  Param,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { FileFlowEngineService } from './file-flow-engine.service';
 import { AWSService } from './aws-s3/aws.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('api/v1/')
 export class FileFlowEngineController {
@@ -11,15 +20,32 @@ export class FileFlowEngineController {
 
   private readonly logger = new Logger(FileFlowEngineController.name);
 
-  @Get(':mimeType')
+  @Get('upload')
   @Header('Content-Type', 'application/json')
-  async getAWSPresignedUrl(@Param('mimeType') type: string) {
+  @UseGuards(AuthGuard())
+  async getAWSPresignedUrl(@Query('type') type: string) {
     console.log(type);
     const { Key, signedUrl } = await this.awsService.createPresignedUrl(type);
 
     return {
       signedUrl,
       Key,
+    };
+  }
+
+  @Get('download/')
+  @Header('Content-Type', 'application/json')
+  @UseGuards(AuthGuard())
+  async getAWSPresignedUrlDownload(
+    @Query('Key') Key: string,
+    @Query('type') type: string,
+  ) {
+    console.log(Key, type);
+
+    const uri = await this.awsService.createPresignedUrlDownload(Key, type);
+
+    return {
+      uri,
     };
   }
 }

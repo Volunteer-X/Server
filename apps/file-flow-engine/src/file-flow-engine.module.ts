@@ -4,6 +4,7 @@ import { FileFlowEngineService } from './file-flow-engine.service';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { AWSService } from './aws-s3/aws.service';
+import { AuthModule } from '@app/auth';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AWSService } from './aws-s3/aws.service';
         AWS_BUCKET: Joi.string().required(),
       }),
     }),
+    AuthModule,
   ],
   controllers: [FileFlowEngineController],
   providers: [FileFlowEngineService, AWSService],

@@ -30,7 +30,7 @@ export class JwtStrategy extends PassportStrategy(BaseStrategy) {
         },
       }),
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      audience: configService.get<string>('AUTH0_AUDIENCE'),
+      // audience: configService.get<string>('AUTH0_AUDIENCE'),
       issuer: `https://${configService.get<string>('AUTH0_DOMAIN')}/`,
       algorithms: ['RS256'],
     });
@@ -39,9 +39,23 @@ export class JwtStrategy extends PassportStrategy(BaseStrategy) {
   async validate(payload: JwtPayload): Promise<User> {
     // get user info from payload
 
-    console.log('payload', payload);
+    const minimumScope = ['openid', 'profile', 'email'];
 
-    const email = payload?.email;
+    if (
+      payload?.scope
+        ?.split(' ')
+        .filter((scope) => minimumScope.indexOf(scope) > -1).length !== 3
+    ) {
+      throw new UnauthorizedException(
+        'JWT does not possess the required scope (`openid profile email`).',
+      );
+    }
+
+    // console.log('payload', payload);
+
+    const email = payload['https://api.volunteerX.module/email'];
+
+    // console.log('email', email);s
 
     // ! if error, use an api based on the auth0 user email to get the user info, eg: http://localhost:3510/users?email=${email}
 
