@@ -40,8 +40,6 @@ export class FileFlowEngineController {
     @Query('Key') Key: string,
     @Query('type') type: string,
   ) {
-    console.log(Key, type);
-
     const uri = await this.awsService.createPresignedUrlDownload(Key, type);
 
     return {
