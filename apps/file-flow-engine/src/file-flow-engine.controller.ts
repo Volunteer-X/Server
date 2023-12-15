@@ -3,7 +3,6 @@ import {
   Get,
   Header,
   Logger,
-  Param,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -41,6 +40,8 @@ export class FileFlowEngineController {
     @Query('type') type: string,
   ) {
     const uri = await this.awsService.createPresignedUrlDownload(Key, type);
+
+    // console.log(type);
 
     return {
       uri,
