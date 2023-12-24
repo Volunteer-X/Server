@@ -3,6 +3,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { BroadcastModule } from './broadcast.module';
 import { Neo4jErrorFilter, Neo4jTypeInterceptor } from '@app/neo4j';
 import { RMQService } from '@app/common';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(BroadcastModule);
@@ -15,9 +16,9 @@ async function bootstrap() {
 
   app.connectMicroservice(rmqService.getOptions('BROADCAST'));
 
-  await app.startAllMicroservices();
+  // await app.startAllMicroservices();
 
-  const port = app.get('ConfigService').get('PORT');
+  const port = app.get(ConfigService).get('PORT');
 
   await app.listen(port);
 

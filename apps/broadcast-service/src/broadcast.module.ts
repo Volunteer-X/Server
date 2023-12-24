@@ -6,9 +6,20 @@ import { Neo4jCommonModule, Neo4jConfig, Neo4jScheme } from '@app/neo4j';
 import * as Joi from 'joi';
 import { RmqModule } from '@app/common';
 import { HealthModule } from './health/health.module';
+import { FirebaseModule } from '@app/firebase';
+import * as path from 'path';
 
 @Module({
   imports: [
+    FirebaseModule.forRoot({
+      googleApplicationCredential: path.join(
+        __dirname,
+        '..',
+        '..',
+        '..',
+        'firebase.json',
+      ),
+    }),
     HealthModule,
     RmqModule,
     ConfigModule.forRoot({

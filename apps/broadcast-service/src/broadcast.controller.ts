@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { BroadcastService } from './broadcast.service';
 import { PingNode, RMQService } from '@app/common';
 import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
@@ -18,5 +18,12 @@ export class BroadcastController {
     const ping: PingNode = JSON.parse(data);
     this.broadcastService.broadcastPing(ping);
     this.rmqService.ack(context);
+  }
+
+  @Get('test')
+  async test() {
+    const test = await this.broadcastService.test();
+    console.log(test);
+    return test;
   }
 }

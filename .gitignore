@@ -36,5 +36,7 @@ lerna-debug.log*
 
 .env
 
+firebase.json
+
 
 apps/__generated__/*

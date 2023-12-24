@@ -45,10 +45,10 @@
       "@app/auth/*": [
         "libs/auth/src/*"
       ],
-      "firebase/firebase": [
+      "@app/firebase": [
         "libs/firebase/src"
       ],
-      "firebase/firebase/*": [
+      "@app/firebase/*": [
         "libs/firebase/src/*"
       ]
     }

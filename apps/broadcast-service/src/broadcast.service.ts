@@ -1,10 +1,14 @@
 import { PingNode } from '@app/common';
 import { Neo4jCommonService } from '@app/neo4j';
 import { Injectable } from '@nestjs/common';
+import { FirebaseAdmin, InjectFirebaseAdmin } from '@app/firebase';
 
 @Injectable()
 export class BroadcastService {
-  constructor(private readonly neo4jClient: Neo4jCommonService) {}
+  constructor(
+    private readonly neo4jClient: Neo4jCommonService,
+    @InjectFirebaseAdmin() private readonly firebase: FirebaseAdmin,
+  ) {}
 
   /* 
   * Ping
@@ -18,5 +22,21 @@ export class BroadcastService {
     const cypher = ``;
 
     console.log('Broadcasting ping', ping);
+  }
+
+  test() {
+    return this.firebase.messaging.send({
+      notification: {
+        title: 'Test',
+        body: 'Test',
+      },
+      token: 'eQZ6ZQZ1QZqZ',
+      android: { priority: 'high' },
+      webpush: {
+        headers: {
+          Urgency: 'high',
+        },
+      },
+    });
   }
 }
