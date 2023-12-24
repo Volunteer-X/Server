@@ -40,6 +40,6 @@ import { GraphQLError, GraphQLFormattedError } from 'graphql';
     PrismaModule.register({ logQueries: false }),
     RmqModule.register({ name: [NEO4J_SERVICE] }),
   ],
-  providers: [UsersResolver, UsersService],
+  providers: [UsersResolver, Userservice],
 })
 export class UsersModule {}

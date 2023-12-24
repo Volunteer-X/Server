@@ -44,6 +44,12 @@
       ],
       "@app/auth/*": [
         "libs/auth/src/*"
+      ],
+      "firebase/firebase": [
+        "libs/firebase/src"
+      ],
+      "firebase/firebase/*": [
+        "libs/firebase/src/*"
       ]
     }
   },
