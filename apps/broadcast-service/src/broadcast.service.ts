@@ -16,10 +16,10 @@ export class BroadcastService {
   within a certain radius of a location 
   with similar picks
   */
-  async broadcastPing(id: string) {
-    console.log('broadcastPing', id);
 
-    // send to Neo4j get users and broadcast to them
+  async broadcastPing(users: Array<string>) {
+    // console.log('broadcastPing', users);
+    // get user device token from the user service and broadcast to them
   }
 
   async test() {

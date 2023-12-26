@@ -59,16 +59,18 @@ export class PingService {
       }),
     ]);
 
-    try {
-      await firstValueFrom(
-        this.broadcastClient.emit<string, string>(
-          'broadcastPing',
-          JSON.stringify({
-            id: result[0].id,
-          }),
-        ),
-      );
-    } catch (error) {}
+    // try {
+    //   await lastValueFrom(
+    //     this.broadcastClient.emit<string, string>(
+    //       'broadcastPing',
+    //       JSON.stringify({
+    //         id: result[0].id,
+    //       }),
+    //     ),
+    //   );
+    // } catch (error) {
+    //   console.log('broadcast error', error);
+    // }
 
     try {
       await lastValueFrom(

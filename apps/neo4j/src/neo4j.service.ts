@@ -1,10 +1,14 @@
-import { PingNode, UserNode } from '@app/common';
+import { BROADCAST_SERVICE, PingNode, UserNode } from '@app/common';
 import { Neo4jCommonService } from '@app/neo4j';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class Neo4jService {
-  constructor(private readonly neo4jCommon: Neo4jCommonService) {}
+  constructor(
+    private readonly neo4jCommon: Neo4jCommonService,
+    @Inject(BROADCAST_SERVICE) private broadcastClient: ClientProxy,
+  ) {}
 
   // Add a new user to the database
   async createUser(user: UserNode) {
@@ -94,9 +98,16 @@ export class Neo4jService {
       throw new Error('No users found');
     }
 
-    const users = result.records.map((record) => record.get('u').properties);
+    const users = result.records
+      .map((record) => record.get('u').properties)
+      .map((user) => user.id);
 
-    console.log(users);
+    this.broadcastClient.emit<string, string>(
+      'broadcastPing',
+      JSON.stringify({
+        users,
+      }),
+    );
 
     return users;
   }
