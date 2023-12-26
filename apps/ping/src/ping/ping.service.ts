@@ -2,22 +2,22 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { CreatePingInput, UPingInput } from './graphql/ping.schema';
 import { PingRepository } from '../service/prisma.service';
 import { ClientProxy } from '@nestjs/microservices';
-import { lastValueFrom } from 'rxjs';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 import {
   GraphQLLatitude,
   GraphQLLongitude,
   GraphQLObjectID,
   GraphQLURL,
 } from 'graphql-scalars';
-import { NEO4J_SERVICE } from '@app/common';
+import { BROADCAST_SERVICE, NEO4J_SERVICE } from '@app/common';
 import { ObjectId } from 'bson';
-import { User } from 'libs/utils/entities';
 
 @Injectable()
 export class PingService {
   constructor(
     private readonly repository: PingRepository,
     @Inject(NEO4J_SERVICE) private neo4jClient: ClientProxy,
+    @Inject(BROADCAST_SERVICE) private broadcastClient: ClientProxy,
   ) {}
 
   private readonly logger = new Logger(PingService.name);
@@ -58,6 +58,17 @@ export class PingService {
         },
       }),
     ]);
+
+    try {
+      await firstValueFrom(
+        this.broadcastClient.emit<string, string>(
+          'broadcastPing',
+          JSON.stringify({
+            id: result[0].id,
+          }),
+        ),
+      );
+    } catch (error) {}
 
     try {
       await lastValueFrom(

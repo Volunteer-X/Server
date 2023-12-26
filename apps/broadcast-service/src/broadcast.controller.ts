@@ -15,15 +15,14 @@ export class BroadcastController {
     @Payload() data: string,
     @Ctx() context: RmqContext,
   ) {
-    const ping: PingNode = JSON.parse(data);
-    this.broadcastService.broadcastPing(ping);
+    const id: string = JSON.parse(data);
+    this.broadcastService.broadcastPing(id);
     this.rmqService.ack(context);
   }
 
   @Get('test')
   async test() {
     const test = await this.broadcastService.test();
-    console.log('test', test);
 
     return test;
   }

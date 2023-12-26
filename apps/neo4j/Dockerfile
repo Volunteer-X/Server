@@ -14,6 +14,8 @@ RUN npm install
 
 COPY . .
 
+# RUN npm run prisma:gen:users
+
 RUN npm run build
 
 FROM base AS production

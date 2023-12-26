@@ -9,8 +9,8 @@ async function bootstrap() {
   const app = await NestFactory.create(BroadcastModule);
 
   app.useGlobalPipes(new ValidationPipe());
-  app.useGlobalInterceptors(new Neo4jTypeInterceptor());
-  app.useGlobalFilters(new Neo4jErrorFilter());
+  // app.useGlobalInterceptors(new Neo4jTypeInterceptor());
+  // app.useGlobalFilters(new Neo4jErrorFilter());
 
   const rmqService = app.get<RMQService>(RMQService);
 

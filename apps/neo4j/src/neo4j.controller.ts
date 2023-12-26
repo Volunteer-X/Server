@@ -1,6 +1,12 @@
 import { Controller } from '@nestjs/common';
 import { Neo4jService } from './neo4j.service';
-import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
+import {
+  Ctx,
+  EventPattern,
+  MessagePattern,
+  Payload,
+  RmqContext,
+} from '@nestjs/microservices';
 import { PingNode, RMQService, UserNode } from '@app/common';
 
 @Controller()
@@ -20,5 +26,10 @@ export class Neo4jController {
   async handlePingCreated(@Payload() ping: string, @Ctx() context: RmqContext) {
     await this.neo4jService.createPing(JSON.parse(ping) as PingNode);
     this.rmqService.ack(context);
+  }
+
+  @MessagePattern('test')
+  async test(@Payload() payload: string) {
+    return `Test successful:: ${payload}`;
   }
 }
