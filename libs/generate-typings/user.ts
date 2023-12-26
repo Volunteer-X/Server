@@ -4,8 +4,8 @@ import { join } from 'path';
 const definitionFactory = new GraphQLFederationDefinitionsFactory();
 
 definitionFactory.generate({
-  typePaths: ['./apps/users/src/users/graphql/*.gql'],
-  path: join(process.cwd(), 'apps/users/src/users/graphql/user.schema.ts'),
+  typePaths: ['./apps/users/src/user/graphql/*.gql'],
+  path: join(process.cwd(), 'apps/users/src/user/graphql/user.schema.ts'),
   outputAs: 'interface',
   defaultScalarType: 'unknown',
   customScalarTypeMapping: {

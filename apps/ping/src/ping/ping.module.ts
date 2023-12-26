@@ -16,7 +16,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 import { PingService } from './ping.service';
 import { PingResolver } from './ping.resolver';
 import { PingRepository } from '../service/prisma.service';
-import { ACTIVITY_SERVICE, NEO4J_SERVICE, RmqModule } from '@app/common';
+import { BROADCAST_SERVICE, NEO4J_SERVICE, RmqModule } from '@app/common';
 import { AuthModule } from '@app/auth';
 
 @Module({
@@ -35,7 +35,7 @@ import { AuthModule } from '@app/auth';
       },
     }),
     AuthModule,
-    RmqModule.register({ name: [ACTIVITY_SERVICE, NEO4J_SERVICE] }),
+    RmqModule.register({ name: [BROADCAST_SERVICE, NEO4J_SERVICE] }),
   ],
   providers: [PingService, PingResolver, PingRepository],
 })

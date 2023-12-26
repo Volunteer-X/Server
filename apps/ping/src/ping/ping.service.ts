@@ -9,7 +9,7 @@ import {
   GraphQLObjectID,
   GraphQLURL,
 } from 'graphql-scalars';
-import { ACTIVITY_SERVICE, NEO4J_SERVICE } from '@app/common';
+import { NEO4J_SERVICE } from '@app/common';
 import { ObjectId } from 'bson';
 import { User } from 'libs/utils/entities';
 
@@ -17,7 +17,6 @@ import { User } from 'libs/utils/entities';
 export class PingService {
   constructor(
     private readonly repository: PingRepository,
-    @Inject(ACTIVITY_SERVICE) private activityClient: ClientProxy,
     @Inject(NEO4J_SERVICE) private neo4jClient: ClientProxy,
   ) {}
 
@@ -59,13 +58,6 @@ export class PingService {
         },
       }),
     ]);
-
-    // await lastValueFrom(
-    //   this.activityClient.emit<string, string>(
-    //     'pingCreated',
-    //     JSON.stringify(result[0]),
-    //   ),
-    // );
 
     try {
       await lastValueFrom(

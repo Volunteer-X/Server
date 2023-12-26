@@ -12,8 +12,8 @@ import {
 } from 'graphql-scalars';
 
 import { PrismaModule } from '@app/prisma';
-import { UsersService } from './users.service';
-import { UsersResolver } from './users.resolver';
+import { UserService } from './user.service';
+import { UserResolver } from './user.resolver';
 import { NEO4J_SERVICE, RmqModule } from '@app/common';
 import { GraphQLError, GraphQLFormattedError } from 'graphql';
 
@@ -40,6 +40,6 @@ import { GraphQLError, GraphQLFormattedError } from 'graphql';
     PrismaModule.register({ logQueries: false }),
     RmqModule.register({ name: [NEO4J_SERVICE] }),
   ],
-  providers: [UsersResolver, Userservice],
+  providers: [UserResolver, UserService],
 })
-export class UsersModule {}
+export class UserModule {}

@@ -16,12 +16,12 @@ async function bootstrap() {
 
   app.connectMicroservice(rmqService.getOptions('BROADCAST'));
 
-  // await app.startAllMicroservices();
+  await app.startAllMicroservices();
 
   const port = app.get(ConfigService).get('PORT');
 
   await app.listen(port);
 
-  console.log('🚀 Ping server running successfully on port:', port);
+  console.log('🚀 Broadcast service running successfully on port:', port);
 }
 bootstrap();

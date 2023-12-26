@@ -1,9 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import {
-  CreateUserInput,
-  EmailAddress,
-  UpdateUserInput,
-} from './graphql/user.schema';
+import { CreateUserInput, UpdateUserInput } from './graphql/user.schema';
 import { GraphQLEmailAddress, GraphQLObjectID } from 'graphql-scalars';
 import { InjectRepository, PrismaService } from '@app/prisma';
 import { lastValueFrom } from 'rxjs';
@@ -13,7 +9,7 @@ import { NEO4J_SERVICE } from '@app/common';
 import { ObjectId } from 'bson';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(
     @InjectRepository('user')
     private readonly userRepo: PrismaService['user'],
@@ -27,11 +23,13 @@ export class UsersService {
       email,
       username,
       firstName,
+      middleName,
       lastName,
       picks,
       picture,
       latitude,
       longitude,
+      device,
     } = input;
 
     const result = await this.userRepo.create({
@@ -40,10 +38,12 @@ export class UsersService {
         username,
         name: {
           firstName,
+          middleName,
           lastName,
         },
         picture,
         picks,
+        devices: [device],
       },
     });
 
@@ -56,11 +56,12 @@ export class UsersService {
             picks: picks,
             longitude,
             latitude,
+            devices: [device],
           }),
         ),
       );
     } catch (error) {
-      console.log('error', error);
+      console.log('Neo4J error', error);
     }
 
     const user = {
@@ -70,10 +71,12 @@ export class UsersService {
       username: result.username,
       name: {
         firstName: result.name.firstName,
+        middleName: result.name.middleName,
         lastName: result.name.lastName,
       },
       picture: result.picture,
       picks: result.picks,
+      devices: result.devices,
     };
 
     return user;
@@ -104,8 +107,72 @@ export class UsersService {
     return count > 0 ? false : true;
   }
 
-  update(id: string, payload: UpdateUserInput) {
-    return `This action updates a #${id} user`;
+  async update(payload: UpdateUserInput) {
+    const {
+      id,
+      email,
+      username,
+      lastName,
+      firstName,
+      middleName,
+      picks,
+      picture,
+      devices,
+    } = payload;
+
+    let dbResult;
+
+    if (lastName || firstName || middleName) {
+      dbResult = await this.userRepo.update({
+        where: {
+          id: GraphQLObjectID.parseValue(id),
+        },
+        data: {
+          email: email ? GraphQLEmailAddress.parseValue(email) : undefined,
+          username,
+          name: {
+            update: {
+              firstName,
+              lastName,
+              middleName,
+            },
+          },
+          picks,
+          picture,
+          devices,
+        },
+      });
+    }
+
+    dbResult = await this.userRepo.update({
+      where: {
+        id: GraphQLObjectID.parseValue(id),
+      },
+      data: {
+        email: email ? GraphQLEmailAddress.parseValue(email) : undefined,
+        username,
+        picks,
+        picture,
+        devices,
+      },
+    });
+
+    const updatedUser = {
+      createdAt: new ObjectId(dbResult.id).getTimestamp(),
+      id: dbResult.id,
+      email: dbResult.email,
+      username: dbResult.username,
+      name: {
+        firstName: dbResult.name.firstName,
+        middleName: dbResult.name.middleName,
+        lastName: dbResult.name.lastName,
+      },
+      picture: dbResult.picture,
+      picks: dbResult.picks,
+      devices: dbResult.devices,
+    };
+
+    return updatedUser;
   }
 
   async findOne(id: string) {

@@ -17,6 +17,7 @@ type User @key(fields: "id") {
   createdAt: DateTime
   picks: [String!]!
   pings: [Ping]
+  devices: [String!]
 }
 
 extend type Ping @key(fields: "id") {
@@ -34,16 +35,21 @@ input CreateUserInput {
   picks: [String!]!
   latitude: Float
   longitude: Float
+  device: String!
 }
 
 input UpdateUserInput {
   id: ObjectID!
-  usename: String
+  username: String
   email: EmailAddress
   firstName: String
   lastName: String
   middleName: String
   picks: [String!]
+  picture: String
+  devices: [String!]
+  latitude: Float
+  longitude: Float
 }
 
 extend type Query {
@@ -57,7 +63,3 @@ extend type Mutation {
   updateUser(payload: UpdateUserInput!): User!
   removeUser(id: ObjectID!): User
 }
-
-# type Subscription {
-#   watchUsernameAvailability(username: String!): Boolean!
-# }

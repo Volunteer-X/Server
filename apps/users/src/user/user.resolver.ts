@@ -5,7 +5,7 @@ import {
   Args,
   ResolveReference,
 } from '@nestjs/graphql';
-import { UsersService } from './users.service';
+import { UserService } from './user.service';
 import {
   CreateUserInput,
   EmailAddress,
@@ -14,8 +14,8 @@ import {
 import { GraphQLEmailAddress, GraphQLObjectID } from 'graphql-scalars';
 
 @Resolver('User')
-export class UsersResolver {
-  constructor(private readonly usersService: UsersService) {}
+export class UserResolver {
+  constructor(private readonly usersService: UserService) {}
 
   @Mutation('createUser')
   create(@Args('payload') payload: CreateUserInput) {
@@ -46,10 +46,7 @@ export class UsersResolver {
 
   @Mutation('updateUser')
   update(@Args('payload') payload: UpdateUserInput) {
-    return this.usersService.update(
-      GraphQLObjectID.parseValue(payload.id),
-      payload,
-    );
+    return this.usersService.update(payload);
   }
 
   @ResolveReference()

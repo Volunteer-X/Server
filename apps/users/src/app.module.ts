@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { UsersModule } from './users/users.module';
+import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { portConfig } from '@app/common';
 import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
-    UsersModule,
+    UserModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [portConfig],

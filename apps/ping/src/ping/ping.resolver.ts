@@ -7,12 +7,7 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { PingService } from './ping.service';
-import {
-  CreatePingInput,
-  Ping,
-  PingConnection,
-  UPingInput,
-} from './graphql/ping.schema';
+import { CreatePingInput, Ping, UPingInput } from './graphql/ping.schema';
 import { Logger, UseGuards } from '@nestjs/common';
 import { CurrentUser, GqlAuthGuard } from '@app/auth';
 import { User } from 'libs/utils/entities';

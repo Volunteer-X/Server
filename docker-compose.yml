@@ -100,30 +100,6 @@ services:
       retries: 10
     restart: always
 
-  # activity:
-  #   image: activity
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/activity/Dockerfile
-  #     target: development
-  #   command: npm run start:dev activity
-  #   env_file:
-  #     - ./apps/activity/.env
-  #   volumes:
-  #     - .:/usr/src/volunteerx
-  #     - /usr/src/volunteerx/node_modules
-  #   ports:
-  #     - '3530:3530'
-  #   expose:
-  #     - 3530
-  #   depends_on:
-  #     - rabbitmq
-  #     - ping
-  #     - users
-  #   environment:
-  #     - WATCHPACK_POLLING=true
-  #   restart: always
-
   neo4j:
     image: neo4j-service
     build:
