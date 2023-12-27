@@ -74,9 +74,18 @@ type PingConnection {
   pageInfo: PageInfo!
 }
 
+input UPingsWithinRadiusInput {
+  longitude: Longitude!
+  latitude: Latitude!
+  radius: Float!
+  first: Int!
+  after: String
+}
+
 extend type Query {
   getPing(id: ObjectID!): Ping!
   getAllPing(first: Int!, after: String): PingConnection!
+  getPingsWithinRadius(payload: UPingsWithinRadiusInput!): [Ping]!
 }
 
 extend type Mutation {

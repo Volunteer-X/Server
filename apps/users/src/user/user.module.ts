@@ -16,6 +16,7 @@ import { UserService } from './user.service';
 import { UserResolver } from './user.resolver';
 import { NEO4J_SERVICE, RmqModule } from '@app/common';
 import { GraphQLError, GraphQLFormattedError } from 'graphql';
+import { UserController } from './user.controller';
 
 @Module({
   imports: [
@@ -38,8 +39,10 @@ import { GraphQLError, GraphQLFormattedError } from 'graphql';
       },
     }),
     PrismaModule.register({ logQueries: false }),
+    RmqModule,
     RmqModule.register({ name: [NEO4J_SERVICE] }),
   ],
+  controllers: [UserController],
   providers: [UserResolver, UserService],
 })
 export class UserModule {}

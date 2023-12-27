@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { CreatePingInput, UPingInput } from './graphql/ping.schema';
 import { PingRepository } from '../service/prisma.service';
 import { ClientProxy } from '@nestjs/microservices';
-import { firstValueFrom, lastValueFrom } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import {
   GraphQLLatitude,
   GraphQLLongitude,
@@ -14,6 +14,9 @@ import { ObjectId } from 'bson';
 
 @Injectable()
 export class PingService {
+  getPingsWithinRadius() {
+    throw new Error('Method not implemented.');
+  }
   constructor(
     private readonly repository: PingRepository,
     @Inject(NEO4J_SERVICE) private neo4jClient: ClientProxy,
@@ -59,19 +62,6 @@ export class PingService {
       }),
     ]);
 
-    // try {
-    //   await lastValueFrom(
-    //     this.broadcastClient.emit<string, string>(
-    //       'broadcastPing',
-    //       JSON.stringify({
-    //         id: result[0].id,
-    //       }),
-    //     ),
-    //   );
-    // } catch (error) {
-    //   console.log('broadcast error', error);
-    // }
-
     try {
       await lastValueFrom(
         this.neo4jClient.emit<string, string>(
@@ -94,6 +84,7 @@ export class PingService {
 
     const ping = {
       id: result[0].id,
+      createdAt: new ObjectId(result[0].id).getTimestamp(),
       title: result[0].title,
       description: result[0].description,
       picks: result[0].picks,
@@ -236,4 +227,6 @@ export class PingService {
 
     return pings;
   }
+
+  //
 }

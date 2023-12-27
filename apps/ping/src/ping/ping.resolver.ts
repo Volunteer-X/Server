@@ -65,6 +65,12 @@ export class PingResolver {
     };
   }
 
+  @Query('getPingsWithinRadius')
+  @UseGuards(GqlAuthGuard)
+  async getPingsWithinRadius(@Args('payload') payload, @CurrentUser() user) {
+    return this.pingService.getPingsWithinRadius();
+  }
+
   @ResolveField('user')
   user(@Parent() ping: Ping) {
     this.logger.log('ping', ping.userID);

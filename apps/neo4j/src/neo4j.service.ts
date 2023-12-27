@@ -98,13 +98,14 @@ export class Neo4jService {
       throw new Error('No users found');
     }
 
-    const users = result.records
+    const users: string[] = result.records
       .map((record) => record.get('u').properties)
       .map((user) => user.id);
 
     this.broadcastClient.emit<string, string>(
       'broadcastPing',
       JSON.stringify({
+        id: ping.id,
         users,
       }),
     );

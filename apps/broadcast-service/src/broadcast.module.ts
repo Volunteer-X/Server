@@ -3,7 +3,12 @@ import { BroadcastController } from './broadcast.controller';
 import { BroadcastService } from './broadcast.service';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
-import { NEO4J_SERVICE, RmqModule } from '@app/common';
+import {
+  BROADCAST_SERVICE,
+  NEO4J_SERVICE,
+  RmqModule,
+  USER_SERVICE,
+} from '@app/common';
 import { HealthModule } from './health/health.module';
 import { FirebaseModule } from '@app/firebase';
 import * as path from 'path';
@@ -21,7 +26,7 @@ import * as path from 'path';
     }),
     HealthModule,
     RmqModule,
-    RmqModule.register({ name: [NEO4J_SERVICE] }),
+    RmqModule.register({ name: [NEO4J_SERVICE, USER_SERVICE] }),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: './apps/broadcast-service/.env',

@@ -15,9 +15,9 @@ export class BroadcastController {
     @Payload() data: string,
     @Ctx() context: RmqContext,
   ) {
-    const users: Array<string> = JSON.parse(data);
+    const { id, users } = JSON.parse(data) as { id: string; users: string[] };
 
-    this.broadcastService.broadcastPing(users);
+    this.broadcastService.broadcastPing(id, users);
     this.rmqService.ack(context);
   }
 

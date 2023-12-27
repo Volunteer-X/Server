@@ -196,4 +196,25 @@ export class UserService {
       createdAt: new ObjectId(id).getTimestamp(),
     };
   }
+
+  async getUserDevices(users: string[]) {
+    try {
+      const result = await this.userRepo.findMany({
+        where: {
+          id: {
+            in: users,
+          },
+        },
+        select: {
+          devices: true,
+        },
+      });
+
+      return result
+        .filter((user) => user.devices.length > 0)
+        .flatMap((user) => user.devices);
+    } catch (error) {
+      console.log('error', error);
+    }
+  }
 }

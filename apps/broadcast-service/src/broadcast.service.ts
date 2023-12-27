@@ -1,13 +1,20 @@
-import { NEO4J_SERVICE, PingNode } from '@app/common';
+import {
+  BROADCAST_SERVICE,
+  NEO4J_SERVICE,
+  PingNode,
+  USER_SERVICE,
+} from '@app/common';
 import { Inject, Injectable } from '@nestjs/common';
 import { FirebaseAdmin, InjectFirebaseAdmin } from '@app/firebase';
 import { ClientProxy } from '@nestjs/microservices';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class BroadcastService {
   constructor(
     @InjectFirebaseAdmin() private readonly firebase: FirebaseAdmin,
     @Inject(NEO4J_SERVICE) private neo4jClient: ClientProxy,
+    @Inject(USER_SERVICE) private userClient: ClientProxy,
   ) {}
 
   /* 
@@ -17,28 +24,54 @@ export class BroadcastService {
   with similar picks
   */
 
-  async broadcastPing(users: Array<string>) {
-    // console.log('broadcastPing', users);
+  async broadcastPing(id: string, users: string[]) {
     // get user device token from the user service and broadcast to them
+    const tokens = await lastValueFrom(
+      this.userClient.send<string[], string[]>('userDevices', users),
+    );
+
+    console.log('Broadcast Service:: tokens', tokens);
+
+    // if (tokens.length === 0) {
+    //   return;
+    // }
+
+    // send ping to users
+    this.firebase.messaging
+      .sendEachForMulticast({
+        tokens: [
+          'eK_p6UbuSka3aXetlqcPWg:APA91bGtfrwnvoUhSGBcbjbsCNIjhk9pkfqQgErJNfh7JnN2jqG-yKYof3I2hlKE9LUXzR2XSKYaxy2p_GkjUrI7kPuXzYVlrhbzU_okVCh5oBYpzCMaTdzu5gcnlLGPB3YtnpriHnrQ',
+        ],
+        data: {
+          type: 'ping',
+          id,
+        },
+      })
+      .then((response) => {
+        console.log('Successfully sent message:', response);
+      })
+      .catch((error) => {
+        console.log('Error sending message:', error);
+      });
   }
 
   async test() {
-    let _data;
-    this.neo4jClient.send('test', 'test').subscribe((data) => {
-      console.log('data', data);
-      _data = data;
-    });
-
-    return _data;
-
-    // const message = await this.firebase.messaging.send({
-    //   token:
-    //     'c-7e2Bk-TNSWGRmm9jvAhX:APA91bF_x6G1qvLKN748GLMK3T_npwY7Bc5g-DlbDiRqOi-iM1Eci7_-b3MtWcb7csSwDys17K3veCbWcxK-26qyWAt2jNYgE8mPE64VA4qcBsqVMOPqofCZu7LIvTVQ-L8kkMtgptsS',
-    //   data: {
-    //     type: 'ping',
-    //     id: '6576257c3120201ecfdf6482',
-    //   },
+    // let _data;
+    // this.neo4jClient.send('test', 'test').subscribe((data) => {
+    //   console.log('data', data);
+    //   _data = data;
     // });
-    // return message;
+
+    // return _data;
+
+    const message = await this.firebase.messaging.send({
+      token:
+        'eK_p6UbuSka3aXetlqcPWg:APA91bGtfrwnvoUhSGBcbjbsCNIjhk9pkfqQgErJNfh7JnN2jqG-yKYof3I2hlKE9LUXzR2XSKYaxy2p_GkjUrI7kPuXzYVlrhbzU_okVCh5oBYpzCMaTdzu5gcnlLGPB3YtnpriHnrQ',
+      data: {
+        type: 'ping',
+        id: '6576257c3120201ecfdf6482',
+      },
+    });
+    return message;
   }
 }
