@@ -7,7 +7,12 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { PingService } from './ping.service';
-import { CreatePingInput, Ping, UPingInput } from './graphql/ping.schema';
+import {
+  CreatePingInput,
+  Ping,
+  UPingInput,
+  UPingsWithinRadiusInput,
+} from './graphql/ping.schema';
 import { Logger, UseGuards } from '@nestjs/common';
 import { CurrentUser, GqlAuthGuard } from '@app/auth';
 import { User } from 'libs/utils/entities';
@@ -67,8 +72,11 @@ export class PingResolver {
 
   @Query('getPingsWithinRadius')
   @UseGuards(GqlAuthGuard)
-  async getPingsWithinRadius(@Args('payload') payload, @CurrentUser() user) {
-    return this.pingService.getPingsWithinRadius();
+  async getPingsWithinRadius(
+    @Args('payload') payload: UPingsWithinRadiusInput,
+    @CurrentUser() user,
+  ) {
+    return this.pingService.getPingsWithinRadius(payload);
   }
 
   @ResolveField('user')

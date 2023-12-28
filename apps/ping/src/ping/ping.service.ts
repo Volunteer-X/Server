@@ -1,5 +1,9 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { CreatePingInput, UPingInput } from './graphql/ping.schema';
+import {
+  CreatePingInput,
+  UPingInput,
+  UPingsWithinRadiusInput,
+} from './graphql/ping.schema';
 import { PingRepository } from '../service/prisma.service';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
@@ -14,9 +18,6 @@ import { ObjectId } from 'bson';
 
 @Injectable()
 export class PingService {
-  getPingsWithinRadius() {
-    throw new Error('Method not implemented.');
-  }
   constructor(
     private readonly repository: PingRepository,
     @Inject(NEO4J_SERVICE) private neo4jClient: ClientProxy,
@@ -228,5 +229,8 @@ export class PingService {
     return pings;
   }
 
-  //
+  //Get all Pings within a certain radius
+  getPingsWithinRadius(payload: UPingsWithinRadiusInput) {
+    lastValueFrom(this.neo4jClient.send('getPingsWithinRadius', payload));
+  }
 }

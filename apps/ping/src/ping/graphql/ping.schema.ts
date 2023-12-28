@@ -37,6 +37,14 @@ export interface MediaInput {
     type: string;
 }
 
+export interface UPingsWithinRadiusInput {
+    longitude: Longitude;
+    latitude: Latitude;
+    radius: number;
+    first: number;
+    after?: Nullable<string>;
+}
+
 export interface Media {
     key: string;
     type: string;
@@ -78,6 +86,7 @@ export interface PingConnection {
 export interface IQuery {
     getPing(id: ObjectID): Ping | Promise<Ping>;
     getAllPing(first: number, after?: Nullable<string>): PingConnection | Promise<PingConnection>;
+    getPingsWithinRadius(payload: UPingsWithinRadiusInput): Nullable<Ping>[] | Promise<Nullable<Ping>[]>;
 }
 
 export interface User {
