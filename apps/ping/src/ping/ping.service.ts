@@ -230,7 +230,47 @@ export class PingService {
   }
 
   //Get all Pings within a certain radius
-  getPingsWithinRadius(payload: UPingsWithinRadiusInput) {
-    lastValueFrom(this.neo4jClient.send('getPingsWithinRadius', payload));
+  async getPingsWithinRadius(
+    payload: UPingsWithinRadiusInput,
+    first: number,
+    after: string,
+    picks: string[],
+  ) {
+    const resultStr = await lastValueFrom(
+      this.neo4jClient.send('getPingsWithinRadius', {
+        payload,
+        first,
+        after,
+        picks,
+      }),
+    );
+
+    const result = JSON.parse(resultStr) as {
+      data: string[];
+      totalCount: number;
+    };
+
+    if (result.totalCount === 0) {
+      return {
+        pings: [],
+        totalCount: 0,
+      };
+    }
+
+    const pings = await this.repository.ping.findMany({
+      where: {
+        id: {
+          in: result.data,
+        },
+        picks: {
+          hasSome: picks,
+        },
+      },
+      take: first,
+      cursor: after ? { id: after } : undefined,
+      orderBy: {
+        id: 'asc',
+      },
+    });
   }
 }

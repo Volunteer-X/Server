@@ -41,8 +41,6 @@ export interface UPingsWithinRadiusInput {
     longitude: Longitude;
     latitude: Latitude;
     radius: number;
-    first: number;
-    after?: Nullable<string>;
 }
 
 export interface Media {
@@ -78,15 +76,16 @@ export interface PingEdge {
 }
 
 export interface PingConnection {
+    totalCount?: Nullable<number>;
     edges: PingEdge[];
-    owner: User;
+    owner?: Nullable<User>;
     pageInfo: PageInfo;
 }
 
 export interface IQuery {
     getPing(id: ObjectID): Ping | Promise<Ping>;
-    getAllPing(first: number, after?: Nullable<string>): PingConnection | Promise<PingConnection>;
-    getPingsWithinRadius(payload: UPingsWithinRadiusInput): Nullable<Ping>[] | Promise<Nullable<Ping>[]>;
+    getAllPing(first: number, after?: Nullable<string>, userID?: Nullable<string>): PingConnection | Promise<PingConnection>;
+    getPingsWithinRadius(payload: UPingsWithinRadiusInput, first: number, after?: Nullable<string>, sort?: Nullable<string>): Nullable<PingConnection> | Promise<Nullable<PingConnection>>;
 }
 
 export interface User {

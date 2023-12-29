@@ -74,9 +74,31 @@ export class PingResolver {
   @UseGuards(GqlAuthGuard)
   async getPingsWithinRadius(
     @Args('payload') payload: UPingsWithinRadiusInput,
+    @Args('first') first: number,
+    @Args('after') after: string,
+    @Args('picks') picks: string[] | undefined,
     @CurrentUser() user,
   ) {
-    return this.pingService.getPingsWithinRadius(payload);
+    const { pings, totalCount } = await this.pingService.getPingsWithinRadius(
+      payload,
+      first,
+      decodeFromBase64(after),
+      picks,
+    );
+
+    return {
+      totalCount,
+      edges: pings.map((ping) => ({
+        node: ping,
+        cursor: encodeToBase64(ping.id),
+      })),
+      owner: null,
+      pageInfo: {
+        hasNextPage: pings.length === first,
+        endCursor:
+          pings.length > 0 ? encodeToBase64(pings[pings.length - 1].id) : null,
+      },
+    };
   }
 
   @ResolveField('user')

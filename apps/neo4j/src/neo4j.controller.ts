@@ -28,6 +28,25 @@ export class Neo4jController {
     this.rmqService.ack(context);
   }
 
+  @MessagePattern('getPingsWithinRadius')
+  async getPingsWithinRadius(@Payload() _payload: string) {
+    const { payload, first, after, picks } = JSON.parse(_payload) as {
+      payload: any;
+      first: number;
+      after: string;
+      picks: string[];
+    };
+
+    const result = await this.neo4jService.getPingsWithinRadius(
+      payload,
+      first,
+      after,
+      picks,
+    );
+
+    return JSON.stringify(result);
+  }
+
   @MessagePattern('test')
   async test(@Payload() payload: string) {
     return `Test successful:: ${payload}`;
