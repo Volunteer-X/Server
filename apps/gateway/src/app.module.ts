@@ -29,7 +29,6 @@ import { AuthModule } from '@app/auth';
           });
         },
         supergraphSdl: new IntrospectAndCompose({
-          logger: console,
           subgraphHealthCheck: true,
           subgraphs: [
             {

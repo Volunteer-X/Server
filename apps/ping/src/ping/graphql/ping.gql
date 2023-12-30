@@ -13,7 +13,7 @@ type Ping @key(fields: "id") {
   id: ObjectID!
   title: String!
   userID: ID!
-  user: User
+  user: User!
   longitude: Longitude!
   latitude: Latitude!
   picks: [String!]!
@@ -60,7 +60,7 @@ type PageInfo {
   hasNextPage: Boolean!
   hasPreviousPage: Boolean
   startCursor: String
-  endCursor: String!
+  endCursor: String
 }
 
 type PingEdge {

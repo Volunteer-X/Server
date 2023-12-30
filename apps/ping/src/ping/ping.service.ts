@@ -235,20 +235,17 @@ export class PingService {
     first: number,
     after: string,
     picks: string[],
+    userID: string,
   ) {
-    const resultStr = await lastValueFrom(
+    const result: { data: string[]; totalCount: number } = await lastValueFrom(
       this.neo4jClient.send('getPingsWithinRadius', {
         payload,
         first,
         after,
         picks,
+        userID,
       }),
     );
-
-    const result = JSON.parse(resultStr) as {
-      data: string[];
-      totalCount: number;
-    };
 
     if (result.totalCount === 0) {
       return {
@@ -262,9 +259,6 @@ export class PingService {
         id: {
           in: result.data,
         },
-        picks: {
-          hasSome: picks,
-        },
       },
       take: first,
       cursor: after ? { id: after } : undefined,
@@ -272,5 +266,25 @@ export class PingService {
         id: 'asc',
       },
     });
+
+    console.log('pings', pings[0].userID);
+
+    return {
+      pings: pings.map((ping) => ({
+        id: ping.id,
+        createdAt: new ObjectId(ping.id).getTimestamp(),
+        title: ping.title,
+        description: ping.description,
+        picks: ping.picks,
+        url: ping.url && ping.url,
+        radius: ping.radius,
+        latitude: ping.geometry.coordinates[0],
+        longitude: ping.geometry.coordinates[1],
+        media: ping.media,
+        userID: ping.userID,
+        user: { __typename: 'User', id: ping.userID },
+      })),
+      totalCount: result.totalCount,
+    };
   }
 }

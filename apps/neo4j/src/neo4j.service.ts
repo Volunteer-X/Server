@@ -117,49 +117,59 @@ export class Neo4jService {
     payload: any,
     first: number,
     after: string,
-    picks: string[],
+    picks: string[] = null,
+    userID: string,
   ) {
     const cypher = `
     WITH point({latitude: $latitude, longitude: $longitude}) AS centerPoint
-    MATCH (ping:Ping)
-    WHERE point.distance(
-      point(
-        {
-          latitude: ping.latitude,
-          longitude: ping.longitude
-        }),
-         centerPoint) <= $radius * 10 
+    OPTIONAL MATCH (ping:Ping)
+      WHERE NOT (:User {id: $userID})-[:CREATED]->(ping)
+      AND 
+      point.distance(
+        point(
+          {
+            latitude: ping.latitude,
+            longitude: ping.longitude
+          }), 
+          centerPoint) <= $radius
     WITH count(ping) AS totalCount, centerPoint
-    MATCH (ping:Ping)
-    WHERE point.distance(
-      point(
-        {
-          latitude: ping.latitude,
-          longitude: ping.longitude
-        }),
-         centerPoint) <= $radius * 10  
-         AND ping.id > $cursor
-         AND coalesce(ANY(
-          picks IN ping.picks WHERE picks in $picks
-          ), TRUE)
+    OPTIONAL MATCH (ping:Ping)
+      WHERE point.distance(
+        point(
+          {
+            latitude: ping.latitude, 
+            longitude: ping.longitude
+          }), 
+          centerPoint) <= $radius
+        AND NOT (:User {id: $userID})-[:CREATED]->(ping)
+        AND coalesce(ANY(picks IN ping.picks WHERE picks IN $picks), TRUE)
     WITH ping, totalCount
     LIMIT $first
     WITH collect(ping.id) AS IDs, totalCount
-    RETURN {totalCount: totalCount, data: IDs}`;
+    RETURN CASE 
+      WHEN totalCount=0 THEN {totalCount: 0, data: []}
+      ELSE {totalCount: totalCount, data: IDs}
+    END AS result
+    `;
+
+    console.log(userID);
 
     const { latitude, longitude, radius } = payload;
 
     const result = await this.neo4jCommon.read(cypher, {
-      latitude: latitude,
-      longitude: longitude,
-      radius: radius,
+      latitude,
+      longitude,
+      radius,
       cursor: after,
-      picks: picks,
-      first: first,
+      picks,
+      first: this.neo4jCommon.int(first),
+      userID,
     });
 
-    const data: string[] = result.records[0].get('data');
-    const totalCount: number = result.records[0].get('totalCount');
+    const data: string[] = result.records[0].get('result').data;
+    const totalCount: number = result.records[0]
+      .get('result')
+      .totalCount.toNumber();
 
     return {
       totalCount,

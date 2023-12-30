@@ -29,12 +29,13 @@ export class Neo4jController {
   }
 
   @MessagePattern('getPingsWithinRadius')
-  async getPingsWithinRadius(@Payload() _payload: string) {
-    const { payload, first, after, picks } = JSON.parse(_payload) as {
+  async getPingsWithinRadius(@Payload() _payload: any) {
+    const { payload, first, after, picks, userID } = _payload as {
       payload: any;
       first: number;
       after: string;
       picks: string[];
+      userID: string;
     };
 
     const result = await this.neo4jService.getPingsWithinRadius(
@@ -42,9 +43,10 @@ export class Neo4jController {
       first,
       after,
       picks,
+      userID,
     );
 
-    return JSON.stringify(result);
+    return result;
   }
 
   @MessagePattern('test')

@@ -67,7 +67,7 @@ export interface PageInfo {
     hasNextPage: boolean;
     hasPreviousPage?: Nullable<boolean>;
     startCursor?: Nullable<string>;
-    endCursor: string;
+    endCursor?: Nullable<string>;
 }
 
 export interface PingEdge {
@@ -85,7 +85,7 @@ export interface PingConnection {
 export interface IQuery {
     getPing(id: ObjectID): Ping | Promise<Ping>;
     getAllPing(first: number, after?: Nullable<string>, userID?: Nullable<string>): PingConnection | Promise<PingConnection>;
-    getPingsWithinRadius(payload: UPingsWithinRadiusInput, first: number, after?: Nullable<string>, sort?: Nullable<string>): Nullable<PingConnection> | Promise<Nullable<PingConnection>>;
+    getPingsWithinRadius(payload: UPingsWithinRadiusInput, first: number, after?: Nullable<string>, picks?: Nullable<Nullable<string>[]>): Nullable<PingConnection> | Promise<Nullable<PingConnection>>;
 }
 
 export interface User {

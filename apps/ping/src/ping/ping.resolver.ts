@@ -84,6 +84,7 @@ export class PingResolver {
       first,
       decodeFromBase64(after),
       picks,
+      user.id,
     );
 
     return {
