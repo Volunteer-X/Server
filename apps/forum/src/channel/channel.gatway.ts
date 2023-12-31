@@ -5,6 +5,8 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
+import { CreateMessage } from '../common/dto/message.dto';
+import { MessageService } from '../message/message.service';
 
 @WebSocketGateway(88, {
   namespace: 'chat',
@@ -17,9 +19,10 @@ export class ChannelGateway {
   @WebSocketServer()
   server: Server;
 
-  @SubscribeMessage('message')
-  handleMessage(@MessageBody() message: string) {
-    this.server.emit('message', message);
+  @SubscribeMessage('chat')
+  handleMessage(@MessageBody() message: CreateMessage) {
+    this.server.emit('chat', message);
+    this.messageService.addMessage(message);
     // this.messageService
   }
 }

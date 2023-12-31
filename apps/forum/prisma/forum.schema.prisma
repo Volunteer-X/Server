@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+    output   = "../../../node_modules/@prisma/client-forum"
+}
+
+datasource db {
+    provider = "mongodb"
+    url      = env("FORUM_DB_URL")
+}
+
+model Message {
+    id        String  @id @default(auto()) @map("_id") @db.ObjectId
+    userID    String  @db.ObjectId
+    channelID String  @db.ObjectId
+    channel   Channel @relation(fields: [channelID], references: [id])
+    text      String
+}
+
+model Channel {
+    id           String    @id @default(auto()) @map("_id") @db.ObjectId
+    activityID   String    @db.ObjectId
+    admin        String    @db.ObjectId
+    title        String
+    participants String[]
+    messages     Message[]
+}
