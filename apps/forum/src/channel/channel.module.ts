@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { ForumController } from './channel.controller';
-import { ForumService } from './channel.service';
-import { ForumResolver } from './channel.resolver';
-import { ChatGateway } from './chat.gatway';
+import { ChannelController } from './channel.controller';
+import { ChannelService } from './channel.service';
+import { ChannelResolver } from './channel.resolver';
+import { ChannelGateway } from './channel.gatway';
 
 @Module({
   imports: [],
-  controllers: [ForumController],
-  providers: [ForumService, ForumResolver, ChatGateway],
+  controllers: [ChannelController],
+  providers: [ChannelService, ChannelResolver, ChannelGateway],
 })
-export class ForumModule {}
+export class ChannelModule {}

@@ -1,4 +1,4 @@
 import { Resolver } from '@nestjs/graphql';
 
 @Resolver('forum')
-export class ForumResolver {}
+export class ChannelResolver {}

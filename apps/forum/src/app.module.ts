@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { ForumModule } from './channel/channel.module';
+import { ChannelModule } from './channel/channel.module';
 
 @Module({
-  imports: [ForumModule],
+  imports: [ChannelModule],
   controllers: [],
   providers: [],
 })

@@ -1,9 +1,9 @@
 import { Controller, Get } from '@nestjs/common';
-import { ForumService } from './channel.service';
+import { ChannelService } from './channel.service';
 
 @Controller()
-export class ForumController {
-  constructor(private readonly forumService: ForumService) {}
+export class ChannelController {
+  constructor(private readonly forumService: ChannelService) {}
 
   @Get()
   getHello(): string {

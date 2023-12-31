@@ -11,7 +11,7 @@ import { Server } from 'socket.io';
   transports: ['websocket'],
   cors: { origin: '*' },
 })
-export class ChatGateway {
+export class ChannelGateway {
   constructor(private readonly messageService: MessageService) {}
 
   @WebSocketServer()
