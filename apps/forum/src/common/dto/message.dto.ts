@@ -19,6 +19,6 @@ export type Channel = {
   id: string;
   activityID: string;
   title: string;
-  admins: string;
+  admin: string;
   participants?: string[];
 };
