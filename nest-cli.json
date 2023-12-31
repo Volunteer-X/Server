@@ -126,6 +126,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/firebase/tsconfig.lib.json"
       }
+    },
+    "forum": {
+      "type": "application",
+      "root": "apps/forum",
+      "entryFile": "main",
+      "sourceRoot": "apps/forum/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/forum/tsconfig.app.json"
+      }
     }
   }
 }
