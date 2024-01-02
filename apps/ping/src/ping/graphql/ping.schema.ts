@@ -52,7 +52,7 @@ export interface Ping {
     id: ObjectID;
     title: string;
     userID: string;
-    user?: Nullable<User>;
+    user: User;
     longitude: Longitude;
     latitude: Latitude;
     picks: string[];
@@ -61,6 +61,7 @@ export interface Ping {
     radius?: Nullable<number>;
     createdAt?: Nullable<DateTime>;
     media?: Nullable<Nullable<Media>[]>;
+    participants?: Nullable<Nullable<User>[]>;
 }
 
 export interface PageInfo {
@@ -96,6 +97,8 @@ export interface User {
 export interface IMutation {
     createPing(payload: CreatePingInput): Ping | Promise<Ping>;
     updatePing(id: ObjectID, payload: UPingInput): Ping | Promise<Ping>;
+    addParticipant(id: ObjectID, userID: ObjectID): string | Promise<string>;
+    removeParticipant(id: ObjectID, userID: ObjectID): string | Promise<string>;
 }
 
 export type Longitude = typeof GraphQLLongitude;

@@ -14,16 +14,17 @@ datasource db {
 }
 
 model Ping {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  description String?
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  description  String?
   // createdAt   DateTime @default(now())
-  url         String?
-  picks       String[]
-  userID      String   @map("user") @db.ObjectId
-  geometry    GeoJson
-  radius      Float?   @default(200)
-  media       Media[]
+  url          String?
+  picks        String[]
+  userID       String   @map("user") @db.ObjectId
+  geometry     GeoJson
+  radius       Float?   @default(200)
+  media        Media[]
+  participants String[] @db.ObjectId
 }
 
 type Media {

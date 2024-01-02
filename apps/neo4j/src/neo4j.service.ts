@@ -1,6 +1,6 @@
 import { BROADCAST_SERVICE, PingNode, UserNode } from '@app/common';
 import { Neo4jCommonService } from '@app/neo4j';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
@@ -9,6 +9,8 @@ export class Neo4jService {
     private readonly neo4jCommon: Neo4jCommonService,
     @Inject(BROADCAST_SERVICE) private broadcastClient: ClientProxy,
   ) {}
+
+  private readonly logger = new Logger(Neo4jService.name);
 
   // Add a new user to the database
   async createUser(user: UserNode) {
@@ -175,5 +177,50 @@ export class Neo4jService {
       totalCount,
       data,
     };
+  }
+
+  async addParticipant(userID: string, id: string) {
+    const cypher = `
+    MATCH (user:User {id: $userID}), (ping:Ping {id: $id})
+    MERGE (user)-[:PARTICIPATED {since: $time}]->(ping)
+    RETURN ping
+    `;
+
+    const result = await this.neo4jCommon.write(cypher, {
+      userID,
+      id,
+      time: new Date().toISOString(),
+    });
+
+    if (result.records.length === 0) {
+      throw new Error('Participant not added');
+    }
+
+    this.logger.log(
+      'participant added',
+      result.records[0].get('ping').properties,
+    );
+  }
+
+  async removeParticipant(userID: string, id: string) {
+    const cypher = `
+    MATCH (user:User {id: $userID})-[r:PARTICIPATED]->(ping:Ping {id: $id})
+    DELETE r
+    RETURN ping
+    `;
+
+    const result = await this.neo4jCommon.write(cypher, {
+      userID,
+      id,
+    });
+
+    if (result.records.length === 0) {
+      throw new Error('Participant not removed');
+    }
+
+    this.logger.log(
+      'participant removed',
+      result.records[0].get('ping').properties,
+    );
   }
 }

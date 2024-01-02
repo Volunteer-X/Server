@@ -7,6 +7,7 @@ import {
   Payload,
   RmqContext,
 } from '@nestjs/microservices';
+import { Pattern } from '@app/common';
 import { PingNode, RMQService, UserNode } from '@app/common';
 
 @Controller()
@@ -16,19 +17,19 @@ export class Neo4jController {
     private readonly rmqService: RMQService,
   ) {}
 
-  @EventPattern('newUserCreated')
+  @EventPattern(Pattern.userCreated)
   async handleUserCreated(@Payload() user: string, @Ctx() context: RmqContext) {
     await this.neo4jService.createUser(JSON.parse(user) as UserNode);
     this.rmqService.ack(context);
   }
 
-  @EventPattern('pingCreated')
+  @EventPattern(Pattern.pingCreated)
   async handlePingCreated(@Payload() ping: string, @Ctx() context: RmqContext) {
     await this.neo4jService.createPing(JSON.parse(ping) as PingNode);
     this.rmqService.ack(context);
   }
 
-  @MessagePattern('getPingsWithinRadius')
+  @MessagePattern(Pattern.getPingsWithinRadius)
   async getPingsWithinRadius(@Payload() _payload: any) {
     const { payload, first, after, picks, userID } = _payload as {
       payload: any;
@@ -47,6 +48,24 @@ export class Neo4jController {
     );
 
     return result;
+  }
+
+  @EventPattern(Pattern.participantAdded)
+  async handleParticipantAdded(
+    @Payload() payload: { userID: string; id: string },
+  ) {
+    const { userID, id } = payload;
+
+    await this.neo4jService.addParticipant(userID, id);
+  }
+
+  @EventPattern(Pattern.participantRemoved)
+  async handleParticipantRemoved(
+    @Payload() payload: { userID: string; id: string },
+  ) {
+    const { userID, id } = payload;
+
+    await this.neo4jService.removeParticipant(userID, id);
   }
 
   @MessagePattern('test')

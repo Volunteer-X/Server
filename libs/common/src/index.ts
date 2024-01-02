@@ -4,3 +4,4 @@ export * from './rmq/rmq.module';
 export * from './types';
 
 export * from './services';
+export * from './constants/pattern';

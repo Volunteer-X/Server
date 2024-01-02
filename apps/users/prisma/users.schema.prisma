@@ -20,6 +20,17 @@ model User {
   picture  String?
   picks    String[]
   devices  String[]
+  pings    Ping[]
+}
+
+type Ping {
+  id             String         @db.ObjectId
+  membershipType MembershipType @default(MEMBER)
+}
+
+enum MembershipType {
+  ADMIN
+  MEMBER
 }
 
 type Name {

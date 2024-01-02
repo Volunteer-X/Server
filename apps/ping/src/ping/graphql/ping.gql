@@ -22,6 +22,7 @@ type Ping @key(fields: "id") {
   radius: Float
   createdAt: DateTime
   media: [Media]
+  participants: [User]
 }
 
 extend type User @key(fields: "id") {
@@ -95,4 +96,6 @@ extend type Query {
 extend type Mutation {
   createPing(payload: CreatePingInput!): Ping!
   updatePing(id: ObjectID!, payload: UPingInput!): Ping!
+  addParticipant(id: ObjectID!, userID: ObjectID!): String!
+  removeParticipant(id: ObjectID!, userID: ObjectID!): String!
 }

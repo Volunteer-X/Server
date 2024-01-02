@@ -13,7 +13,7 @@ import {
   GraphQLObjectID,
   GraphQLURL,
 } from 'graphql-scalars';
-import { BROADCAST_SERVICE, NEO4J_SERVICE } from '@app/common';
+import { BROADCAST_SERVICE, NEO4J_SERVICE, Pattern } from '@app/common';
 import { ObjectId } from 'bson';
 
 @Injectable()
@@ -286,5 +286,80 @@ export class PingService {
       })),
       totalCount: result.totalCount,
     };
+  }
+
+  async addParticipant(id: string, userID: string) {
+    try {
+      await this.repository.ping.update({
+        where: {
+          id,
+        },
+        data: {
+          participants: {
+            push: [userID],
+          },
+        },
+      });
+    } catch (error) {
+      throw new Error(error.message);
+    } finally {
+      try {
+        await lastValueFrom(
+          this.neo4jClient.emit<string, { id: string; userID: string }>(
+            Pattern.participantAdded,
+            {
+              id,
+              userID,
+            },
+          ),
+        );
+      } catch (error) {
+        throw new Error('Neo4j error');
+      }
+    }
+    return 'Participant added';
+  }
+
+  async removeParticipant(id: string, userID: string) {
+    try {
+      const exisitngDoc = await this.repository.ping.findUnique({
+        where: {
+          id,
+        },
+        select: {
+          participants: true,
+        },
+      });
+
+      const updatedParticipants = exisitngDoc.participants.filter(
+        (participant) => participant !== userID,
+      );
+
+      await this.repository.ping.update({
+        where: {
+          id,
+        },
+        data: {
+          participants: updatedParticipants,
+        },
+      });
+    } catch (error) {
+      throw new Error(error.message);
+    } finally {
+      try {
+        await lastValueFrom(
+          this.neo4jClient.emit<string, { id: string; userID: string }>(
+            Pattern.participantRemoved,
+            {
+              id,
+              userID,
+            },
+          ),
+        );
+      } catch (error) {
+        throw new Error('Neo4j error');
+      }
+    }
+    return 'Participant removed';
   }
 }

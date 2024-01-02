@@ -5,7 +5,7 @@ import { InjectRepository, PrismaService } from '@app/prisma';
 import { lastValueFrom } from 'rxjs';
 
 import { ClientProxy } from '@nestjs/microservices';
-import { NEO4J_SERVICE } from '@app/common';
+import { NEO4J_SERVICE, Pattern } from '@app/common';
 import { ObjectId } from 'bson';
 
 @Injectable()
@@ -50,7 +50,7 @@ export class UserService {
     try {
       await lastValueFrom(
         this.neo4jClient.emit<string, string>(
-          'newUserCreated',
+          Pattern.userCreated,
           JSON.stringify({
             id: result.id,
             picks: picks,

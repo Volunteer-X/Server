@@ -102,6 +102,21 @@ export class PingResolver {
     };
   }
 
+  @Mutation('addParticipant')
+  @UseGuards(GqlAuthGuard)
+  async addParticipant(@Args('id') id: string, @Args('userID') userID: string) {
+    return await this.pingService.addParticipant(id, userID);
+  }
+
+  @Mutation('removeParticipant')
+  @UseGuards(GqlAuthGuard)
+  async removeParticipant(
+    @Args('id') id: string,
+    @Args('userID') userID: string,
+  ) {
+    return await this.pingService.removeParticipant(id, userID);
+  }
+
   @ResolveField('user')
   user(@Parent() ping: Ping) {
     this.logger.log('ping', ping.userID);

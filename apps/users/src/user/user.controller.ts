@@ -1,8 +1,9 @@
 import { Controller } from '@nestjs/common';
 import { UserService } from './user.service';
-import { RMQService } from '@app/common';
+import { Pattern, RMQService } from '@app/common';
 import {
   Ctx,
+  EventPattern,
   MessagePattern,
   Payload,
   RmqContext,
@@ -18,11 +19,15 @@ export class UserController {
   /*
    * return user devices as an array of strings
    */
-  @MessagePattern('userDevices')
+  @MessagePattern(Pattern.userDevices)
   async getUserDevices(@Payload() users: string[], @Ctx() context: RmqContext) {
     const userDevices = await this.userService.getUserDevices(users);
 
     this.rmqService.ack(context);
     return userDevices;
   }
+
+  @EventPattern()
+  async update
+
 }

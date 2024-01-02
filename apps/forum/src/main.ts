@@ -9,9 +9,9 @@ async function bootstrap() {
 
   const port = configService.get('FORUM_PORT');
 
-  app.enableCors();
+  app.enableCors({ origin: '*' });
   await app.listen(port);
 
-  console.log('🚀 Ping server running successfully on port:', port);
+  console.log('🚀 Forum server running successfully on port:', port);
 }
 bootstrap();
