@@ -18,6 +18,7 @@ type User @key(fields: "id") {
   picks: [String!]!
   pings: [Ping]
   devices: [String!]
+  pings: [Ping]
 }
 
 extend type Ping @key(fields: "id") {

@@ -8,6 +8,7 @@ import {
   Payload,
   RmqContext,
 } from '@nestjs/microservices';
+import { Membership } from '@prisma/client';
 
 @Controller()
 export class UserController {
@@ -27,7 +28,19 @@ export class UserController {
     return userDevices;
   }
 
-  @EventPattern()
-  async update
+  @EventPattern(Pattern.addMembership)
+  async addMembership(
+    @Payload() payload: { userID: string; id: string; membership: Membership },
+  ) {
+    const { userID, id, membership } = payload;
 
+    await this.userService.addMembership(userID, id, membership);
+  }
+
+  @EventPattern(Pattern.removeMembership)
+  async removeMembership(@Payload() payload: { userID: string; id: string }) {
+    const { userID, id } = payload;
+
+    await this.userService.removeMembership(userID, id);
+  }
 }

@@ -91,6 +91,7 @@ extend type Query {
     after: String
     picks: [String]
   ): PingConnection
+  getParticipants(id: ObjectID!): [User]
 }
 
 extend type Mutation {

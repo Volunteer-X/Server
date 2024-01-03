@@ -5,4 +5,6 @@ export const Pattern = {
   participantAdded: 'pingParticipantAdded',
   participantRemoved: 'pingParticipantRemoved',
   userDevices: 'userDevices',
+  addMembership: 'addMembership',
+  removeMembership: 'removeMembership',
 } as const;

@@ -1,10 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateUserInput, UpdateUserInput } from './graphql/user.schema';
 import { GraphQLEmailAddress, GraphQLObjectID } from 'graphql-scalars';
-import { InjectRepository, PrismaService } from '@app/prisma';
 import { lastValueFrom } from 'rxjs';
-
 import { ClientProxy } from '@nestjs/microservices';
+import { Membership } from '@prisma/client';
+
+import { InjectRepository, PrismaService } from '@app/prisma';
 import { NEO4J_SERVICE, Pattern } from '@app/common';
 import { ObjectId } from 'bson';
 
@@ -215,6 +216,54 @@ export class UserService {
         .flatMap((user) => user.devices);
     } catch (error) {
       console.log('error', error);
+    }
+  }
+
+  async addMembership(userID: string, id: string, membership: Membership) {
+    try {
+      await this.userRepo.update({
+        where: {
+          id: GraphQLObjectID.parseValue(userID),
+        },
+        data: {
+          pings: {
+            push: [
+              {
+                id,
+                membership,
+              },
+            ],
+          },
+        },
+      });
+    } catch (error) {
+      console.log('Add membership', error);
+    }
+  }
+
+  async removeMembership(userID: string, id: string) {
+    try {
+      const exisitngPings = await this.userRepo.findUnique({
+        where: {
+          id: GraphQLObjectID.parseValue(userID),
+        },
+        select: {
+          pings: true,
+        },
+      });
+
+      const updatedPing = exisitngPings.pings.filter((ping) => ping.id !== id);
+
+      await this.userRepo.update({
+        where: {
+          id: GraphQLObjectID.parseValue(userID),
+        },
+        data: {
+          pings: updatedPing,
+        },
+      });
+    } catch (error) {
+      console.log('Remove membership', error);
     }
   }
 }

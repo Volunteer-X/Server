@@ -24,11 +24,11 @@ model User {
 }
 
 type Ping {
-  id             String         @db.ObjectId
-  membershipType MembershipType @default(MEMBER)
+  id         String     @db.ObjectId
+  membership Membership @default(MEMBER)
 }
 
-enum MembershipType {
+enum Membership {
   ADMIN
   MEMBER
 }

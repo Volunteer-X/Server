@@ -13,15 +13,22 @@ import {
   GraphQLObjectID,
   GraphQLURL,
 } from 'graphql-scalars';
-import { BROADCAST_SERVICE, NEO4J_SERVICE, Pattern } from '@app/common';
+import {
+  BROADCAST_SERVICE,
+  NEO4J_SERVICE,
+  Pattern,
+  USER_SERVICE,
+} from '@app/common';
 import { ObjectId } from 'bson';
+import { Membership } from '@prisma/client';
 
 @Injectable()
 export class PingService {
   constructor(
     private readonly repository: PingRepository,
-    @Inject(NEO4J_SERVICE) private neo4jClient: ClientProxy,
-    @Inject(BROADCAST_SERVICE) private broadcastClient: ClientProxy,
+    @Inject(NEO4J_SERVICE) private readonly neo4jClient: ClientProxy,
+    @Inject(BROADCAST_SERVICE) private readonly broadcastClient: ClientProxy,
+    @Inject(USER_SERVICE) private readonly userService: ClientProxy,
   ) {}
 
   private readonly logger = new Logger(PingService.name);
@@ -65,6 +72,14 @@ export class PingService {
 
     try {
       await lastValueFrom(
+        this.userService.emit<string, any>(Pattern.addMembership, {
+          id: result[0].id,
+          userID: result[0].userID,
+          membership: Membership.ADMIN,
+        }),
+      );
+
+      await lastValueFrom(
         this.neo4jClient.emit<string, string>(
           'pingCreated',
           JSON.stringify({
@@ -80,7 +95,7 @@ export class PingService {
         ),
       );
     } catch (error) {
-      throw new Error('Neo4j error');
+      throw new Error(`Neo4j error || user service error, ${error}`);
     }
 
     const ping = {
@@ -305,6 +320,14 @@ export class PingService {
     } finally {
       try {
         await lastValueFrom(
+          this.userService.emit<string, any>(Pattern.addMembership, {
+            id: id,
+            userID: userID,
+            membership: Membership.MEMBER,
+          }),
+        );
+
+        await lastValueFrom(
           this.neo4jClient.emit<string, { id: string; userID: string }>(
             Pattern.participantAdded,
             {
@@ -314,7 +337,7 @@ export class PingService {
           ),
         );
       } catch (error) {
-        throw new Error('Neo4j error');
+        throw new Error(`Neo4j error || user service error, ${error}`);
       }
     }
     return 'Participant added';
@@ -348,6 +371,16 @@ export class PingService {
     } finally {
       try {
         await lastValueFrom(
+          this.userService.emit<string, { id: string; userID: string }>(
+            Pattern.removeMembership,
+            {
+              id,
+              userID,
+            },
+          ),
+        );
+
+        await lastValueFrom(
           this.neo4jClient.emit<string, { id: string; userID: string }>(
             Pattern.participantRemoved,
             {
@@ -357,7 +390,7 @@ export class PingService {
           ),
         );
       } catch (error) {
-        throw new Error('Neo4j error');
+        throw new Error('Neo4j error || user service error');
       }
     }
     return 'Participant removed';

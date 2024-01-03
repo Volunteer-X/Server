@@ -10,6 +10,7 @@ export type User = {
   username: string;
   picture?: string;
   picks: string[];
+  ping: Ping[];
 };
 
 export type Ping = {

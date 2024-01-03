@@ -4,6 +4,7 @@ import {
   Parent,
   Query,
   ResolveField,
+  ResolveReference,
   Resolver,
 } from '@nestjs/graphql';
 import { PingService } from './ping.service';
@@ -43,9 +44,9 @@ export class PingResolver {
   @Query('getAllPing')
   @UseGuards(GqlAuthGuard)
   async getAllPing(
+    @CurrentUser() user: User,
     @Args('first') first: number,
     @Args('after') after: string,
-    @CurrentUser() user: User,
     @Args('userID') userID?: string,
   ) {
     userID = userID ? userID : user.id;
@@ -115,6 +116,34 @@ export class PingResolver {
     @Args('userID') userID: string,
   ) {
     return await this.pingService.removeParticipant(id, userID);
+  }
+
+  @ResolveReference()
+  async resolveReference(reference: {
+    __typename: string;
+    first: number;
+    after: string;
+    userID: string;
+  }) {
+    const { __typename, after, first, userID } = reference;
+
+    const pings = await this.pingService.getAllPing(
+      userID,
+      first,
+      decodeFromBase64(after),
+    );
+
+    return {
+      edges: pings.map((ping) => ({
+        node: ping,
+        cursor: encodeToBase64(ping.id),
+      })),
+      pageInfo: {
+        hasNextPage: pings.length === first,
+        endCursor:
+          pings.length > 0 ? encodeToBase64(pings[pings.length - 1].id) : null,
+      },
+    };
   }
 
   @ResolveField('user')

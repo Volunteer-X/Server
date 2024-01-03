@@ -87,6 +87,7 @@ export interface IQuery {
     getPing(id: ObjectID): Ping | Promise<Ping>;
     getAllPing(first: number, after?: Nullable<string>, userID?: Nullable<string>): PingConnection | Promise<PingConnection>;
     getPingsWithinRadius(payload: UPingsWithinRadiusInput, first: number, after?: Nullable<string>, picks?: Nullable<Nullable<string>[]>): Nullable<PingConnection> | Promise<Nullable<PingConnection>>;
+    getParticipants(id: ObjectID): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
 }
 
 export interface User {

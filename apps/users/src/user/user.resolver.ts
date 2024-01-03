@@ -4,6 +4,8 @@ import {
   Mutation,
   Args,
   ResolveReference,
+  Parent,
+  ResolveField,
 } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import {
@@ -12,10 +14,13 @@ import {
   UpdateUserInput,
 } from './graphql/user.schema';
 import { GraphQLEmailAddress, GraphQLObjectID } from 'graphql-scalars';
+import { User } from 'libs/utils/entities';
+import { Logger } from '@nestjs/common';
 
 @Resolver('User')
 export class UserResolver {
   constructor(private readonly usersService: UserService) {}
+  private readonly logger = new Logger(UserResolver.name);
 
   @Mutation('createUser')
   create(@Args('payload') payload: CreateUserInput) {
@@ -59,8 +64,15 @@ export class UserResolver {
     return this.usersService.findOne(GraphQLObjectID.parseValue(reference.id));
   }
 
-  // @ResolveField('Ping')
-  // getPing(@Parent() user: User) {
-  //   return { __typename: 'User', id: user.pings. };
+  @ResolveField('ping')
+  pings(@Parent() user: User) {
+    this.logger.log('user', user);
+    return { __typename: 'User', id: user.id };
+  }
+
+  // @ResolveField('user')
+  // user(@Parent() ping: Ping) {
+  //   this.logger.log('ping', ping.userID);
+  //   return { __typename: 'User', id: ping.userID };
   // }
 }
