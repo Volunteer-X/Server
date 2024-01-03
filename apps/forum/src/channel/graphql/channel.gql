@@ -1,0 +1,18 @@
+scalar ObjectID
+
+type Forum @key(fields: "id") {
+  id: ObjectID!
+  activityID: ObjectID!
+  title: String!
+  admin: User!
+  participants: [User!]!
+}
+
+extend type User @key(fields: "id") {
+  id: ObjectID! @external
+}
+
+type Query {
+  forum(id: ObjectID!): Forum
+  forums: [Forum!]!
+}

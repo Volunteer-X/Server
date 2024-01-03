@@ -15,6 +15,7 @@
     "prisma:gen": "npm run prisma:gen:users && npm run prisma:gen:ping && npm run prisma:gen:forum",
     "generate-typings:user": "ts-node ./libs/generate-typings/user.ts",
     "generate-typings:ping": "ts-node ./libs/generate-typings/ping.ts",
+    "generate-typings:channel": "ts-node ./libs/generate-typings/channel.ts",
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",

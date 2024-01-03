@@ -1,4 +1,8 @@
-import { Resolver } from '@nestjs/graphql';
+import { Query, Resolver } from '@nestjs/graphql';
 
 @Resolver('forum')
-export class ChannelResolver {}
+export class ChannelResolver {
+
+    @Query()
+
+}
