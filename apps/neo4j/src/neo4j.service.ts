@@ -66,6 +66,17 @@ export class Neo4jService {
 
   // get all users within a certain radius of a location with similar picks
   async getUsersWithinRadius(ping: any, radius: number, userID: string) {
+    /**
+     * The Cypher query used to match users based on certain criteria.
+     * @remarks
+     * The query filters users based on their distance from a given latitude and longitude,
+     * as well as their picks matching a provided array of picks.
+     * @param userID - The ID of the user to exclude from the results.
+     * @param latitude - The latitude used to calculate the distance.
+     * @param longitude - The longitude used to calculate the distance.
+     * @param picks - An array of picks to match against the user's picks.
+     * @returns The matched users.
+     */
     const cypher = `
     MATCH (u:User)
     WHERE
@@ -134,6 +145,7 @@ export class Neo4jService {
             longitude: ping.longitude
           }), 
           centerPoint) <= $radius
+      AND coalesce(ANY(picks IN ping.picks WHERE picks IN $picks), TRUE)
     WITH count(ping) AS totalCount, centerPoint
     OPTIONAL MATCH (ping:Ping)
       WHERE point.distance(

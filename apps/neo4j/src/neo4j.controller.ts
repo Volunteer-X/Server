@@ -30,7 +30,10 @@ export class Neo4jController {
   }
 
   @MessagePattern(Pattern.getPingsWithinRadius)
-  async getPingsWithinRadius(@Payload() _payload: any) {
+  async getPingsWithinRadius(
+    @Payload() _payload: any,
+    @Ctx() context: RmqContext,
+  ) {
     const { payload, first, after, picks, userID } = _payload as {
       payload: any;
       first: number;
@@ -46,6 +49,8 @@ export class Neo4jController {
       picks,
       userID,
     );
+
+    this.rmqService.ack(context);
 
     return result;
   }

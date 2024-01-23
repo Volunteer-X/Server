@@ -8,6 +8,7 @@ import { Membership } from '@prisma/client';
 import { InjectRepository, PrismaService } from '@app/prisma';
 import { NEO4J_SERVICE, Pattern } from '@app/common';
 import { ObjectId } from 'bson';
+import { User } from 'libs/utils/entities';
 
 @Injectable()
 export class UserService {
@@ -89,9 +90,31 @@ export class UserService {
   async getUserByEmail(email: string) {
     console.log('email', email);
 
-    const user = await this.userRepo.findUnique({
+    const result = await this.userRepo.findUnique({
       where: { email: email },
     });
+
+    console.log(result.pings.length);
+
+    const user: User = {
+      createdAt: new ObjectId(result.id).getTimestamp(),
+      id: result.id,
+      email: result.email,
+      username: result.username,
+      name: {
+        firstName: result.name.firstName,
+        middleName: result.name.middleName,
+        lastName: result.name.lastName,
+      },
+      picture: result.picture,
+      picks: result.picks,
+      devices: result.devices,
+      ping: result.pings.map((ping) => ({
+        __typename: 'Ping',
+        id: ping.id,
+      })),
+      activityCount: result.pings.length,
+    };
 
     console.log('user', user);
 
@@ -223,7 +246,7 @@ export class UserService {
     try {
       await this.userRepo.update({
         where: {
-          id: GraphQLObjectID.parseValue(userID),
+          id: userID,
         },
         data: {
           pings: {

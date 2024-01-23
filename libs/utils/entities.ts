@@ -10,7 +10,12 @@ export type User = {
   username: string;
   picture?: string;
   picks: string[];
-  ping: Ping[];
+  devices: string[];
+  ping?: {
+    __typename: 'Ping';
+    id: string;
+  }[];
+  activityCount: number;
 };
 
 export type Ping = {

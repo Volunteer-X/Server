@@ -81,7 +81,7 @@ export class PingService {
 
       await lastValueFrom(
         this.neo4jClient.emit<string, string>(
-          'pingCreated',
+          Pattern.pingCreated,
           JSON.stringify({
             id: result[0].id,
             userID: result[0].userID,
@@ -239,6 +239,10 @@ export class PingService {
       longitude: item.geometry.coordinates[1],
       media: item.media,
       userID: item.userID,
+      // participants: item.participants.map((i) => ({
+      //   __typename: 'User',
+      //   id: i,
+      // })),
     }));
 
     return pings;
@@ -262,6 +266,8 @@ export class PingService {
       }),
     );
 
+    console.log('neo4j results', result);
+
     if (result.totalCount === 0) {
       return {
         pings: [],
@@ -281,8 +287,6 @@ export class PingService {
         id: 'asc',
       },
     });
-
-    console.log('pings', pings[0].userID);
 
     return {
       pings: pings.map((ping) => ({
@@ -305,16 +309,16 @@ export class PingService {
 
   async addParticipant(id: string, userID: string) {
     try {
-      await this.repository.ping.update({
-        where: {
-          id,
-        },
-        data: {
-          participants: {
-            push: [userID],
-          },
-        },
-      });
+      // await this.repository.ping.update({
+      //   where: {
+      //     id,
+      //   },
+      //   data: {
+      //     participants: {
+      //       push: [userID],
+      //     },
+      //   },
+      // });
     } catch (error) {
       throw new Error(error.message);
     } finally {
@@ -327,15 +331,15 @@ export class PingService {
           }),
         );
 
-        await lastValueFrom(
-          this.neo4jClient.emit<string, { id: string; userID: string }>(
-            Pattern.participantAdded,
-            {
-              id,
-              userID,
-            },
-          ),
-        );
+        // await lastValueFrom(
+        //   this.neo4jClient.emit<string, { id: string; userID: string }>(
+        //     Pattern.participantAdded,
+        //     {
+        //       id,
+        //       userID,
+        //     },
+        //   ),
+        // );
       } catch (error) {
         throw new Error(`Neo4j error || user service error, ${error}`);
       }
@@ -394,5 +398,32 @@ export class PingService {
       }
     }
     return 'Participant removed';
+  }
+
+  async getParticipants(pingID: string, first: number, after: string) {
+    const cursor = after ? { id: after } : undefined;
+
+    const result = await this.repository.ping.findUnique({
+      where: {
+        id: pingID,
+      },
+      select: { participants: true },
+      // where: {
+      //   id: pingID,
+      // },
+      // select: { participants: true },
+      // take: first,
+      // cursor,
+      // orderBy: {
+      //   id: '',
+      // },
+    });
+
+    const members = result.participants.map((id) => ({
+      __typename: 'User',
+      id: id,
+    }));
+
+    return { members, totalCount: members.length };
   }
 }

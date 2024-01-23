@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Pattern, RMQService } from '@app/common';
 import {
@@ -17,6 +17,8 @@ export class UserController {
     private readonly rmqService: RMQService,
   ) {}
 
+  private readonly logger = new Logger(UserController.name);
+
   /*
    * return user devices as an array of strings
    */
@@ -33,6 +35,8 @@ export class UserController {
     @Payload() payload: { userID: string; id: string; membership: Membership },
   ) {
     const { userID, id, membership } = payload;
+
+    this.logger.log(payload);
 
     await this.userService.addMembership(userID, id, membership);
   }

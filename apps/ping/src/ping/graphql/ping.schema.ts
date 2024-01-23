@@ -83,11 +83,16 @@ export interface PingConnection {
     pageInfo: PageInfo;
 }
 
+export interface GetParticipantsResponse {
+    totalCount: number;
+    members?: Nullable<Nullable<User>[]>;
+}
+
 export interface IQuery {
     getPing(id: ObjectID): Ping | Promise<Ping>;
     getAllPing(first: number, after?: Nullable<string>, userID?: Nullable<string>): PingConnection | Promise<PingConnection>;
     getPingsWithinRadius(payload: UPingsWithinRadiusInput, first: number, after?: Nullable<string>, picks?: Nullable<Nullable<string>[]>): Nullable<PingConnection> | Promise<Nullable<PingConnection>>;
-    getParticipants(id: ObjectID): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
+    getParticipants(pingID: ObjectID, first?: Nullable<number>, after?: Nullable<string>): GetParticipantsResponse | Promise<GetParticipantsResponse>;
 }
 
 export interface User {

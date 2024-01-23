@@ -30,6 +30,8 @@ export class AuthService {
       username: result.username,
       picture: result.picture,
       picks: result.picks,
+      activityCount: result.pings.length,
+      devices: result.devices,
     };
   }
 }

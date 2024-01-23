@@ -80,6 +80,8 @@ export class PingResolver {
     @Args('picks') picks: string[] | undefined,
     @CurrentUser() user,
   ) {
+    console.log(user.id);
+
     const { pings, totalCount } = await this.pingService.getPingsWithinRadius(
       payload,
       first,
@@ -100,6 +102,25 @@ export class PingResolver {
         endCursor:
           pings.length > 0 ? encodeToBase64(pings[pings.length - 1].id) : null,
       },
+    };
+  }
+
+  @Query('getParticipants')
+  @UseGuards(GqlAuthGuard)
+  async getParticipants(
+    @Args('pingID') pingID: string,
+    @Args('first') first: number,
+    @Args('after') after: string,
+  ) {
+    const { members, totalCount } = await this.pingService.getParticipants(
+      pingID,
+      first,
+      after,
+    );
+
+    return {
+      totalCount,
+      members,
     };
   }
 

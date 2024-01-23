@@ -3,9 +3,14 @@ scalar ObjectID
 type Forum @key(fields: "id") {
   id: ObjectID!
   activityID: ObjectID!
+  ping: Ping!
   title: String!
   admin: User!
   participants: [User!]!
+}
+
+extend type Ping @key(fields: "id") {
+  id: ObjectID! @external
 }
 
 extend type User @key(fields: "id") {

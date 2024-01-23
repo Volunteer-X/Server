@@ -17,8 +17,8 @@ type User @key(fields: "id") {
   createdAt: DateTime
   picks: [String!]!
   pings: [Ping]
+  activityCount: Int
   devices: [String!]
-  pings: [Ping]
 }
 
 extend type Ping @key(fields: "id") {

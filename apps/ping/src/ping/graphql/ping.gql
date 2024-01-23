@@ -82,6 +82,11 @@ input UPingsWithinRadiusInput {
   radius: Float!
 }
 
+type GetParticipantsResponse {
+  totalCount: Int!
+  members: [User]
+}
+
 extend type Query {
   getPing(id: ObjectID!): Ping!
   getAllPing(first: Int!, after: String, userID: String): PingConnection!
@@ -91,7 +96,11 @@ extend type Query {
     after: String
     picks: [String]
   ): PingConnection
-  getParticipants(id: ObjectID!): [User]
+  getParticipants(
+    pingID: ObjectID!
+    first: Int
+    after: String
+  ): GetParticipantsResponse!
 }
 
 extend type Mutation {

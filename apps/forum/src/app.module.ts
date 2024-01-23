@@ -13,7 +13,5 @@ import { ConfigModule } from '@nestjs/config';
       expandVariables: true,
     }),
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}

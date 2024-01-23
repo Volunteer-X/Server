@@ -52,6 +52,7 @@ export interface User {
     createdAt?: Nullable<DateTime>;
     picks: string[];
     pings?: Nullable<Nullable<Ping>[]>;
+    activityCount?: Nullable<number>;
     devices?: Nullable<string[]>;
 }
 
