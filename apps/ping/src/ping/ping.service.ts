@@ -256,16 +256,23 @@ export class PingService {
     picks: string[],
     userID: string,
   ) {
-    const result: { data: string[]; totalCount: number } = await lastValueFrom(
-      this.neo4jClient.send('getPingsWithinRadius', {
-        payload,
-        first,
-        after,
-        picks,
-        userID,
-      }),
-    );
+    let result: { data: string[]; totalCount: number };
 
+    this.logger.log('userID', userID);
+
+    try {
+      result = await lastValueFrom(
+        this.neo4jClient.send('getPingsWithinRadius', {
+          payload,
+          first,
+          after,
+          picks,
+          userID,
+        }),
+      );
+    } catch (error) {
+      console.error('Neo4j Error::', error.message);
+    }
     console.log('neo4j results', result);
 
     if (result.totalCount === 0) {

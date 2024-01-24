@@ -80,7 +80,7 @@ export class PingResolver {
     @Args('picks') picks: string[] | undefined,
     @CurrentUser() user,
   ) {
-    console.log(user.id);
+    this.logger.log('userID', user.id);
 
     const { pings, totalCount } = await this.pingService.getPingsWithinRadius(
       payload,
