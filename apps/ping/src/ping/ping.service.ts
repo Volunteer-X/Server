@@ -309,42 +309,43 @@ export class PingService {
 
   async addParticipant(id: string, userID: string) {
     try {
-      // await this.repository.ping.update({
-      //   where: {
-      //     id,
-      //   },
-      //   data: {
-      //     participants: {
-      //       push: [userID],
-      //     },
-      //   },
-      // });
+      await this.repository.ping.update({
+        where: {
+          id,
+        },
+        data: {
+          participants: {
+            push: [userID],
+          },
+        },
+      });
     } catch (error) {
-      throw new Error(error.message);
-    } finally {
-      try {
-        await lastValueFrom(
-          this.userService.emit<string, any>(Pattern.addMembership, {
-            id: id,
-            userID: userID,
-            membership: Membership.MEMBER,
-          }),
-        );
-
-        // await lastValueFrom(
-        //   this.neo4jClient.emit<string, { id: string; userID: string }>(
-        //     Pattern.participantAdded,
-        //     {
-        //       id,
-        //       userID,
-        //     },
-        //   ),
-        // );
-      } catch (error) {
-        throw new Error(`Neo4j error || user service error, ${error}`);
-      }
+      console.error(error.message);
+      return false;
     }
-    return 'Participant added';
+    try {
+      await lastValueFrom(
+        this.userService.emit<string, any>(Pattern.addMembership, {
+          id: id,
+          userID: userID,
+          membership: Membership.MEMBER,
+        }),
+      );
+
+      await lastValueFrom(
+        this.neo4jClient.emit<string, { id: string; userID: string }>(
+          Pattern.participantAdded,
+          {
+            id,
+            userID,
+          },
+        ),
+      );
+    } catch (error) {
+      console.error(`Neo4j error || user service error, ${error}`);
+      return false;
+    }
+    return true;
   }
 
   async removeParticipant(id: string, userID: string) {

@@ -85,7 +85,7 @@ export interface PingConnection {
 
 export interface GetParticipantsResponse {
     totalCount: number;
-    members?: Nullable<Nullable<User>[]>;
+    members?: Nullable<User[]>;
 }
 
 export interface IQuery {
@@ -103,7 +103,7 @@ export interface User {
 export interface IMutation {
     createPing(payload: CreatePingInput): Ping | Promise<Ping>;
     updatePing(id: ObjectID, payload: UPingInput): Ping | Promise<Ping>;
-    addParticipant(id: ObjectID, userID: ObjectID): string | Promise<string>;
+    addParticipant(id: ObjectID, userID: ObjectID): boolean | Promise<boolean>;
     removeParticipant(id: ObjectID, userID: ObjectID): string | Promise<string>;
 }
 

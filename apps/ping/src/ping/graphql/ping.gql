@@ -84,7 +84,7 @@ input UPingsWithinRadiusInput {
 
 type GetParticipantsResponse {
   totalCount: Int!
-  members: [User]
+  members: [User!]
 }
 
 extend type Query {
@@ -106,6 +106,6 @@ extend type Query {
 extend type Mutation {
   createPing(payload: CreatePingInput!): Ping!
   updatePing(id: ObjectID!, payload: UPingInput!): Ping!
-  addParticipant(id: ObjectID!, userID: ObjectID!): String!
+  addParticipant(id: ObjectID!, userID: ObjectID!): Boolean!
   removeParticipant(id: ObjectID!, userID: ObjectID!): String!
 }
