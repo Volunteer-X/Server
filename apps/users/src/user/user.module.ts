@@ -1,32 +1,34 @@
-import { Module } from '@nestjs/common';
-import { GraphQLModule } from '@nestjs/graphql';
 import {
   ApolloFederationDriver,
   ApolloFederationDriverConfig,
 } from '@nestjs/apollo';
-import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import {
   DateTimeResolver,
   EmailAddressResolver,
   ObjectIDResolver,
 } from 'graphql-scalars';
-
-import { PrismaModule } from '@app/prisma';
-import { UserService } from './user.service';
-import { UserResolver } from './user.resolver';
-import { NEO4J_SERVICE, RmqModule } from '@app/common';
 import { GraphQLError, GraphQLFormattedError } from 'graphql';
+import { NEO4J_SERVICE, RmqModule } from '@app/common';
+
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import { AuthModule } from '@app/auth';
+import { GraphQLModule } from '@nestjs/graphql';
+import { Module } from '@nestjs/common';
+import { PayloadResolver } from './payload.resolver';
+import { PrismaModule } from '@app/prisma';
 import { UserController } from './user.controller';
+import { UserResolver } from './user.resolver';
+import { UserService } from './user.service';
 
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloFederationDriverConfig>({
       driver: ApolloFederationDriver,
-      typePaths: ['**/user.gql'],
+      typePaths: ['**/user.gql', 'libs/utils/errors.gql'],
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       resolvers: {
-        DataTime: DateTimeResolver,
+        DateTime: DateTimeResolver,
         EmailAddress: EmailAddressResolver,
         ObjectID: ObjectIDResolver,
       },
@@ -38,11 +40,12 @@ import { UserController } from './user.controller';
         return graphQLFormattedError;
       },
     }),
+    AuthModule,
     PrismaModule.register({ logQueries: false }),
-    RmqModule,
-    RmqModule.register({ name: [NEO4J_SERVICE] }),
+    // RmqModule,
+    // RmqModule.register({ name: [NEO4J_SERVICE] }),
   ],
-  controllers: [UserController],
-  providers: [UserResolver, UserService],
+  // controllers: [UserController],
+  providers: [UserResolver, PayloadResolver, UserService],
 })
 export class UserModule {}

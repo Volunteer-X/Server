@@ -10,7 +10,7 @@
 
 import { GraphQLDateTime, GraphQLEmailAddress, GraphQLObjectID } from 'graphql-scalars'
 
-export interface CreateUserInput {
+export class CreateUserInput {
     username: string;
     email: EmailAddress;
     firstName: string;
@@ -23,7 +23,7 @@ export interface CreateUserInput {
     device: string;
 }
 
-export interface UpdateUserInput {
+export class UpdateUserInput {
     id: ObjectID;
     username?: Nullable<string>;
     email?: Nullable<EmailAddress>;
@@ -37,13 +37,17 @@ export interface UpdateUserInput {
     longitude?: Nullable<number>;
 }
 
-export interface Name {
+export interface BaseError {
+    message: string;
+}
+
+export class Name {
     firstName: string;
     middleName?: Nullable<string>;
     lastName: string;
 }
 
-export interface User {
+export class User {
     id: ObjectID;
     email: EmailAddress;
     username: string;
@@ -56,24 +60,53 @@ export interface User {
     devices?: Nullable<string[]>;
 }
 
-export interface IQuery {
-    getUser(id: ObjectID): User | Promise<User>;
-    getUserByEmail(email: EmailAddress): Nullable<User> | Promise<Nullable<User>>;
-    isUsernameAvailable(username: string): boolean | Promise<boolean>;
+export abstract class IQuery {
+    abstract getUser(): UserPayload | Promise<UserPayload>;
+
+    abstract getUserById(id: ObjectID): User | Promise<User>;
+
+    abstract isUsernameAvailable(username: string): boolean | Promise<boolean>;
 }
 
-export interface Ping {
+export class InvalidInputError implements BaseError {
+    message: string;
+}
+
+export class NotFoundError implements BaseError {
+    message: string;
+}
+
+export class UnauthorizedError implements BaseError {
+    message: string;
+}
+
+export class ForbiddenError implements BaseError {
+    message: string;
+}
+
+export class InternalServerError implements BaseError {
+    message: string;
+}
+
+export class UnknownError implements BaseError {
+    message: string;
+}
+
+export class Ping {
     id: ObjectID;
     user?: Nullable<User>;
 }
 
-export interface IMutation {
-    createUser(payload: CreateUserInput): User | Promise<User>;
-    updateUser(payload: UpdateUserInput): User | Promise<User>;
-    removeUser(id: ObjectID): Nullable<User> | Promise<Nullable<User>>;
+export abstract class IMutation {
+    abstract createUser(payload: CreateUserInput): User | Promise<User>;
+
+    abstract updateUser(payload: UpdateUserInput): User | Promise<User>;
+
+    abstract removeUser(id: ObjectID): Nullable<User> | Promise<Nullable<User>>;
 }
 
 export type DateTime = typeof GraphQLDateTime;
 export type EmailAddress = typeof GraphQLEmailAddress;
 export type ObjectID = typeof GraphQLObjectID;
+export type UserPayload = User | NotFoundError | UnauthorizedError;
 type Nullable<T> = T | null;

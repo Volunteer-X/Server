@@ -4,9 +4,9 @@ import { join } from 'path';
 const definitionFactory = new GraphQLFederationDefinitionsFactory();
 
 definitionFactory.generate({
-  typePaths: ['./apps/users/src/user/graphql/*.gql'],
+  typePaths: ['./apps/users/src/user/graphql/*.gql', './libs/utils/errors.gql'],
   path: join(process.cwd(), 'apps/users/src/user/graphql/user.schema.ts'),
-  outputAs: 'interface',
+  outputAs: 'class',
   defaultScalarType: 'unknown',
   customScalarTypeMapping: {
     DateTime: 'typeof GraphQLDateTime',

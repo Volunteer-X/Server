@@ -1,11 +1,12 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { PassportStrategy } from '@nestjs/passport';
 import { Strategy as BaseStrategy, ExtractJwt } from 'passport-jwt';
-import { passportJwtSecret } from 'jwks-rsa';
-import { JwtPayload } from './jwt-payload.interface';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+
 import { AuthService } from '../service/auth.service';
+import { ConfigService } from '@nestjs/config';
+import { JwtPayload } from './jwt-payload.interface';
+import { PassportStrategy } from '@nestjs/passport';
 import { User } from 'libs/utils/entities';
+import { passportJwtSecret } from 'jwks-rsa';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(BaseStrategy) {
@@ -51,11 +52,7 @@ export class JwtStrategy extends PassportStrategy(BaseStrategy) {
       );
     }
 
-    // console.log('payload', payload);
-
-    const email = payload['https://api.volunteerX.module/email'];
-
-    // console.log('email', email);s
+    const email = payload['api.volunteerx/email'];
 
     // ! if error, use an api based on the auth0 user email to get the user info, eg: http://localhost:3510/users?email=${email}
 

@@ -15,7 +15,7 @@ export class UserService {
   constructor(
     @InjectRepository('user')
     private readonly userRepo: PrismaService['user'],
-    @Inject(NEO4J_SERVICE) private readonly neo4jClient: ClientProxy,
+    // @Inject(NEO4J_SERVICE) private readonly neo4jClient: ClientProxy,
   ) {}
   /*
    ? Create new user
@@ -49,22 +49,22 @@ export class UserService {
       },
     });
 
-    try {
-      await lastValueFrom(
-        this.neo4jClient.emit<string, string>(
-          Pattern.userCreated,
-          JSON.stringify({
-            id: result.id,
-            picks: picks,
-            longitude,
-            latitude,
-            devices: [device],
-          }),
-        ),
-      );
-    } catch (error) {
-      console.log('Neo4J error', error);
-    }
+    // try {
+    //   await lastValueFrom(
+    //     this.neo4jClient.emit<string, string>(
+    //       Pattern.userCreated,
+    //       JSON.stringify({
+    //         id: result.id,
+    //         picks: picks,
+    //         longitude,
+    //         latitude,
+    //         devices: [device],
+    //       }),
+    //     ),
+    //   );
+    // } catch (error) {
+    //   console.log('Neo4J error', error);
+    // }
 
     const user = {
       createdAt: new ObjectId(result.id).getTimestamp(),
@@ -88,13 +88,9 @@ export class UserService {
   ? Get user details by email
   */
   async getUserByEmail(email: string) {
-    console.log('email', email);
-
     const result = await this.userRepo.findUnique({
       where: { email: email },
     });
-
-    console.log(result.pings.length);
 
     const user: User = {
       createdAt: new ObjectId(result.id).getTimestamp(),
@@ -115,8 +111,6 @@ export class UserService {
       })),
       activityCount: result.pings.length,
     };
-
-    console.log('user', user);
 
     return user;
   }
