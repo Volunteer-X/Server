@@ -3,9 +3,17 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "apps/gateway/src",
   "compilerOptions": {
+    "manualRestart": true,
+    "watchAssets": true,
     "deleteOutDir": true,
     "webpack": true,
-    "tsConfigPath": "apps/gateway/tsconfig.app.json"
+    "tsConfigPath": "apps/gateway/tsconfig.app.json",
+    "assets": [
+      {
+        "include": "**/*.gql",
+        "watchAssets": true
+      }
+    ]
   },
   "monorepo": true,
   "root": "apps/gateway",

@@ -2,9 +2,9 @@
   "name": "gateway",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "Amil Muhammed Hamza",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist && npm run prisma:gen",
     "prisma:push:user": "prisma db push --schema ./prisma/users/users.schema.prisma",
