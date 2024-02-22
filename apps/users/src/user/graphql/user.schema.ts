@@ -61,9 +61,9 @@ export class User {
 }
 
 export abstract class IQuery {
-    abstract getUser(): UserPayload | Promise<UserPayload>;
+    abstract user(): UserPayload | Promise<UserPayload>;
 
-    abstract getUserById(id: ObjectID): User | Promise<User>;
+    abstract userById(id: ObjectID): User | Promise<User>;
 
     abstract isUsernameAvailable(username: string): boolean | Promise<boolean>;
 }

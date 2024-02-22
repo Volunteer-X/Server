@@ -40,7 +40,7 @@ export class UserResolver {
     }
   }
 
-  @Query('getUser')
+  @Query('user')
   @UseGuards(GqlAuthGuard)
   getUser(@CurrentUser() user: TUser) {
     return this.wrapPayload(user);
@@ -64,7 +64,7 @@ export class UserResolver {
     return this.usersService.isUsernameAvailable(username);
   }
 
-  @Query('getUserById')
+  @Query('userById')
   getUserById(
     @Args({ name: 'id', type: () => GraphQLObjectID })
     id: typeof GraphQLObjectID,

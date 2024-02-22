@@ -1,27 +1,41 @@
+"Represents the base error interface."
 interface BaseError {
+  "The error message."
   message: String!
 }
 
+"Represents an invalid input error."
 type InvalidInputError implements BaseError {
+  "The error message."
   message: String!
 }
 
+"Represents a not found error."
 type NotFoundError implements BaseError {
+  "The error message."
   message: String!
 }
 
+"Represents an unauthorized error."
 type UnauthorizedError implements BaseError {
+  "The error message."
   message: String!
 }
 
+"Represents a forbidden error."
 type ForbiddenError implements BaseError {
+  "The error message."
   message: String!
 }
 
+"Represents an internal server error."
 type InternalServerError implements BaseError {
+  "The error message."
   message: String!
 }
 
+"Represents an unknown error."
 type UnknownError implements BaseError {
+  "The error message."
   message: String!
 }
