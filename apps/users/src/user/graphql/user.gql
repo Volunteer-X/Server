@@ -58,10 +58,9 @@ input UpdateUserInput {
   longitude: Float
 }
 
-union UserPayload = User | NotFoundError | UnauthorizedError
+union UserPayload = User | NotFoundError | UnauthorizedError | UnknownError
 # | ForbiddenError
 # | InternalServerError
-# | UnknownError
 
 extend type Query {
   getUser: UserPayload!

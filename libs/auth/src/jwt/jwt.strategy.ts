@@ -58,8 +58,6 @@ export class JwtStrategy extends PassportStrategy(BaseStrategy) {
 
     const user = await this.authService.findUser(email.toString());
 
-    // console.log('payload', user);
-
     return user;
   }
 }

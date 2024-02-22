@@ -3,7 +3,6 @@ import { ExecutionContext, Injectable, Logger } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { UnauthorizedError } from 'apps/users/src/user/graphql/user.schema';
-import { User } from 'libs/utils/entities';
 
 @Injectable()
 export class GqlAuthGuard extends AuthGuard() {
@@ -17,26 +16,21 @@ export class GqlAuthGuard extends AuthGuard() {
 
   handleRequest<TUser = any>(
     err: any,
-    user: User,
+    user: any,
     info: any,
     context: ExecutionContext,
     status?: any,
   ): TUser {
     if (err || !user) {
-      this.logger.log(`err: ${err}`);
+      this.logger.error('Unauthorized');
       return new UnauthorizedError() as TUser;
     }
-
-    this.logger.log(`user: ${user}`);
 
     return user as TUser;
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const result = (await super.canActivate(context)) as boolean;
-
-    this.logger.log(`canActivate: ${result}`);
-
     return result;
   }
 }

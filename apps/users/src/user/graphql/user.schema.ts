@@ -108,5 +108,5 @@ export abstract class IMutation {
 export type DateTime = typeof GraphQLDateTime;
 export type EmailAddress = typeof GraphQLEmailAddress;
 export type ObjectID = typeof GraphQLObjectID;
-export type UserPayload = User | NotFoundError | UnauthorizedError;
+export type UserPayload = User | NotFoundError | UnauthorizedError | UnknownError;
 type Nullable<T> = T | null;

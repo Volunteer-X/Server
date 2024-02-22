@@ -12,6 +12,7 @@ import {
   CreateUserInput,
   EmailAddress,
   UnauthorizedError,
+  UnknownError,
   UpdateUserInput,
 } from './graphql/user.schema';
 import { GraphQLEmailAddress, GraphQLObjectID } from 'graphql-scalars';
@@ -24,19 +25,38 @@ export class UserResolver {
   constructor(private readonly usersService: UserService) {}
   private readonly logger = new Logger(UserResolver.name);
 
+  wrapPayload<T>(T: unknown) {
+    switch (T.constructor) {
+      case UnauthorizedError:
+        const unAuthorized = new UnauthorizedError();
+        unAuthorized.message = 'Unauthorized';
+        return unAuthorized;
+      case Object:
+        return T;
+      default:
+        const unknownError = new UnknownError();
+        unknownError.message = 'Unknown error';
+        return unknownError;
+    }
+  }
+
   @Query('getUser')
   @UseGuards(GqlAuthGuard)
   getUser(@CurrentUser() user: TUser) {
-    this.logger.log(`user: ${user.constructor}`);
+    return this.wrapPayload(user);
 
-    switch (user.constructor) {
-      case UnauthorizedError:
-        this.logger.log('Unauthorized');
-        return { __typename: 'UnauthorizedError', message: 'Unauthorized' };
-      default:
-        this.logger.log('User');
-        return { __typename: 'User', ...user };
-    }
+    // switch (user.constructor) {
+    //   case UnauthorizedError:
+    //     const unAuthorized = new UnauthorizedError();
+    //     unAuthorized.message = 'Unauthorized';
+    //     return unAuthorized;
+    //   case Object:
+    //     return user;
+    //   default:
+    //     const unknownError = new UnknownError();
+    //     unknownError.message = 'Unknown error';
+    //     return unknownError;
+    // }
   }
 
   @Query('isUsernameAvailable')
