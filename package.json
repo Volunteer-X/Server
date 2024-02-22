@@ -5,6 +5,11 @@
   "author": "Amil Muhammed Hamza",
   "private": true,
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Volunteer-X/Server.git"
+  },
+  "readme": "README.md",
   "scripts": {
     "prebuild": "rimraf dist && npm run prisma:gen",
     "prisma:push:user": "prisma db push --schema ./prisma/users/users.schema.prisma",
