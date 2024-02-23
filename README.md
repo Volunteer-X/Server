@@ -60,7 +60,7 @@ Here are some related projects
 
 ## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT](./LICENSE)
 
 
 ## Authors
