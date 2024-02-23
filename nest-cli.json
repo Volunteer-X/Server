@@ -3,7 +3,6 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "apps/gateway/src",
   "compilerOptions": {
-    "manualRestart": true,
     "watchAssets": true,
     "deleteOutDir": true,
     "webpack": true,

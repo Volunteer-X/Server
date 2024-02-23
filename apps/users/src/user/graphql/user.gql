@@ -72,9 +72,13 @@ input UpdateUserInput {
 }
 
 "The payload for the user."
-union UserPayload = User | NotFoundError | UnauthorizedError | UnknownError
-# | ForbiddenError
-# | InternalServerError
+union UserPayload =
+  | User
+  | NotFoundError
+  | UnauthorizedError
+  | UnknownError
+  | # | ForbiddenError
+  InternalServerError
 
 # The queries for the user.
 extend type Query {

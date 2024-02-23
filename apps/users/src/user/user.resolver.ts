@@ -4,59 +4,32 @@ import {
   Mutation,
   Args,
   ResolveReference,
-  Parent,
-  ResolveField,
 } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import {
   CreateUserInput,
-  EmailAddress,
+  InternalServerError,
+  NotFoundError,
   UnauthorizedError,
   UnknownError,
   UpdateUserInput,
 } from './graphql/user.schema';
-import { GraphQLEmailAddress, GraphQLObjectID } from 'graphql-scalars';
-import { TUser, User } from 'libs/utils/entities';
+import { GraphQLObjectID } from 'graphql-scalars';
+import { TUser } from 'libs/utils/entities';
 import { Logger, UseGuards } from '@nestjs/common';
 import { CurrentUser, GqlAuthGuard } from '@app/auth';
+import { WrappedPayload } from '../common';
 
 @Resolver('User')
 export class UserResolver {
   constructor(private readonly usersService: UserService) {}
   private readonly logger = new Logger(UserResolver.name);
-
-  wrapPayload<T>(T: unknown) {
-    switch (T.constructor) {
-      case UnauthorizedError:
-        const unAuthorized = new UnauthorizedError();
-        unAuthorized.message = 'Unauthorized';
-        return unAuthorized;
-      case Object:
-        return T;
-      default:
-        const unknownError = new UnknownError();
-        unknownError.message = 'Unknown error';
-        return unknownError;
-    }
-  }
+  private readonly wrapPayload = new WrappedPayload();
 
   @Query('user')
   @UseGuards(GqlAuthGuard)
   getUser(@CurrentUser() user: TUser) {
-    return this.wrapPayload(user);
-
-    // switch (user.constructor) {
-    //   case UnauthorizedError:
-    //     const unAuthorized = new UnauthorizedError();
-    //     unAuthorized.message = 'Unauthorized';
-    //     return unAuthorized;
-    //   case Object:
-    //     return user;
-    //   default:
-    //     const unknownError = new UnknownError();
-    //     unknownError.message = 'Unknown error';
-    //     return unknownError;
-    // }
+    return this.wrapPayload.wrap(user);
   }
 
   @Query('isUsernameAvailable')

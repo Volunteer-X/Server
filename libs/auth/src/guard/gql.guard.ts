@@ -22,7 +22,7 @@ export class GqlAuthGuard extends AuthGuard() {
     status?: any,
   ): TUser {
     if (err || !user) {
-      this.logger.error('Unauthorized');
+      // this.logger.error('Unauthorized');
       return new UnauthorizedError() as TUser;
     }
 
