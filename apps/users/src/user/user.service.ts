@@ -1,13 +1,14 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { CreateUserInput, UpdateUserInput } from './graphql/user.schema';
+import { Injectable } from '@nestjs/common';
+import { UpdateUserInput } from './graphql/user.schema';
 import { GraphQLEmailAddress, GraphQLObjectID } from 'graphql-scalars';
 import { lastValueFrom } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
 import { Membership } from '@prisma/client';
 
 import { InjectRepository, PrismaService } from '@app/prisma';
-import { NEO4J_SERVICE, Pattern, User } from '@app/common';
+import { NEO4J_SERVICE, Pattern } from '@app/common';
 import { ObjectId } from 'bson';
+import { UserCreateInput, User } from 'apps/users/entity/user.entity';
 
 @Injectable()
 export class UserService {
@@ -19,32 +20,32 @@ export class UserService {
   /*
    ? Create new user
    */
-  async createUser(input: CreateUserInput) {
+  async createUser(input: UserCreateInput) {
     const {
       email,
       username,
-      firstName,
-      middleName,
-      lastName,
+      name,
+      // name: { firstName, middleName, lastName },
       picks,
       picture,
       latitude,
       longitude,
-      device,
+      devices,
     } = input;
 
     const result = await this.userRepo.create({
       data: {
-        email: GraphQLEmailAddress.parseValue(email),
+        email,
         username,
-        name: {
-          firstName,
-          middleName,
-          lastName,
-        },
+        name,
+        // name: {
+        //   firstName,
+        //   middleName,
+        //   lastName,
+        // },
         picture,
         picks,
-        devices: [device],
+        devices,
       },
     });
 
@@ -65,22 +66,24 @@ export class UserService {
     //   console.log('Neo4J error', error);
     // }
 
-    const user = {
-      createdAt: new ObjectId(result.id).getTimestamp(),
-      id: result.id,
-      email: result.email,
-      username: result.username,
-      name: {
-        firstName: result.name.firstName,
-        middleName: result.name.middleName,
-        lastName: result.name.lastName,
-      },
-      picture: result.picture,
-      picks: result.picks,
-      devices: result.devices,
-    };
+    return User.ToEntityFromPrisma(result);
 
-    return user;
+    // const user = {
+    //   createdAt: new ObjectId(result.id).getTimestamp(),
+    //   id: result.id,
+    //   email: result.email,
+    //   username: result.username,
+    //   name: {
+    //     firstName: result.name.firstName,
+    //     middleName: result.name.middleName,
+    //     lastName: result.name.lastName,
+    //   },
+    //   picture: result.picture,
+    //   picks: result.picks,
+    //   devices: result.devices,
+    // };
+
+    // return user;
   }
 
   /* 
@@ -104,7 +107,7 @@ export class UserService {
       picture: result.picture,
       picks: result.picks,
       devices: result.devices,
-      ping: result.pings.map((ping) => ({
+      pings: result.pings.map((ping) => ({
         __typename: 'Ping',
         id: ping.id,
       })),

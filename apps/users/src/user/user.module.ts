@@ -26,7 +26,7 @@ import { UserService } from './user.service';
   imports: [
     GraphQLModule.forRoot<ApolloFederationDriverConfig>({
       driver: ApolloFederationDriver,
-      typePaths: ['**/user.gql', 'libs/utils/errors.gql'],
+      typePaths: ['**/user.gql', 'libs/common/src/graphql/error.gql'],
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       resolvers: {

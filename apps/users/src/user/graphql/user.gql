@@ -1,4 +1,4 @@
-#import "../../../../../libs/utils/errors.gql"
+#import "../../../../../libs/common/src/graphql/error.gql"
 
 scalar DateTime
 scalar EmailAddress

@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { User, UserCreateInput } from 'apps/users/entity/user.entity';
 
 import { UserService } from './user.service';
 
@@ -19,17 +20,19 @@ describe('UserService', () => {
 
   describe('createUser', () => {
     it('should create a new user', async () => {
-      const input = {
+      const input: UserCreateInput = {
+        name: {
+          firstName: 'John',
+          middleName: 'Doe',
+          lastName: 'Smith',
+        },
         email: 'test@example.com',
         username: 'testuser',
-        firstName: 'John',
-        middleName: 'Doe',
-        lastName: 'Smith',
         picks: ['pick1', 'pick2'],
         picture: 'profile.jpg',
         latitude: 123.456,
         longitude: 789.012,
-        device: 'device1',
+        devices: ['device1'],
       };
 
       const user = await service.createUser(input);
@@ -40,13 +43,13 @@ describe('UserService', () => {
       expect(user.email).toBe(input.email);
       expect(user.username).toBe(input.username);
       expect(user.name).toEqual({
-        firstName: input.firstName,
-        middleName: input.middleName,
-        lastName: input.lastName,
+        firstName: input.name.firstName,
+        middleName: input.name.middleName,
+        lastName: input.name.lastName,
       });
       expect(user.picture).toBe(input.picture);
       expect(user.picks).toEqual(input.picks);
-      expect(user.devices).toEqual([input.device]);
+      expect(user.devices).toEqual(input.devices);
     });
   });
 

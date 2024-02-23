@@ -5,25 +5,27 @@ import {
   UnknownError,
 } from 'apps/users/src/user/graphql/user.schema';
 
-export type User = {
-  id: string;
-  createdAt: Date;
-  name: {
-    firstName: string;
-    middleName?: string;
-    lastName: string;
-  };
-  email: string;
-  username: string;
-  picture?: string;
-  picks: string[];
-  devices: string[];
-  ping?: {
-    __typename: 'Ping';
-    id: string;
-  }[];
-  activityCount: number;
-};
+import { User } from 'apps/users/entity/user.entity';
+
+// export type User = {
+//   id: string;
+//   createdAt: Date;
+//   name: {
+//     firstName: string;
+//     middleName?: string;
+//     lastName: string;
+//   };
+//   email: string;
+//   username: string;
+//   picture?: string;
+//   picks: string[];
+//   devices: string[];
+//   ping?: {
+//     __typename: 'Ping';
+//     id: string;
+//   }[];
+//   activityCount: number;
+// };
 
 export type TUser =
   | User

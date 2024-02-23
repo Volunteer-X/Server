@@ -1,0 +1,1542 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>@volunteerx/server documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avaoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+
+               if ($darkModeToggles.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">@volunteerx/server documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >PingService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>apps/ping/src/ping/ping.service.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Readonly</span>
+                                <a href="#logger" >logger</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#addParticipant" >addParticipant</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#createPing" >createPing</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getAllPing" >getAllPing</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getParticipants" >getParticipants</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getPing" >getPing</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getPingsWithinRadius" >getPingsWithinRadius</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#removeParticipant" >removeParticipant</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#updatePing" >updatePing</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(repository: <a href="../injectables/PingRepository.html" target="_self">PingRepository</a>, neo4jClient: ClientProxy, broadcastClient: ClientProxy, userService: ClientProxy)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">apps/ping/src/ping/ping.service.ts:26</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>repository</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/PingRepository.html" target="_self" >PingRepository</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>neo4jClient</td>
+                                                  
+                                                        <td>
+                                                                    <code>ClientProxy</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>broadcastClient</td>
+                                                  
+                                                        <td>
+                                                                    <code>ClientProxy</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>userService</td>
+                                                  
+                                                        <td>
+                                                                    <code>ClientProxy</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addParticipant"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>addParticipant</b></span>
+                        <a href="#addParticipant"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>addParticipant(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, userID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="317"
+                                    class="link-to-prism">apps/ping/src/ping/ping.service.ts:317</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>userID</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="createPing"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>createPing</b></span>
+                        <a href="#createPing"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>createPing(payload: <a href="../interfaces/CreatePingInput.html" target="_self">CreatePingInput</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="41"
+                                    class="link-to-prism">apps/ping/src/ping/ping.service.ts:41</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>payload</td>
+                                            <td>
+                                                            <code><a href="../interfaces/CreatePingInput.html" target="_self" >CreatePingInput</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getAllPing"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getAllPing</b></span>
+                        <a href="#getAllPing"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getAllPing(userID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, first: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, after: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="216"
+                                    class="link-to-prism">apps/ping/src/ping/ping.service.ts:216</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>userID</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>first</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>after</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getParticipants"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getParticipants</b></span>
+                        <a href="#getParticipants"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getParticipants(pingID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, first: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, after: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="411"
+                                    class="link-to-prism">apps/ping/src/ping/ping.service.ts:411</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>pingID</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>first</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>after</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPing"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getPing</b></span>
+                        <a href="#getPing"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getPing(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, userID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="187"
+                                    class="link-to-prism">apps/ping/src/ping/ping.service.ts:187</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>userID</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPingsWithinRadius"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getPingsWithinRadius</b></span>
+                        <a href="#getPingsWithinRadius"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getPingsWithinRadius(payload: <a href="../interfaces/UPingsWithinRadiusInput.html" target="_self">UPingsWithinRadiusInput</a>, first: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, after: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, picks: string[], userID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="252"
+                                    class="link-to-prism">apps/ping/src/ping/ping.service.ts:252</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>payload</td>
+                                            <td>
+                                                            <code><a href="../interfaces/UPingsWithinRadiusInput.html" target="_self" >UPingsWithinRadiusInput</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>first</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>after</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>picks</td>
+                                            <td>
+                                                        <code>string[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>userID</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="removeParticipant"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>removeParticipant</b></span>
+                        <a href="#removeParticipant"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>removeParticipant(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, userID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="358"
+                                    class="link-to-prism">apps/ping/src/ping/ping.service.ts:358</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>userID</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updatePing"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>updatePing</b></span>
+                        <a href="#updatePing"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updatePing(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, payload: <a href="../interfaces/UPingInput.html" target="_self">UPingInput</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="119"
+                                    class="link-to-prism">apps/ping/src/ping/ping.service.ts:119</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>payload</td>
+                                            <td>
+                                                            <code><a href="../interfaces/UPingInput.html" target="_self" >UPingInput</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="logger"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Readonly</span>
+                        <span ><b>logger</b></span>
+                        <a href="#logger"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new Logger(PingService.name)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">apps/ping/src/ping/ping.service.ts:34</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Inject, Injectable, Logger } from &#x27;@nestjs/common&#x27;;
+import {
+  CreatePingInput,
+  UPingInput,
+  UPingsWithinRadiusInput,
+} from &#x27;./graphql/ping.schema&#x27;;
+import { PingRepository } from &#x27;../service/prisma.service&#x27;;
+import { ClientProxy } from &#x27;@nestjs/microservices&#x27;;
+import { lastValueFrom } from &#x27;rxjs&#x27;;
+import {
+  GraphQLLatitude,
+  GraphQLLongitude,
+  GraphQLObjectID,
+  GraphQLURL,
+} from &#x27;graphql-scalars&#x27;;
+import {
+  BROADCAST_SERVICE,
+  NEO4J_SERVICE,
+  Pattern,
+  USER_SERVICE,
+} from &#x27;@app/common&#x27;;
+import { ObjectId } from &#x27;bson&#x27;;
+import { Membership } from &#x27;@prisma/client&#x27;;
+
+@Injectable()
+export class PingService {
+  constructor(
+    private readonly repository: PingRepository,
+    @Inject(NEO4J_SERVICE) private readonly neo4jClient: ClientProxy,
+    @Inject(BROADCAST_SERVICE) private readonly broadcastClient: ClientProxy,
+    @Inject(USER_SERVICE) private readonly userService: ClientProxy,
+  ) {}
+
+  private readonly logger &#x3D; new Logger(PingService.name);
+
+  /* 
+  ? Create new Ping
+  * @param {CreatePingInput} input
+  * @returns {Ping}
+  */
+  async createPing(payload: CreatePingInput) {
+    const {
+      title,
+      description,
+      userID,
+      picks,
+      latitude,
+      longitude,
+      url,
+      radius,
+    } &#x3D; payload;
+
+    const result &#x3D; await this.repository.$transaction([
+      this.repository.ping.create({
+        data: {
+          title,
+          description,
+          picks,
+          url: url &amp;&amp; url.toString(),
+          userID: GraphQLObjectID.parseValue(userID),
+          radius: radius ? radius : 200,
+          geometry: {
+            type: &#x27;Point&#x27;,
+            coordinates: [
+              GraphQLLatitude.parseValue(latitude),
+              GraphQLLongitude.parseValue(longitude),
+            ],
+          },
+        },
+      }),
+    ]);
+
+    try {
+      await lastValueFrom(
+        this.userService.emit&lt;string, any&gt;(Pattern.addMembership, {
+          id: result[0].id,
+          userID: result[0].userID,
+          membership: Membership.ADMIN,
+        }),
+      );
+
+      await lastValueFrom(
+        this.neo4jClient.emit&lt;string, string&gt;(
+          Pattern.pingCreated,
+          JSON.stringify({
+            id: result[0].id,
+            userID: result[0].userID,
+            picks: result[0].picks,
+            point: [
+              result[0].geometry.coordinates[0],
+              result[0].geometry.coordinates[1],
+            ],
+            radius: result[0].radius,
+          }),
+        ),
+      );
+    } catch (error) {
+      throw new Error(&#x60;Neo4j error || user service error, ${error}&#x60;);
+    }
+
+    const ping &#x3D; {
+      id: result[0].id,
+      createdAt: new ObjectId(result[0].id).getTimestamp(),
+      title: result[0].title,
+      description: result[0].description,
+      picks: result[0].picks,
+      url: result[0].url,
+      radius: result[0].radius,
+      latitude: result[0].geometry.coordinates[0],
+      longitude: result[0].geometry.coordinates[1],
+      media: result[0].media,
+      userID: result[0].userID,
+      user: { __typename: &#x27;User&#x27;, id: result[0].userID },
+    };
+
+    return ping;
+  }
+
+  async updatePing(id: string, payload: UPingInput) {
+    const {
+      url,
+      title,
+      description,
+      picks,
+      radius,
+      media,
+      latitude,
+      longitude,
+    } &#x3D; payload;
+
+    const result &#x3D; await this.repository.ping.update({
+      where: {
+        id,
+      },
+      data: {
+        title,
+        description,
+        picks,
+        url: url &amp;&amp; GraphQLURL.parseValue(url),
+        geometry: latitude &amp;&amp;
+          longitude &amp;&amp; {
+            type: &#x27;Point&#x27;,
+            coordinates: [
+              GraphQLLatitude.parseValue(latitude),
+              GraphQLLongitude.parseValue(longitude),
+            ],
+          },
+        radius,
+        media,
+      },
+    });
+
+    // update activity
+
+    // try {
+    //   await lastValueFrom(
+    //     this.activityClient.emit&lt;string, string&gt;(
+    //       &#x27;pingUpdated&#x27;,
+    //       JSON.stringify(result),
+    //     ),
+    //   );
+    // } catch (error) {
+    //   throw new Error(&#x60;Activity service error: ${error.message}&#x60;);
+    // }
+
+    const createdAt &#x3D; new ObjectId(result.id).getTimestamp();
+
+    const ping &#x3D; {
+      id: result.id,
+      createdAt: createdAt,
+      title: result.title,
+      description: result.description,
+      picks: result.picks,
+      url: result.url &amp;&amp; result.url,
+      radius: result.radius,
+      latitude: result.geometry.coordinates[0],
+      longitude: result.geometry.coordinates[1],
+      media: result.media,
+      userID: result.userID,
+      user: { __typename: &#x27;User&#x27;, id: result.userID },
+    };
+
+    return ping;
+  }
+
+  // Get Ping by ID
+  async getPing(id: string, userID: string) {
+    const result &#x3D; await this.repository.ping.findUnique({
+      where: {
+        id,
+        userID,
+      },
+    });
+
+    const createdAt &#x3D; new ObjectId(result.id).getTimestamp();
+
+    const ping &#x3D; {
+      id: result.id,
+      createdAt: createdAt,
+      title: result.title,
+      description: result.description,
+      picks: result.picks,
+      url: result.url &amp;&amp; result.url,
+      radius: result.radius,
+      latitude: result.geometry.coordinates[0],
+      longitude: result.geometry.coordinates[1],
+      media: result.media,
+      userID: result.userID,
+      user: { __typename: &#x27;User&#x27;, id: result.userID },
+    };
+
+    return ping;
+  }
+
+  // Get all Pings
+  async getAllPing(userID: string, first: number, after: string) {
+    const cursor &#x3D; after ? { id: after } : undefined;
+
+    const result &#x3D; await this.repository.ping.findMany({
+      where: {
+        userID,
+      },
+      take: first,
+      cursor,
+      orderBy: {
+        id: &#x27;asc&#x27;,
+      },
+    });
+
+    const pings &#x3D; result.map((item) &#x3D;&gt; ({
+      id: item.id,
+      createdAt: new ObjectId(item.id).getTimestamp(),
+      title: item.title,
+      description: item.description,
+      picks: item.picks,
+      url: item.url &amp;&amp; item.url,
+      radius: item.radius,
+      latitude: item.geometry.coordinates[0],
+      longitude: item.geometry.coordinates[1],
+      media: item.media,
+      userID: item.userID,
+      // participants: item.participants.map((i) &#x3D;&gt; ({
+      //   __typename: &#x27;User&#x27;,
+      //   id: i,
+      // })),
+    }));
+
+    return pings;
+  }
+
+  //Get all Pings within a certain radius
+  async getPingsWithinRadius(
+    payload: UPingsWithinRadiusInput,
+    first: number,
+    after: string,
+    picks: string[],
+    userID: string,
+  ) {
+    let result: { data: string[]; totalCount: number };
+
+    this.logger.log(&#x27;userID&#x27;, userID);
+
+    try {
+      result &#x3D; await lastValueFrom(
+        this.neo4jClient.send(&#x27;getPingsWithinRadius&#x27;, {
+          payload,
+          first,
+          after,
+          picks,
+          userID,
+        }),
+      );
+    } catch (error) {
+      console.error(&#x27;Neo4j Error::&#x27;, error.message);
+    }
+    console.log(&#x27;neo4j results&#x27;, result);
+
+    if (result.totalCount &#x3D;&#x3D;&#x3D; 0) {
+      return {
+        pings: [],
+        totalCount: 0,
+      };
+    }
+
+    const pings &#x3D; await this.repository.ping.findMany({
+      where: {
+        id: {
+          in: result.data,
+        },
+      },
+      take: first,
+      cursor: after ? { id: after } : undefined,
+      orderBy: {
+        id: &#x27;asc&#x27;,
+      },
+    });
+
+    return {
+      pings: pings.map((ping) &#x3D;&gt; ({
+        id: ping.id,
+        createdAt: new ObjectId(ping.id).getTimestamp(),
+        title: ping.title,
+        description: ping.description,
+        picks: ping.picks,
+        url: ping.url &amp;&amp; ping.url,
+        radius: ping.radius,
+        latitude: ping.geometry.coordinates[0],
+        longitude: ping.geometry.coordinates[1],
+        media: ping.media,
+        userID: ping.userID,
+        user: { __typename: &#x27;User&#x27;, id: ping.userID },
+      })),
+      totalCount: result.totalCount,
+    };
+  }
+
+  async addParticipant(id: string, userID: string) {
+    try {
+      await this.repository.ping.update({
+        where: {
+          id,
+        },
+        data: {
+          participants: {
+            push: [userID],
+          },
+        },
+      });
+    } catch (error) {
+      console.error(error.message);
+      return false;
+    }
+    try {
+      await lastValueFrom(
+        this.userService.emit&lt;string, any&gt;(Pattern.addMembership, {
+          id: id,
+          userID: userID,
+          membership: Membership.MEMBER,
+        }),
+      );
+
+      await lastValueFrom(
+        this.neo4jClient.emit&lt;string, { id: string; userID: string }&gt;(
+          Pattern.participantAdded,
+          {
+            id,
+            userID,
+          },
+        ),
+      );
+    } catch (error) {
+      console.error(&#x60;Neo4j error || user service error, ${error}&#x60;);
+      return false;
+    }
+    return true;
+  }
+
+  async removeParticipant(id: string, userID: string) {
+    try {
+      const exisitngDoc &#x3D; await this.repository.ping.findUnique({
+        where: {
+          id,
+        },
+        select: {
+          participants: true,
+        },
+      });
+
+      const updatedParticipants &#x3D; exisitngDoc.participants.filter(
+        (participant) &#x3D;&gt; participant !&#x3D;&#x3D; userID,
+      );
+
+      await this.repository.ping.update({
+        where: {
+          id,
+        },
+        data: {
+          participants: updatedParticipants,
+        },
+      });
+    } catch (error) {
+      throw new Error(error.message);
+    } finally {
+      try {
+        await lastValueFrom(
+          this.userService.emit&lt;string, { id: string; userID: string }&gt;(
+            Pattern.removeMembership,
+            {
+              id,
+              userID,
+            },
+          ),
+        );
+
+        await lastValueFrom(
+          this.neo4jClient.emit&lt;string, { id: string; userID: string }&gt;(
+            Pattern.participantRemoved,
+            {
+              id,
+              userID,
+            },
+          ),
+        );
+      } catch (error) {
+        throw new Error(&#x27;Neo4j error || user service error&#x27;);
+      }
+    }
+    return &#x27;Participant removed&#x27;;
+  }
+
+  async getParticipants(pingID: string, first: number, after: string) {
+    const cursor &#x3D; after ? { id: after } : undefined;
+
+    const result &#x3D; await this.repository.ping.findUnique({
+      where: {
+        id: pingID,
+      },
+      select: { participants: true },
+      // where: {
+      //   id: pingID,
+      // },
+      // select: { participants: true },
+      // take: first,
+      // cursor,
+      // orderBy: {
+      //   id: &#x27;&#x27;,
+      // },
+    });
+
+    const members &#x3D; result.participants.map((id) &#x3D;&gt; ({
+      __typename: &#x27;User&#x27;,
+      id: id,
+    }));
+
+    return { members, totalCount: members.length };
+  }
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'PingService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

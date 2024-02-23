@@ -1,7 +1,6 @@
 import { InjectRepository, PrismaService } from '@app/prisma';
 import { Injectable } from '@nestjs/common';
-import { ObjectId } from 'bson';
-import { User } from '@app/common/utils/entities';
+import { AuthEntity } from '@app/auth/entity/auth.entity';
 
 @Injectable()
 export class AuthService {
@@ -13,25 +12,27 @@ export class AuthService {
   /*
   ? Get user details by email
   */
-  async findUser(email: string): Promise<User> {
+  async findUser(email: string): Promise<AuthEntity> {
     const result = await this.userRepo.findUnique({
       where: { email: email },
     });
 
-    return {
-      id: result.id,
-      createdAt: new ObjectId(result.id).getTimestamp(),
-      name: {
-        firstName: result.name.firstName,
-        middleName: result.name.middleName,
-        lastName: result.name.lastName,
-      },
-      email: result.email,
-      username: result.username,
-      picture: result.picture,
-      picks: result.picks,
-      activityCount: result.pings.length,
-      devices: result.devices,
-    };
+    return AuthEntity.ToEntityFromPrisma(result);
+
+    // return {
+    //   id: result.id,
+    //   createdAt: new ObjectId(result.id).getTimestamp(),
+    //   name: {
+    //     firstName: result.name.firstName,
+    //     middleName: result.name.middleName,
+    //     lastName: result.name.lastName,
+    //   },
+    //   email: result.email,
+    //   username: result.username,
+    //   picture: result.picture,
+    //   picks: result.picks,
+    //   activityCount: result.pings.length,
+    //   devices: result.devices,
+    // };
   }
 }

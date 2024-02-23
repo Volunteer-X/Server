@@ -1,11 +1,11 @@
 import { Strategy as BaseStrategy, ExtractJwt } from 'passport-jwt';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 
-import { AuthService } from '../service/auth.service';
+import { AuthEntity } from '@app/auth/entity/auth.entity';
+import { AuthService } from '@app/auth/service/auth.service';
 import { ConfigService } from '@nestjs/config';
 import { JwtPayload } from './jwt-payload.interface';
 import { PassportStrategy } from '@nestjs/passport';
-import { User } from '@app/common/utils/entities';
 import { passportJwtSecret } from 'jwks-rsa';
 
 @Injectable()
@@ -37,7 +37,7 @@ export class JwtStrategy extends PassportStrategy(BaseStrategy) {
     });
   }
 
-  async validate(payload: JwtPayload): Promise<User> {
+  async validate(payload: JwtPayload): Promise<AuthEntity> {
     // get user info from payload
 
     const minimumScope = ['openid', 'profile', 'email'];

@@ -12,6 +12,7 @@ import { TUser } from '@app/common/utils/entities';
 import { Logger, UseGuards } from '@nestjs/common';
 import { CurrentUser, GqlAuthGuard } from '@app/auth';
 import { WrappedPayload } from '../common';
+import { User } from 'apps/users/entity/user.entity';
 
 @Resolver('User')
 export class UserResolver {
@@ -40,9 +41,7 @@ export class UserResolver {
 
   @Mutation('createUser')
   create(@Args('payload') payload: CreateUserInput) {
-    console.log('payload', payload);
-
-    return this.usersService.createUser(payload);
+    return this.usersService.createUser(User.ToEntityFromInput(payload));
   }
 
   @Mutation('updateUser')

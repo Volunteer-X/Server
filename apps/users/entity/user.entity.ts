@@ -4,7 +4,7 @@ import {
   GraphQLLongitude,
 } from 'graphql-scalars';
 
-import { CreateUserInput } from '../user/graphql/user.schema';
+import { CreateUserInput as GraphQLCreateInput } from '../src/user/graphql/user.schema';
 import { ObjectId } from 'bson';
 
 type Ping = {
@@ -16,6 +16,14 @@ type Name = {
   firstName: string;
   middleName?: string;
   lastName: string;
+};
+
+export type UserCreateInput = Omit<
+  User,
+  'id' | 'createdAt' | 'activityCount' | 'ping'
+> & {
+  latitude: number;
+  longitude: number;
 };
 
 /**
@@ -63,13 +71,7 @@ export class User {
    * @param input The input data.
    * @returns The user entity.
    */
-  static ToEntityFromInput(input: CreateUserInput): Omit<
-    User,
-    'id' | 'createdAt' | 'activityCount' | 'ping'
-  > & {
-    latitude: number;
-    longitude: number;
-  } {
+  static ToEntityFromInput(input: GraphQLCreateInput): UserCreateInput {
     const user = new User(
       {
         firstName: input.firstName,
@@ -90,6 +92,12 @@ export class User {
     };
   }
 
+  /**
+   * Maps a Prisma result to a user entity.
+   *
+   * @param result The Prisma result.
+   * @returns The user entity.
+   */
   static ToEntityFromPrisma(result: any): User {
     return {
       createdAt: new ObjectId(result.id).getTimestamp(),

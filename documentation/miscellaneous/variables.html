@@ -1,0 +1,852 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>@volunteerx/server documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avaoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+
+               if ($darkModeToggles.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">@volunteerx/server documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content miscellaneous-variables">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Miscellaneous</li>
+  <li class="breadcrumb-item">Variables</li>
+</ol>
+
+<section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <ul class="index-list">
+                        <li>
+                            <a href="#ACTIVITY_SERVICE" title="libs/common/src/services.ts" ><b>ACTIVITY_SERVICE</b>&nbsp;&nbsp;&nbsp;(libs/.../services.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#BROADCAST_SERVICE" title="libs/common/src/services.ts" ><b>BROADCAST_SERVICE</b>&nbsp;&nbsp;&nbsp;(libs/.../services.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#createDriver" title="libs/neo4j-common/src/neo4j.util.ts" ><b>createDriver</b>&nbsp;&nbsp;&nbsp;(libs/.../neo4j.util.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#createInstances" title="libs/firebase/src/util/getFirebaseAdmin.ts" ><b>createInstances</b>&nbsp;&nbsp;&nbsp;(libs/.../getFirebaseAdmin.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#CurrentUser" title="libs/auth/src/decorator/user.decorator.ts" ><b>CurrentUser</b>&nbsp;&nbsp;&nbsp;(libs/.../user.decorator.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#decodeFromBase64" title="libs/common/src/utils/helpers.ts" ><b>decodeFromBase64</b>&nbsp;&nbsp;&nbsp;(libs/.../helpers.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#defaultPrismaOptions" title="libs/prisma/src/prisma.provider.ts" ><b>defaultPrismaOptions</b>&nbsp;&nbsp;&nbsp;(libs/.../prisma.provider.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#definitionFactory" title="libs/generate-typings/channel.ts" ><b>definitionFactory</b>&nbsp;&nbsp;&nbsp;(libs/.../channel.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#definitionFactory" title="libs/generate-typings/ping.ts" ><b>definitionFactory</b>&nbsp;&nbsp;&nbsp;(libs/.../ping.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#definitionFactory" title="libs/generate-typings/user.ts" ><b>definitionFactory</b>&nbsp;&nbsp;&nbsp;(libs/.../user.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#encodeToBase64" title="libs/common/src/utils/helpers.ts" ><b>encodeToBase64</b>&nbsp;&nbsp;&nbsp;(libs/.../helpers.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#getFirebaseAdmin" title="libs/firebase/src/util/getFirebaseAdmin.ts" ><b>getFirebaseAdmin</b>&nbsp;&nbsp;&nbsp;(libs/.../getFirebaseAdmin.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#NEO4J_CONFIG" title="libs/neo4j-common/src/neo4j.constants.ts" ><b>NEO4J_CONFIG</b>&nbsp;&nbsp;&nbsp;(libs/.../neo4j.constants.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#NEO4J_DRIVER" title="libs/neo4j-common/src/neo4j.constants.ts" ><b>NEO4J_DRIVER</b>&nbsp;&nbsp;&nbsp;(libs/.../neo4j.constants.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#NEO4J_SERVICE" title="libs/common/src/services.ts" ><b>NEO4J_SERVICE</b>&nbsp;&nbsp;&nbsp;(libs/.../services.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#Pattern" title="libs/common/src/constants/pattern.ts" ><b>Pattern</b>&nbsp;&nbsp;&nbsp;(libs/.../pattern.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#PRIMSA_OPTIONS" title="libs/prisma/src/prisma.provider.ts" ><b>PRIMSA_OPTIONS</b>&nbsp;&nbsp;&nbsp;(libs/.../prisma.provider.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#prismaRepositories" title="libs/prisma/src/inject-repository.decorator.ts" ><b>prismaRepositories</b>&nbsp;&nbsp;&nbsp;(libs/.../inject-repository.decorator.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#toNative" title="libs/neo4j-common/src/neo4j-type.interceptor.ts" ><b>toNative</b>&nbsp;&nbsp;&nbsp;(libs/.../neo4j-type.interceptor.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#USER_SERVICE" title="libs/common/src/services.ts" ><b>USER_SERVICE</b>&nbsp;&nbsp;&nbsp;(libs/.../services.ts)</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    <h3>libs/common/src/services.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ACTIVITY_SERVICE"></a>
+                    <span class="name">
+                        <span ><b>ACTIVITY_SERVICE</b></span>
+                        <a href="#ACTIVITY_SERVICE"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;ACTIVITY&#x27;</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="BROADCAST_SERVICE"></a>
+                    <span class="name">
+                        <span ><b>BROADCAST_SERVICE</b></span>
+                        <a href="#BROADCAST_SERVICE"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;BROADCAST&#x27;</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="NEO4J_SERVICE"></a>
+                    <span class="name">
+                        <span ><b>NEO4J_SERVICE</b></span>
+                        <a href="#NEO4J_SERVICE"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;NEO4J&#x27;</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="USER_SERVICE"></a>
+                    <span class="name">
+                        <span ><b>USER_SERVICE</b></span>
+                        <a href="#USER_SERVICE"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;USER&#x27;</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>libs/neo4j-common/src/neo4j.util.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="createDriver"></a>
+                    <span class="name">
+                        <span ><b>createDriver</b></span>
+                        <a href="#createDriver"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>async (config: Neo4jConfig) &#x3D;&gt; {
+  try {
+    const driver: Driver &#x3D; neo4j.driver(
+      &#x60;${config.scheme}://${config.host}:${config.port}&#x60;,
+      neo4j.auth.basic(config.username, config.password),
+    );
+
+    const serverInfo &#x3D; await driver.getServerInfo();
+    console.log(
+      &#x60;Connected to ${serverInfo.address} as ${serverInfo.protocolVersion}&#x60;,
+    );
+
+    return driver;
+  } catch (e) {
+    console.log(&#x60;Connection error\n${e}\nCause: ${e.cause}&#x60;);
+  }
+
+  //   try {
+  //     await driver.verifyAuthentication();
+  //   }catch (e) {
+  //     console.error(e);
+  //   }
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>libs/firebase/src/util/getFirebaseAdmin.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="createInstances"></a>
+                    <span class="name">
+                        <span ><b>createInstances</b></span>
+                        <a href="#createInstances"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(app: admin.app.App): FirebaseAdmin &#x3D;&gt; ({
+  auth: app.auth(),
+  messaging: app.messaging(),
+})</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getFirebaseAdmin"></a>
+                    <span class="name">
+                        <span ><b>getFirebaseAdmin</b></span>
+                        <a href="#getFirebaseAdmin"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(
+  options?: FirebaseModuleOptions,
+): FirebaseAdmin &#x3D;&gt; {
+  if (!options || Object.values(options).filter((v) &#x3D;&gt; !!v).length &#x3D;&#x3D;&#x3D; 0) {
+    return createInstances(admin.initializeApp());
+  }
+
+  const { googleApplicationCredential: serviceAccountPath, ...appOptions } &#x3D;
+    options;
+
+  return createInstances(
+    admin.initializeApp({
+      credential: serviceAccountPath
+        ? admin.credential.cert(serviceAccountPath)
+        : undefined,
+      ...appOptions,
+    }),
+  );
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>libs/auth/src/decorator/user.decorator.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="CurrentUser"></a>
+                    <span class="name">
+                        <span ><b>CurrentUser</b></span>
+                        <a href="#CurrentUser"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createParamDecorator(
+  (data: unknown, context: ExecutionContext) &#x3D;&gt; {
+    const ctx &#x3D; GqlExecutionContext.create(context);
+    return ctx.getContext().req.user;
+  },
+)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>libs/common/src/utils/helpers.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="decodeFromBase64"></a>
+                    <span class="name">
+                        <span ><b>decodeFromBase64</b></span>
+                        <a href="#decodeFromBase64"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(base64?: string) &#x3D;&gt; {
+  if (!base64) {
+    return null;
+  }
+  return Buffer.from(base64, &#x27;base64&#x27;).toString(&#x27;ascii&#x27;);
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="encodeToBase64"></a>
+                    <span class="name">
+                        <span ><b>encodeToBase64</b></span>
+                        <a href="#encodeToBase64"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(id?: string) &#x3D;&gt; {
+  if (!id) {
+    return null;
+  }
+
+  return Buffer.from(id).toString(&#x27;base64&#x27;);
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>libs/prisma/src/prisma.provider.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="defaultPrismaOptions"></a>
+                    <span class="name">
+                        <span ><b>defaultPrismaOptions</b></span>
+                        <a href="#defaultPrismaOptions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  logQueries: false,
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PRIMSA_OPTIONS"></a>
+                    <span class="name">
+                        <span ><b>PRIMSA_OPTIONS</b></span>
+                        <a href="#PRIMSA_OPTIONS"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>Symbol(&#x27;PRIMSA_OPTIONS&#x27;)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>libs/generate-typings/channel.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="definitionFactory"></a>
+                    <span class="name">
+                        <span ><b>definitionFactory</b></span>
+                        <a href="#definitionFactory"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new GraphQLFederationDefinitionsFactory()</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>libs/generate-typings/ping.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="definitionFactory"></a>
+                    <span class="name">
+                        <span ><b>definitionFactory</b></span>
+                        <a href="#definitionFactory"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new GraphQLFederationDefinitionsFactory()</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>libs/generate-typings/user.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="definitionFactory"></a>
+                    <span class="name">
+                        <span ><b>definitionFactory</b></span>
+                        <a href="#definitionFactory"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new GraphQLFederationDefinitionsFactory()</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>libs/neo4j-common/src/neo4j.constants.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="NEO4J_CONFIG"></a>
+                    <span class="name">
+                        <span ><b>NEO4J_CONFIG</b></span>
+                        <a href="#NEO4J_CONFIG"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;NEO4J_CONFIG&#x27;</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="NEO4J_DRIVER"></a>
+                    <span class="name">
+                        <span ><b>NEO4J_DRIVER</b></span>
+                        <a href="#NEO4J_DRIVER"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;NEO4J_DRIVER&#x27;</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>libs/common/src/constants/pattern.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="Pattern"></a>
+                    <span class="name">
+                        <span ><b>Pattern</b></span>
+                        <a href="#Pattern"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  userCreated: &#x27;userCreated&#x27;,
+  pingCreated: &#x27;pingCreated&#x27;,
+  getPingsWithinRadius: &#x27;getPingsWithinRadius&#x27;,
+  participantAdded: &#x27;pingParticipantAdded&#x27;,
+  participantRemoved: &#x27;pingParticipantRemoved&#x27;,
+  userDevices: &#x27;userDevices&#x27;,
+  addMembership: &#x27;addMembership&#x27;,
+  removeMembership: &#x27;removeMembership&#x27;,
+} as const</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>libs/prisma/src/inject-repository.decorator.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="prismaRepositories"></a>
+                    <span class="name">
+                        <span ><b>prismaRepositories</b></span>
+                        <a href="#prismaRepositories"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new Set&lt;PrismaDelegateNames&gt;()</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>libs/neo4j-common/src/neo4j-type.interceptor.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="toNative"></a>
+                    <span class="name">
+                        <span ><b>toNative</b></span>
+                        <a href="#toNative"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(
+  value: any,
+  showLabelsOrType?: boolean,
+  showIdentity?: boolean,
+) &#x3D;&gt; {
+  if (value &#x3D;&#x3D;&#x3D; null || value &#x3D;&#x3D;&#x3D; undefined) return undefined;
+  else if (value instanceof Result || value.records) {
+    return value.records?.map((row) &#x3D;&gt;
+      Object.fromEntries(row.keys.map((key) &#x3D;&gt; [key, toNative(row.get(key))])),
+    );
+  } else if (Array.isArray(value)) return value.map((v) &#x3D;&gt; toNative(v));
+  else if (isNode(value))
+    return toNative({
+      _id: showIdentity ? toNative(value.identity) : null,
+      _labels: showLabelsOrType ? toNative(value.labels) : null,
+      ...toNative(value.properties),
+    });
+  else if (isRelationship(value))
+    return toNative({
+      _id: toNative(value.identity),
+      _type: showLabelsOrType ? toNative(value.type) : null,
+      ...toNative(value.properties),
+    });
+  else if (isInt(value)) return value.toNumber();
+  else if (
+    isDuration(value) ||
+    isLocalTime(value) ||
+    isTime(value) ||
+    isDate(value) ||
+    isDateTime(value) ||
+    isLocalDateTime(value)
+  ) {
+    return value.toString();
+  }
+  if (isPoint(value)) {
+    switch (value.srid.toNumber()) {
+      case 4326:
+        return { longitude: value.y, latitude: value.x }; // WGS 84 2D
+      case 4979:
+        return { longitude: value.y, latitude: value.x, height: value.z }; // WGS 84 3D
+      default:
+        toNative({ x: value.x, y: value.y, z: value.z }); // Cartesian
+    }
+  } else if (typeof value &#x3D;&#x3D;&#x3D; &#x27;object&#x27;) {
+    return Object.fromEntries(
+      Object.keys(value).map((key) &#x3D;&gt; [
+        key,
+        toNative(value[key], showLabelsOrType, showIdentity),
+      ]),
+    );
+  }
+  return value;
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'miscellaneous-variables';
+            var COMPODOC_CURRENT_PAGE_URL = 'variables.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

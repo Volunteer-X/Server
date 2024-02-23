@@ -1,0 +1,861 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>@volunteerx/server documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avaoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+
+               if ($darkModeToggles.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">@volunteerx/server documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content miscellaneous-typealiases">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Miscellaneous</li>
+  <li class="breadcrumb-item">Type aliases</li>
+</ol>
+
+<section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <ul class="index-list">
+                        <li>
+                            <a href="#Channel" title="apps/forum/src/common/dto/message.dto.ts" ><b>Channel</b>&nbsp;&nbsp;&nbsp;(apps/.../message.dto.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#CreateMessage" title="apps/forum/src/common/dto/message.dto.ts" ><b>CreateMessage</b>&nbsp;&nbsp;&nbsp;(apps/.../message.dto.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#DateTime" title="apps/users/src/user/graphql/user.schema.ts" ><b>DateTime</b>&nbsp;&nbsp;&nbsp;(apps/.../user.schema.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#DateTime" title="apps/ping/src/ping/graphql/ping.schema.ts" ><b>DateTime</b>&nbsp;&nbsp;&nbsp;(apps/.../ping.schema.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#EmailAddress" title="apps/users/src/user/graphql/user.schema.ts" ><b>EmailAddress</b>&nbsp;&nbsp;&nbsp;(apps/.../user.schema.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#FirebaseModuleAsyncOptions" title="libs/firebase/src/firebase.interface.ts" ><b>FirebaseModuleAsyncOptions</b>&nbsp;&nbsp;&nbsp;(libs/.../firebase.interface.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#FirebaseModuleOptions" title="libs/firebase/src/firebase.interface.ts" ><b>FirebaseModuleOptions</b>&nbsp;&nbsp;&nbsp;(libs/.../firebase.interface.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#IPing" title="libs/common/src/types.ts" ><b>IPing</b>&nbsp;&nbsp;&nbsp;(libs/.../types.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#JsonValue" title="libs/auth/src/jwt/jwt-payload.interface.ts" ><b>JsonValue</b>&nbsp;&nbsp;&nbsp;(libs/.../jwt-payload.interface.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#Latitude" title="apps/users/src/user/graphql/user.schema.ts" ><b>Latitude</b>&nbsp;&nbsp;&nbsp;(apps/.../user.schema.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#Latitude" title="apps/ping/src/ping/graphql/ping.schema.ts" ><b>Latitude</b>&nbsp;&nbsp;&nbsp;(apps/.../ping.schema.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#Longitude" title="apps/users/src/user/graphql/user.schema.ts" ><b>Longitude</b>&nbsp;&nbsp;&nbsp;(apps/.../user.schema.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#Longitude" title="apps/ping/src/ping/graphql/ping.schema.ts" ><b>Longitude</b>&nbsp;&nbsp;&nbsp;(apps/.../ping.schema.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#Message" title="apps/forum/src/common/dto/message.dto.ts" ><b>Message</b>&nbsp;&nbsp;&nbsp;(apps/.../message.dto.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#Name" title="apps/users/entity/user.entity.ts" ><b>Name</b>&nbsp;&nbsp;&nbsp;(apps/.../user.entity.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#Name" title="libs/auth/src/entity/auth.entity.ts" ><b>Name</b>&nbsp;&nbsp;&nbsp;(libs/.../auth.entity.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#Neo4jConfig" title="libs/neo4j-common/src/neo4j-config.interface.ts" ><b>Neo4jConfig</b>&nbsp;&nbsp;&nbsp;(libs/.../neo4j-config.interface.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#Neo4jScheme" title="libs/neo4j-common/src/neo4j-config.interface.ts" ><b>Neo4jScheme</b>&nbsp;&nbsp;&nbsp;(libs/.../neo4j-config.interface.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#Nullable" title="apps/forum/src/channel/graphql/channel.schema.ts" ><b>Nullable</b>&nbsp;&nbsp;&nbsp;(apps/.../channel.schema.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#Nullable" title="apps/users/src/user/graphql/user.schema.ts" ><b>Nullable</b>&nbsp;&nbsp;&nbsp;(apps/.../user.schema.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#Nullable" title="apps/ping/src/ping/graphql/ping.schema.ts" ><b>Nullable</b>&nbsp;&nbsp;&nbsp;(apps/.../ping.schema.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#ObjectID" title="apps/forum/src/channel/graphql/channel.schema.ts" ><b>ObjectID</b>&nbsp;&nbsp;&nbsp;(apps/.../channel.schema.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#ObjectID" title="apps/users/src/user/graphql/user.schema.ts" ><b>ObjectID</b>&nbsp;&nbsp;&nbsp;(apps/.../user.schema.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#ObjectID" title="apps/ping/src/ping/graphql/ping.schema.ts" ><b>ObjectID</b>&nbsp;&nbsp;&nbsp;(apps/.../ping.schema.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#Ping" title="apps/users/entity/user.entity.ts" ><b>Ping</b>&nbsp;&nbsp;&nbsp;(apps/.../user.entity.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#Ping" title="libs/common/src/utils/entities.ts" ><b>Ping</b>&nbsp;&nbsp;&nbsp;(libs/.../entities.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#PingNode" title="libs/common/src/types.ts" ><b>PingNode</b>&nbsp;&nbsp;&nbsp;(libs/.../types.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#PrismaDelegateNames" title="libs/prisma/src/inject-repository.decorator.ts" ><b>PrismaDelegateNames</b>&nbsp;&nbsp;&nbsp;(libs/.../inject-repository.decorator.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#PrismaModuleOptions" title="libs/prisma/src/prisma.provider.ts" ><b>PrismaModuleOptions</b>&nbsp;&nbsp;&nbsp;(libs/.../prisma.provider.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#TUser" title="libs/common/src/utils/entities.ts" ><b>TUser</b>&nbsp;&nbsp;&nbsp;(libs/.../entities.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#URL" title="apps/ping/src/ping/graphql/ping.schema.ts" ><b>URL</b>&nbsp;&nbsp;&nbsp;(apps/.../ping.schema.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#UserCreateInput" title="apps/users/entity/user.entity.ts" ><b>UserCreateInput</b>&nbsp;&nbsp;&nbsp;(apps/.../user.entity.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#UserNode" title="libs/common/src/types.ts" ><b>UserNode</b>&nbsp;&nbsp;&nbsp;(libs/.../types.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#UserPayload" title="apps/users/src/user/graphql/user.schema.ts" ><b>UserPayload</b>&nbsp;&nbsp;&nbsp;(apps/.../user.schema.ts)</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    <h3>apps/forum/src/common/dto/message.dto.ts</h3>
+    <section data-compodoc="block-typealias">
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="Channel"></a>
+                    <span class="name "><b>Channel</b><a href="#Channel"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code>literal type</code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="CreateMessage"></a>
+                    <span class="name "><b>CreateMessage</b><a href="#CreateMessage"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code>literal type</code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="Message"></a>
+                    <span class="name "><b>Message</b><a href="#Message"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code>literal type</code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>apps/users/src/user/graphql/user.schema.ts</h3>
+    <section data-compodoc="block-typealias">
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="DateTime"></a>
+                    <span class="name "><b>DateTime</b><a href="#DateTime"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code></code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="EmailAddress"></a>
+                    <span class="name "><b>EmailAddress</b><a href="#EmailAddress"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code></code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="Latitude"></a>
+                    <span class="name "><b>Latitude</b><a href="#Latitude"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code></code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="Longitude"></a>
+                    <span class="name "><b>Longitude</b><a href="#Longitude"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code></code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="Nullable"></a>
+                    <span class="name "><b>Nullable</b><a href="#Nullable"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code>T | null</code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ObjectID"></a>
+                    <span class="name "><b>ObjectID</b><a href="#ObjectID"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code></code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="UserPayload"></a>
+                    <span class="name "><b>UserPayload</b><a href="#UserPayload"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code>User | NotFoundError | UnauthorizedError | UnknownError | InternalServerError</code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>apps/ping/src/ping/graphql/ping.schema.ts</h3>
+    <section data-compodoc="block-typealias">
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="DateTime"></a>
+                    <span class="name "><b>DateTime</b><a href="#DateTime"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code></code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="Latitude"></a>
+                    <span class="name "><b>Latitude</b><a href="#Latitude"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code></code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="Longitude"></a>
+                    <span class="name "><b>Longitude</b><a href="#Longitude"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code></code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="Nullable"></a>
+                    <span class="name "><b>Nullable</b><a href="#Nullable"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code>T | null</code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ObjectID"></a>
+                    <span class="name "><b>ObjectID</b><a href="#ObjectID"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code></code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="URL"></a>
+                    <span class="name "><b>URL</b><a href="#URL"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code></code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>libs/firebase/src/firebase.interface.ts</h3>
+    <section data-compodoc="block-typealias">
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="FirebaseModuleAsyncOptions"></a>
+                    <span class="name "><b>FirebaseModuleAsyncOptions</b><a href="#FirebaseModuleAsyncOptions"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code></code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="FirebaseModuleOptions"></a>
+                    <span class="name "><b>FirebaseModuleOptions</b><a href="#FirebaseModuleOptions"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code></code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>libs/common/src/types.ts</h3>
+    <section data-compodoc="block-typealias">
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="IPing"></a>
+                    <span class="name "><b>IPing</b><a href="#IPing"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code>literal type</code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PingNode"></a>
+                    <span class="name "><b>PingNode</b><a href="#PingNode"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code>literal type</code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="UserNode"></a>
+                    <span class="name "><b>UserNode</b><a href="#UserNode"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code>literal type</code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>libs/auth/src/jwt/jwt-payload.interface.ts</h3>
+    <section data-compodoc="block-typealias">
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="JsonValue"></a>
+                    <span class="name "><b>JsonValue</b><a href="#JsonValue"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code>string | number | boolean</code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>apps/users/entity/user.entity.ts</h3>
+    <section data-compodoc="block-typealias">
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="Name"></a>
+                    <span class="name "><b>Name</b><a href="#Name"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code>literal type</code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="Ping"></a>
+                    <span class="name "><b>Ping</b><a href="#Ping"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code>literal type</code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="UserCreateInput"></a>
+                    <span class="name "><b>UserCreateInput</b><a href="#UserCreateInput"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code></code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>libs/auth/src/entity/auth.entity.ts</h3>
+    <section data-compodoc="block-typealias">
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="Name"></a>
+                    <span class="name "><b>Name</b><a href="#Name"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code>literal type</code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>libs/neo4j-common/src/neo4j-config.interface.ts</h3>
+    <section data-compodoc="block-typealias">
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="Neo4jConfig"></a>
+                    <span class="name "><b>Neo4jConfig</b><a href="#Neo4jConfig"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code>literal type</code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="Neo4jScheme"></a>
+                    <span class="name "><b>Neo4jScheme</b><a href="#Neo4jScheme"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code>&quot;neo4j&quot; | &quot;neo4j+s&quot; | &quot;neo4j+ssc&quot; | &quot;bolt&quot; | &quot;bolt+s&quot; | &quot;bolt+ssc&quot;</code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>apps/forum/src/channel/graphql/channel.schema.ts</h3>
+    <section data-compodoc="block-typealias">
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="Nullable"></a>
+                    <span class="name "><b>Nullable</b><a href="#Nullable"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code>T | null</code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ObjectID"></a>
+                    <span class="name "><b>ObjectID</b><a href="#ObjectID"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code></code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>libs/common/src/utils/entities.ts</h3>
+    <section data-compodoc="block-typealias">
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="Ping"></a>
+                    <span class="name "><b>Ping</b><a href="#Ping"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code>literal type</code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="TUser"></a>
+                    <span class="name "><b>TUser</b><a href="#TUser"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code>User | UnauthorizedError | NotFoundError | UnknownError | InternalServerError</code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>libs/prisma/src/inject-repository.decorator.ts</h3>
+    <section data-compodoc="block-typealias">
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PrismaDelegateNames"></a>
+                    <span class="name "><b>PrismaDelegateNames</b><a href="#PrismaDelegateNames"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code></code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>libs/prisma/src/prisma.provider.ts</h3>
+    <section data-compodoc="block-typealias">
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PrismaModuleOptions"></a>
+                    <span class="name "><b>PrismaModuleOptions</b><a href="#PrismaModuleOptions"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code></code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'miscellaneous-typealiases';
+            var COMPODOC_CURRENT_PAGE_URL = 'typealiases.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

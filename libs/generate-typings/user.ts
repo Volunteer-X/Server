@@ -6,7 +6,7 @@ const definitionFactory = new GraphQLFederationDefinitionsFactory();
 definitionFactory.generate({
   typePaths: [
     './apps/users/src/user/graphql/*.gql',
-    './libs/common/src/graphql/errors.gql',
+    './libs/common/src/graphql/*.gql',
   ],
   path: join(process.cwd(), 'apps/users/src/user/graphql/user.schema.ts'),
   outputAs: 'class',

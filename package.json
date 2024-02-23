@@ -81,6 +81,7 @@
   },
   "devDependencies": {
     "@apollo/rover": "^0.22.0",
+    "@compodoc/compodoc": "^1.1.23",
     "@graphql-codegen/add": "^5.0.2",
     "@nestjs/cli": "^10.3.2",
     "@nestjs/schematics": "^10.1.1",
