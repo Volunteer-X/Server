@@ -6,16 +6,9 @@ import {
   ResolveReference,
 } from '@nestjs/graphql';
 import { UserService } from './user.service';
-import {
-  CreateUserInput,
-  InternalServerError,
-  NotFoundError,
-  UnauthorizedError,
-  UnknownError,
-  UpdateUserInput,
-} from './graphql/user.schema';
+import { CreateUserInput, UpdateUserInput } from './graphql/user.schema';
 import { GraphQLObjectID } from 'graphql-scalars';
-import { TUser } from 'libs/utils/entities';
+import { TUser } from '@app/common/utils/entities';
 import { Logger, UseGuards } from '@nestjs/common';
 import { CurrentUser, GqlAuthGuard } from '@app/auth';
 import { WrappedPayload } from '../common';

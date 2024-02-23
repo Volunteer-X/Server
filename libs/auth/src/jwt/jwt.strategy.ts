@@ -5,7 +5,7 @@ import { AuthService } from '../service/auth.service';
 import { ConfigService } from '@nestjs/config';
 import { JwtPayload } from './jwt-payload.interface';
 import { PassportStrategy } from '@nestjs/passport';
-import { User } from 'libs/utils/entities';
+import { User } from '@app/common/utils/entities';
 import { passportJwtSecret } from 'jwks-rsa';
 
 @Injectable()

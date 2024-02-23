@@ -1,4 +1,9 @@
-import { UnauthorizedError } from 'apps/users/src/user/graphql/user.schema';
+import {
+  InternalServerError,
+  NotFoundError,
+  UnauthorizedError,
+  UnknownError,
+} from 'apps/users/src/user/graphql/user.schema';
 
 export type User = {
   id: string;
@@ -20,7 +25,12 @@ export type User = {
   activityCount: number;
 };
 
-export type TUser = User | UnauthorizedError;
+export type TUser =
+  | User
+  | UnauthorizedError
+  | NotFoundError
+  | UnknownError
+  | InternalServerError;
 
 export type Ping = {
   id: string;

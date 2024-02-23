@@ -5,3 +5,6 @@ export * from './types';
 
 export * from './services';
 export * from './constants/pattern';
+
+export * from './utils/entities';
+export * from './utils/helpers';

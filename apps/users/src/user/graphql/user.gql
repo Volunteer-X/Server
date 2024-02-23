@@ -3,6 +3,8 @@
 scalar DateTime
 scalar EmailAddress
 scalar ObjectID
+scalar Longitude
+scalar Latitude
 
 "Represents a name."
 type Name {
@@ -52,8 +54,8 @@ input CreateUserInput {
   middleName: String
   picture: String
   picks: [String!]!
-  latitude: Float
-  longitude: Float
+  latitude: Latitude
+  longitude: Longitude
   device: String!
 }
 
@@ -67,8 +69,8 @@ input UpdateUserInput {
   picks: [String!]
   picture: String
   devices: [String!]
-  latitude: Float
-  longitude: Float
+  latitude: Latitude
+  longitude: Longitude
 }
 
 "The payload for the user."
@@ -77,8 +79,8 @@ union UserPayload =
   | NotFoundError
   | UnauthorizedError
   | UnknownError
-  | # | ForbiddenError
-  InternalServerError
+  | InternalServerError
+# | ForbiddenError
 
 # The queries for the user.
 extend type Query {

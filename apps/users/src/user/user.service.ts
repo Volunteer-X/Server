@@ -6,9 +6,8 @@ import { ClientProxy } from '@nestjs/microservices';
 import { Membership } from '@prisma/client';
 
 import { InjectRepository, PrismaService } from '@app/prisma';
-import { NEO4J_SERVICE, Pattern } from '@app/common';
+import { NEO4J_SERVICE, Pattern, User } from '@app/common';
 import { ObjectId } from 'bson';
-import { User } from 'libs/utils/entities';
 
 @Injectable()
 export class UserService {

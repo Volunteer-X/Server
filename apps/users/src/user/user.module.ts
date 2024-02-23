@@ -5,6 +5,8 @@ import {
 import {
   DateTimeResolver,
   EmailAddressResolver,
+  LatitudeResolver,
+  LongitudeResolver,
   ObjectIDResolver,
 } from 'graphql-scalars';
 import { GraphQLError, GraphQLFormattedError } from 'graphql';
@@ -31,6 +33,8 @@ import { UserService } from './user.service';
         DateTime: DateTimeResolver,
         EmailAddress: EmailAddressResolver,
         ObjectID: ObjectIDResolver,
+        Latitude: LatitudeResolver,
+        Longitude: LongitudeResolver,
       },
       formatError: (error: GraphQLError) => {
         console.log(error);

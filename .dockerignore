@@ -27,3 +27,6 @@ dist
 **/.prettierrc
 LICENSE
 README.md
+Makefile
+
+apps/**/Dockerfile
