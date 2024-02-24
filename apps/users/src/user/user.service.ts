@@ -37,11 +37,6 @@ export class UserService {
         email,
         username,
         name,
-        // name: {
-        //   firstName,
-        //   middleName,
-        //   lastName,
-        // },
         picture,
         picks,
         devices,

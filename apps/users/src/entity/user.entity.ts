@@ -112,13 +112,15 @@ export class User {
       picture: result.picture,
       picks: result.picks,
       devices: result.devices,
-      pings: result.pings.map(
-        (ping: Ping): Ping => ({
-          __typename: ping.__typename,
-          id: ping.id,
-        }),
-      ),
-      activityCount: result.pings.length,
+      pings:
+        result.pings &&
+        result.pings.map(
+          (ping: Ping): Ping => ({
+            __typename: ping.__typename,
+            id: ping.id,
+          }),
+        ),
+      activityCount: result.pings && result.pings.length,
     };
   }
 }
