@@ -35,6 +35,7 @@ export class UpdateUserInput {
     devices?: Nullable<string[]>;
     latitude?: Nullable<Latitude>;
     longitude?: Nullable<Longitude>;
+    pings?: Nullable<string[]>;
 }
 
 export interface BaseError {

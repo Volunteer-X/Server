@@ -1,10 +1,14 @@
 import {
+  CreateUserInput as GraphQLCreateInput,
+  UpdateUserInput,
+} from '../user/graphql/user.schema';
+import {
   GraphQLEmailAddress,
   GraphQLLatitude,
   GraphQLLongitude,
+  GraphQLObjectID,
 } from 'graphql-scalars';
 
-import { CreateUserInput as GraphQLCreateInput } from '../user/graphql/user.schema';
 import { ObjectId } from 'bson';
 
 type Ping = {
@@ -25,6 +29,9 @@ export type UserCreateInput = Omit<
   latitude: number;
   longitude: number;
 };
+
+export type RequiredOnlyR<T, R extends keyof T> = Partial<Omit<T, R>> &
+  Required<Pick<T, R>>;
 
 /**
  * Maps user data between different representations.
@@ -89,6 +96,32 @@ export class User {
       ...user,
       latitude: GraphQLLatitude.parseValue(input.latitude),
       longitude: GraphQLLongitude.parseValue(input.longitude),
+    };
+  }
+
+  /**
+   * Maps update input data to a user entity.
+   *
+   * @param input The input data.
+   * @returns The user entity.
+   */
+  static ToEntityFromUpdate(input: UpdateUserInput): RequiredOnlyR<User, 'id'> {
+    return {
+      id: GraphQLObjectID.parseValue(input.id),
+      name: {
+        firstName: input.firstName,
+        lastName: input.lastName,
+        middleName: input.middleName,
+      },
+      email: GraphQLEmailAddress.parseValue(input.email),
+      username: input.username,
+      picture: input.picture,
+      picks: input.picks,
+      devices: input.devices,
+      pings: input.pings.map((id) => ({
+        __typename: 'Ping',
+        id: id,
+      })),
     };
   }
 

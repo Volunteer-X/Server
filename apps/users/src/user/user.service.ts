@@ -7,7 +7,7 @@ import {
 } from './graphql/user.schema';
 import { Membership, Prisma } from '@prisma/client';
 import { NEO4J_SERVICE, Pattern } from '@app/common';
-import { User, UserCreateInput } from '../entity/user.entity';
+import { RequiredOnlyR, User, UserCreateInput } from '../entity/user.entity';
 
 import { ClientProxy } from '@nestjs/microservices';
 import { ObjectId } from 'bson';
@@ -86,72 +86,38 @@ export class UserService {
     return count > 0 ? false : true;
   }
 
-  async update(payload: UpdateUserInput) {
+  async update(payload: RequiredOnlyR<User, 'id'>) {
     const {
       id,
       email,
       username,
-      lastName,
-      firstName,
-      middleName,
+      name: { firstName, middleName, lastName },
       picks,
       picture,
       devices,
     } = payload;
 
-    let dbResult;
-
-    if (lastName || firstName || middleName) {
-      dbResult = await this.userRepository.user.update({
-        where: {
-          id: GraphQLObjectID.parseValue(id),
-        },
-        data: {
-          email: email ? GraphQLEmailAddress.parseValue(email) : undefined,
-          username,
-          name: {
-            update: {
-              firstName,
-              lastName,
-              middleName,
-            },
-          },
-          picks,
-          picture,
-          devices,
-        },
-      });
-    }
-
-    dbResult = await this.userRepository.user.update({
+    const result = await this.userRepository.user.update({
       where: {
         id: GraphQLObjectID.parseValue(id),
       },
       data: {
-        email: email ? GraphQLEmailAddress.parseValue(email) : undefined,
+        email: email,
         username,
+        name: {
+          update: {
+            firstName,
+            lastName,
+            middleName,
+          },
+        },
         picks,
         picture,
         devices,
       },
     });
 
-    const updatedUser = {
-      createdAt: new ObjectId(dbResult.id).getTimestamp(),
-      id: dbResult.id,
-      email: dbResult.email,
-      username: dbResult.username,
-      name: {
-        firstName: dbResult.name.firstName,
-        middleName: dbResult.name.middleName,
-        lastName: dbResult.name.lastName,
-      },
-      picture: dbResult.picture,
-      picks: dbResult.picks,
-      devices: dbResult.devices,
-    };
-
-    return updatedUser;
+    return User.ToEntityFromPrisma(result);
   }
 
   async getUserById(id: string) {

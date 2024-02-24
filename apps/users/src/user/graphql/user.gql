@@ -71,6 +71,7 @@ input UpdateUserInput {
   devices: [String!]
   latitude: Latitude
   longitude: Longitude
+  pings: [String!]
 }
 
 "The payload for the user."

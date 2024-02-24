@@ -46,9 +46,6 @@ export class UserResolver {
     const result = await this.usersService.getUserById(
       GraphQLObjectID.parseValue(id),
     );
-    console.log('result', result);
-
-    console.log('wrapPayload', this.wrapPayload.wrap(result));
 
     return this.wrapPayload.wrap(result);
   }
@@ -60,7 +57,7 @@ export class UserResolver {
 
   @Mutation('updateUser')
   updateUser(@Args('payload') payload: UpdateUserInput) {
-    return this.usersService.update(payload);
+    return this.usersService.update(User.ToEntityFromUpdate(payload));
   }
 
   @ResolveReference()

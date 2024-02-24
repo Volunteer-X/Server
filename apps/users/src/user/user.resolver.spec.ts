@@ -67,19 +67,29 @@ describe('UserResolver', () => {
   });
 
   describe('getUserById', () => {
-    it('should return a user by ID', () => {
-      // Test implementation here
+    it('should return a user by ID', async () => {
       const id = userStub().id as unknown as typeof GraphQLObjectID;
 
       const spy = jest
         .spyOn(service, 'getUserById')
         .mockResolvedValue(userStub());
 
-      const result = resolver.getUserById(id);
+      const result = await resolver.getUserById(id);
 
       expect(spy).toHaveBeenCalled();
       expect(spy).toHaveBeenCalledWith(userStub().id);
-      // expect(result).toStrictEqual(wrapPayload.wrap(userStub()));
+      expect(result).toStrictEqual(userStub());
+    });
+    it('should return an NotFoundError if the user is not found', async () => {
+      const id = userStub().id as unknown as typeof GraphQLObjectID;
+
+      jest
+        .spyOn(service, 'getUserById')
+        .mockResolvedValue(new UnauthorizedError());
+
+      const result = await resolver.getUserById(id);
+
+      expect(result).toBeInstanceOf(UnauthorizedError);
     });
   });
 
