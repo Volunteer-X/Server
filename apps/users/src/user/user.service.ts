@@ -7,7 +7,11 @@ import {
 } from './graphql/user.schema';
 import { Membership, Prisma } from '@prisma/client';
 import { NEO4J_SERVICE, Pattern } from '@app/common';
-import { RequiredOnlyR, User, UserCreateInput } from '../entity/user.entity';
+import {
+  PartialWithRequired,
+  User,
+  UserCreateInput,
+} from '../entity/user.entity';
 
 import { ClientProxy } from '@nestjs/microservices';
 import { ObjectId } from 'bson';
@@ -86,7 +90,7 @@ export class UserService {
     return count > 0 ? false : true;
   }
 
-  async update(payload: RequiredOnlyR<User, 'id'>) {
+  async update(payload: PartialWithRequired<User, 'id'>) {
     const {
       id,
       email,

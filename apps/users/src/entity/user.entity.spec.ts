@@ -1,11 +1,12 @@
+import { CreateUserInput, UpdateUserInput } from '../user/graphql/user.schema';
 import {
   GraphQLEmailAddress,
   GraphQLLatitude,
   GraphQLLongitude,
+  GraphQLObjectID,
 } from 'graphql-scalars';
-import { User, UserCreateInput } from './user.entity';
+import { PartialWithRequired, User, UserCreateInput } from './user.entity';
 
-import { CreateUserInput } from '../user/graphql/user.schema';
 import { ObjectId } from 'bson';
 
 describe('UserEntity', () => {
@@ -83,5 +84,29 @@ describe('UserEntity', () => {
     const user = User.ToEntityFromPrisma(result);
 
     expect(user).toEqual(expectedUser);
+  });
+
+  describe('when create a user from the update input', () => {
+    it('should handle update input without email', () => {
+      const input: UpdateUserInput = {
+        id: '65d9a85d64190930a909d6ba' as unknown as typeof GraphQLObjectID,
+        firstName: 'John',
+        lastName: 'Doe',
+        middleName: 'Smith',
+      };
+
+      const expectedUser: PartialWithRequired<User, 'id'> = {
+        id: '65d9a85d64190930a909d6ba',
+        name: {
+          firstName: 'John',
+          lastName: 'Doe',
+          middleName: 'Smith',
+        },
+      };
+
+      const user = User.ToEntityFromUpdate(input);
+
+      expect(user).toEqual(expectedUser);
+    });
   });
 });
