@@ -5,7 +5,7 @@ import {
   UnknownError,
 } from 'apps/users/src/user/graphql/user.schema';
 
-import { User } from 'apps/users/entity/user.entity';
+import { User } from 'apps/users/src/entity/user.entity';
 
 // export type User = {
 //   id: string;

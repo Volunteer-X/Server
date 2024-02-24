@@ -12,7 +12,7 @@ import { TUser } from '@app/common/utils/entities';
 import { Logger, UseGuards } from '@nestjs/common';
 import { CurrentUser, GqlAuthGuard } from '@app/auth';
 import { WrappedPayload } from '../common';
-import { User } from 'apps/users/entity/user.entity';
+import { User } from 'apps/users/src/entity/user.entity';
 
 @Resolver('User')
 export class UserResolver {

@@ -1,20 +1,19 @@
-import { Injectable } from '@nestjs/common';
-import { UpdateUserInput } from './graphql/user.schema';
 import { GraphQLEmailAddress, GraphQLObjectID } from 'graphql-scalars';
-import { lastValueFrom } from 'rxjs';
-import { ClientProxy } from '@nestjs/microservices';
-import { Membership } from '@prisma/client';
-
-import { InjectRepository, PrismaService } from '@app/prisma';
 import { NEO4J_SERVICE, Pattern } from '@app/common';
+import { User, UserCreateInput } from 'apps/users/src/entity/user.entity';
+
+import { ClientProxy } from '@nestjs/microservices';
+import { Injectable } from '@nestjs/common';
+import { Membership } from '@prisma/client';
 import { ObjectId } from 'bson';
-import { UserCreateInput, User } from 'apps/users/entity/user.entity';
+import { UpdateUserInput } from './graphql/user.schema';
+import { UserRepository } from './service/prisma.service';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository('user')
-    private readonly userRepo: PrismaService['user'],
+    private readonly userRepository: UserRepository['user'],
     // @Inject(NEO4J_SERVICE) private readonly neo4jClient: ClientProxy,
   ) {}
   /*
@@ -33,7 +32,7 @@ export class UserService {
       devices,
     } = input;
 
-    const result = await this.userRepo.create({
+    const result = await this.userRepository.create({
       data: {
         email,
         username,
@@ -90,7 +89,7 @@ export class UserService {
   ? Get user details by email
   */
   async getUserByEmail(email: string) {
-    const result = await this.userRepo.findUnique({
+    const result = await this.userRepository.findUnique({
       where: { email: email },
     });
 
@@ -118,7 +117,7 @@ export class UserService {
   }
 
   async isUsernameAvailable(username: string) {
-    const count = await this.userRepo.count({
+    const count = await this.userRepository.count({
       where: {
         username: username,
       },
@@ -143,7 +142,7 @@ export class UserService {
     let dbResult;
 
     if (lastName || firstName || middleName) {
-      dbResult = await this.userRepo.update({
+      dbResult = await this.userRepository.update({
         where: {
           id: GraphQLObjectID.parseValue(id),
         },
@@ -164,7 +163,7 @@ export class UserService {
       });
     }
 
-    dbResult = await this.userRepo.update({
+    dbResult = await this.userRepository.update({
       where: {
         id: GraphQLObjectID.parseValue(id),
       },
@@ -198,7 +197,7 @@ export class UserService {
   async findOne(id: string) {
     console.log('id', id);
 
-    const result = await this.userRepo.findUnique({
+    const result = await this.userRepository.findUnique({
       where: {
         id: GraphQLObjectID.parseValue(id),
       },
@@ -219,7 +218,7 @@ export class UserService {
 
   async getUserDevices(users: string[]) {
     try {
-      const result = await this.userRepo.findMany({
+      const result = await this.userRepository.findMany({
         where: {
           id: {
             in: users,
@@ -240,7 +239,7 @@ export class UserService {
 
   async addMembership(userID: string, id: string, membership: Membership) {
     try {
-      await this.userRepo.update({
+      await this.userRepository.update({
         where: {
           id: userID,
         },
@@ -262,7 +261,7 @@ export class UserService {
 
   async removeMembership(userID: string, id: string) {
     try {
-      const exisitngPings = await this.userRepo.findUnique({
+      const exisitngPings = await this.userRepository.findUnique({
         where: {
           id: GraphQLObjectID.parseValue(userID),
         },
@@ -273,7 +272,7 @@ export class UserService {
 
       const updatedPing = exisitngPings.pings.filter((ping) => ping.id !== id);
 
-      await this.userRepo.update({
+      await this.userRepository.update({
         where: {
           id: GraphQLObjectID.parseValue(userID),
         },

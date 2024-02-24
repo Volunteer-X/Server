@@ -19,6 +19,7 @@ import { Module } from '@nestjs/common';
 import { PayloadResolver } from './payload.resolver';
 import { PrismaModule } from '@app/prisma';
 import { UserController } from './user.controller';
+import { UserRepository } from './service/prisma.service';
 import { UserResolver } from './user.resolver';
 import { UserService } from './user.service';
 
@@ -45,11 +46,10 @@ import { UserService } from './user.service';
       },
     }),
     AuthModule,
-    PrismaModule.register({ logQueries: false }),
     // RmqModule,
     // RmqModule.register({ name: [NEO4J_SERVICE] }),
   ],
   // controllers: [UserController],
-  providers: [UserResolver, PayloadResolver, UserService],
+  providers: [UserResolver, PayloadResolver, UserService, UserRepository],
 })
 export class UserModule {}

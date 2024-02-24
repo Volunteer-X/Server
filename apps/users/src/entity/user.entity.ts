@@ -4,7 +4,7 @@ import {
   GraphQLLongitude,
 } from 'graphql-scalars';
 
-import { CreateUserInput as GraphQLCreateInput } from '../src/user/graphql/user.schema';
+import { CreateUserInput as GraphQLCreateInput } from '../user/graphql/user.schema';
 import { ObjectId } from 'bson';
 
 type Ping = {
