@@ -115,12 +115,6 @@ describe('UserService', () => {
     });
   });
 
-  // describe('update', () => {
-  //   it('should update a user', async () => {
-  //     // Test implementation here
-  //   });
-  // });
-
   describe('getUserById', () => {
     it('should return the user with the specified ID', async () => {
       // Arrange
@@ -155,6 +149,131 @@ describe('UserService', () => {
         where: {
           id,
         },
+      });
+    });
+  });
+
+  describe('update', () => {
+    it('should update a user', async () => {
+      // Arrange
+      const payload = {
+        id: '65d9a85d64190930a909d6ba',
+        email: 'updated@example.com',
+        username: 'updateduser',
+        name: {
+          firstName: 'Updated',
+          middleName: 'User',
+          lastName: 'Name',
+        },
+        picks: ['updatedPick1', 'updatedPick2'],
+        picture: 'updatedProfile.jpg',
+        devices: ['updatedDevice1'],
+      };
+
+      const updateData = {
+        email: payload.email,
+        username: payload.username,
+        name: {
+          update: {
+            firstName: payload.name.firstName,
+            lastName: payload.name.lastName,
+            middleName: payload.name.middleName,
+          },
+        },
+        picks: payload.picks,
+        picture: payload.picture,
+        devices: payload.devices,
+      };
+
+      const expectedResult = userStub();
+
+      client.update.mockResolvedValue(expectedResult);
+
+      // Act
+      const result = await service.update(payload);
+
+      // Assert
+      expect(result).toEqual(User.ToEntityFromPrisma(expectedResult));
+      expect(client.update).toHaveBeenCalledWith({
+        where: {
+          id: payload.id,
+        },
+        data: updateData,
+      });
+    });
+    it('should update a user even when some fields are missing', async () => {
+      const payload = {
+        id: '65d9a85d64190930a909d6ba',
+        name: {
+          firstName: 'John',
+          middleName: 'Doe',
+          lastName: 'Smith',
+        },
+      };
+
+      const updateData = {
+        name: {
+          update: {
+            firstName: payload.name.firstName,
+            lastName: payload.name.lastName,
+            middleName: payload.name.middleName,
+          },
+        },
+      };
+
+      const expectedResult = userStub();
+
+      client.update.mockResolvedValue(expectedResult);
+
+      // Act
+      const result = await service.update(payload);
+
+      // Assert
+      expect(result).toStrictEqual(User.ToEntityFromPrisma(expectedResult));
+      expect(client.update).toHaveBeenCalledWith({
+        where: {
+          id: payload.id,
+        },
+        data: updateData,
+      });
+    });
+    it('should update a user even when name is undefined', async () => {
+      // Arrange
+      const payload = {
+        id: '65d9a85d64190930a909d6ba',
+        email: 'test@example.com',
+      };
+
+      const updateData = {
+        email: payload.email,
+        username: undefined,
+        name: {
+          update: {
+            firstName: undefined,
+            lastName: undefined,
+            middleName: undefined,
+          },
+        },
+        picks: undefined,
+        picture: undefined,
+        devices: undefined,
+      };
+
+      const expectedResult = userStub();
+
+      client.update.mockResolvedValue(expectedResult);
+
+      // Act
+      const result = await service.update(payload);
+
+      // Assert
+      // expect(result.)
+      expect(result).toStrictEqual(User.ToEntityFromPrisma(expectedResult));
+      expect(client.update).toHaveBeenCalledWith({
+        where: {
+          id: payload.id,
+        },
+        data: updateData,
       });
     });
   });

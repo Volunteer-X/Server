@@ -91,28 +91,20 @@ export class UserService {
   }
 
   async update(payload: PartialWithRequired<User, 'id'>) {
-    const {
-      id,
-      email,
-      username,
-      name: { firstName, middleName, lastName },
-      picks,
-      picture,
-      devices,
-    } = payload;
+    const { id, email, username, name, picks, picture, devices } = payload;
 
     const result = await this.userRepository.user.update({
       where: {
-        id: GraphQLObjectID.parseValue(id),
+        id,
       },
       data: {
         email: email,
         username,
         name: {
           update: {
-            firstName,
-            lastName,
-            middleName,
+            firstName: name?.firstName,
+            lastName: name?.lastName,
+            middleName: name?.middleName,
           },
         },
         picks,
