@@ -1,9 +1,9 @@
 import { GraphQLEmailAddress, GraphQLObjectID } from 'graphql-scalars';
+import { Injectable, Logger } from '@nestjs/common';
 import { NEO4J_SERVICE, Pattern } from '@app/common';
 import { User, UserCreateInput } from '../entity/user.entity';
 
 import { ClientProxy } from '@nestjs/microservices';
-import { Injectable } from '@nestjs/common';
 import { Membership } from '@prisma/client';
 import { ObjectId } from 'bson';
 import { UpdateUserInput } from './graphql/user.schema';
@@ -12,6 +12,7 @@ import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class UserService {
+  private readonly logger = new Logger(UserService.name);
   constructor(
     private readonly userRepository: UserRepository,
     // @Inject(NEO4J_SERVICE) private readonly neo4jClient: ClientProxy,
@@ -32,16 +33,21 @@ export class UserService {
       devices,
     } = input;
 
-    const result = await this.userRepository.user.create({
-      data: {
-        email,
-        username,
-        name,
-        picture,
-        picks,
-        devices,
-      },
-    });
+    try {
+      const result = await this.userRepository.user.create({
+        data: {
+          email,
+          username,
+          name,
+          picture,
+          picks,
+          devices,
+        },
+      });
+      return User.ToEntityFromPrisma(result);
+    } catch (error) {
+      this.logger.error('Error creating user', error);
+    }
 
     // try {
     //   await lastValueFrom(
@@ -59,25 +65,6 @@ export class UserService {
     // } catch (error) {
     //   console.log('Neo4J error', error);
     // }
-
-    return User.ToEntityFromPrisma(result);
-
-    // const user = {
-    //   createdAt: new ObjectId(result.id).getTimestamp(),
-    //   id: result.id,
-    //   email: result.email,
-    //   username: result.username,
-    //   name: {
-    //     firstName: result.name.firstName,
-    //     middleName: result.name.middleName,
-    //     lastName: result.name.lastName,
-    //   },
-    //   picture: result.picture,
-    //   picks: result.picks,
-    //   devices: result.devices,
-    // };
-
-    // return user;
   }
 
   /* 

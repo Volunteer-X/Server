@@ -96,7 +96,7 @@ export class User {
    * Maps a Prisma result to a user entity.
    *
    * @param result The Prisma result.
-   * @returns The user entity.
+   * @returns Thge user entity.
    */
   static ToEntityFromPrisma(result: any): User {
     return {

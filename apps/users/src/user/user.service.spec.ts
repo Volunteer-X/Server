@@ -70,54 +70,6 @@ describe('UserService', () => {
     });
   });
 
-  // describe('createUser', () => {
-  //   it('should create a new user', async () => {
-  //     const input: UserCreateInput = {
-  //       name: {
-  //         firstName: 'John',
-  //         middleName: 'Doe',
-  //         lastName: 'Smith',
-  //       },
-  //       email: 'test@example.com',
-  //       username: 'testuser',
-  //       picks: ['pick1', 'pick2'],
-  //       picture: 'profile.jpg',
-  //       latitude: 123.456,
-  //       longitude: 789.012,
-  //       devices: ['device1'],
-  //     };
-
-  //     prisma.create.mockResolvedValue({
-  //       ...input,
-  //       id: '123',
-  //       name: {
-  //         firstName: input.name.firstName,
-  //         middleName: input.name.middleName,
-  //         lastName: input.name.lastName,
-  //       },
-  //       picture: input.picture,
-  //       role: 'USER',
-  //       pings: undefined,
-  //     });
-
-  //     const user = await service.createUser(input);
-
-  //     expect(user).toBeDefined();
-  // expect(user.createdAt).toBeDefined();
-  // expect(user.id).toBeDefined();
-  // expect(user.email).toBe(input.email);
-  // expect(user.username).toBe(input.username);
-  // expect(user.name).toEqual({
-  //   firstName: input.name.firstName,
-  //   middleName: input.name.middleName,
-  //   lastName: input.name.lastName,
-  // });
-  // expect(user.picture).toBe(input.picture);
-  // expect(user.picks).toEqual(input.picks);
-  // expect(user.devices).toEqual(input.devices);
-  //   });
-  // });
-
   // describe('getUserByEmail', () => {
   //   it('should get user details by email', async () => {
   //     // Test implementation here
