@@ -3,6 +3,7 @@ import {
   NotFoundError,
   UnauthorizedError,
   UnknownError,
+  UserPayload,
 } from '../user/graphql/user.schema';
 
 export class WrappedPayload {
@@ -25,7 +26,7 @@ export class WrappedPayload {
     this.unknownError.message = 'Unknown error';
   }
 
-  wrap(T: any) {
+  wrap(T: any): UserPayload {
     switch (T.constructor) {
       case UnauthorizedError:
         return this.unAuthorizedError;

@@ -130,6 +130,7 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
+      "^@user(|/.*)$": "<rootDir>/apps/users/src/$1",
       "^@app/prisma(|/.*)$": "<rootDir>/libs/prisma/src/$1",
       "^@app/common(|/.*)$": "<rootDir>/libs/common/src/$1",
       "^@neo4j/neo4j(|/.*)$": "<rootDir>/libs/neo4j/src/$1",

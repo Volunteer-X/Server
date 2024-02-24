@@ -6,13 +6,20 @@ import {
   ResolveReference,
 } from '@nestjs/graphql';
 import { UserService } from './user.service';
-import { CreateUserInput, UpdateUserInput } from './graphql/user.schema';
+import {
+  CreateUserInput,
+  IQuery,
+  NotFoundError,
+  UpdateUserInput,
+  UserPayload,
+} from './graphql/user.schema';
 import { GraphQLObjectID } from 'graphql-scalars';
 import { TUser } from '@app/common/utils/entities';
 import { Logger, UseGuards } from '@nestjs/common';
 import { CurrentUser, GqlAuthGuard } from '@app/auth';
 import { WrappedPayload } from '../common';
-import { User } from 'apps/users/src/entity/user.entity';
+import { User } from '@user/entity/user.entity';
+import { GraphQLScalarType } from 'graphql';
 
 @Resolver('User')
 export class UserResolver {
@@ -32,11 +39,18 @@ export class UserResolver {
   }
 
   @Query('userById')
-  getUserById(
-    @Args({ name: 'id', type: () => GraphQLObjectID })
+  async getUserById(
+    @Args({ name: 'id' })
     id: typeof GraphQLObjectID,
   ) {
-    return this.usersService.findOne(GraphQLObjectID.parseValue(id));
+    const result = await this.usersService.getUserById(
+      GraphQLObjectID.parseValue(id),
+    );
+    console.log('result', result);
+
+    console.log('wrapPayload', this.wrapPayload.wrap(result));
+
+    return this.wrapPayload.wrap(result);
   }
 
   @Mutation('createUser')
@@ -54,9 +68,9 @@ export class UserResolver {
     __typename: string;
     id: typeof GraphQLObjectID;
   }) {
-    console.log('reference', reference);
-
-    return this.usersService.findOne(GraphQLObjectID.parseValue(reference.id));
+    return this.usersService.getUserById(
+      GraphQLObjectID.parseValue(reference.id),
+    );
   }
 
   // @ResolveField('ping')

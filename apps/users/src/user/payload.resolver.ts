@@ -1,7 +1,12 @@
-import { NotFoundError, UnauthorizedError } from './graphql/user.schema';
+import {
+  InternalServerError,
+  NotFoundError,
+  UnauthorizedError,
+} from './graphql/user.schema';
 import { ResolveField, Resolver } from '@nestjs/graphql';
 
 import { Logger } from '@nestjs/common';
+import { User } from '@user/entity/user.entity';
 
 @Resolver('UserPayload')
 export class PayloadResolver {
@@ -15,8 +20,14 @@ export class PayloadResolver {
     switch (obj.constructor) {
       case UnauthorizedError:
         return 'UnauthorizedError';
-      default:
+      case NotFoundError:
+        return 'NotFoundError';
+      case InternalServerError:
+        return 'InternalServerError';
+      case User:
         return 'User';
+      default:
+        return 'UnknownError';
     }
   }
 }

@@ -1,11 +1,12 @@
 import { DeepMockProxy, mockDeep, mockReset } from 'jest-mock-extended';
+import { InternalServerError, NotFoundError } from './graphql/user.schema';
 import { Test, TestingModule } from '@nestjs/testing';
 import { User, UserCreateInput } from '../entity/user.entity';
 
 import { PrismaClient } from '@prisma/client';
 import { UserRepository } from './service/prisma.service';
 import { UserService } from './user.service';
-import { userStub } from './__mock__/stubs/user.stub';
+import { userStub } from './__mocks__/stubs/user.stub';
 
 describe('UserService', () => {
   let service: UserService;
@@ -76,11 +77,43 @@ describe('UserService', () => {
   //   });
   // });
 
-  // describe('isUsernameAvailable', () => {
-  //   it('should check if username is available', async () => {
-  //     // Test implementation here
-  //   });
-  // });
+  describe('isUsernameAvailable', () => {
+    it('should return true if username is available', async () => {
+      // Arrange
+      const username = 'testuser';
+      const count = 0;
+      client.count.mockResolvedValue(count);
+
+      // Act
+      const result = await service.isUsernameAvailable(username);
+
+      // Assert
+      expect(result).toBe(true);
+      expect(client.count).toHaveBeenCalledWith({
+        where: {
+          username: username,
+        },
+      });
+    });
+
+    it('should return false if username is not available', async () => {
+      // Arrange
+      const username = 'testuser';
+      const count = 1;
+      client.count.mockResolvedValue(count);
+
+      // Act
+      const result = await service.isUsernameAvailable(username);
+
+      // Assert
+      expect(result).toBe(false);
+      expect(client.count).toHaveBeenCalledWith({
+        where: {
+          username: username,
+        },
+      });
+    });
+  });
 
   // describe('update', () => {
   //   it('should update a user', async () => {
@@ -88,11 +121,43 @@ describe('UserService', () => {
   //   });
   // });
 
-  // describe('findOne', () => {
-  //   it('should find a user by ID', async () => {
-  //     // Test implementation here
-  //   });
-  // });
+  describe('getUserById', () => {
+    it('should return the user with the specified ID', async () => {
+      // Arrange
+      const id = '65d9a85d64190930a909d6ba';
+
+      client.findUniqueOrThrow.mockResolvedValue(userStub());
+
+      // Act
+      const result = await service.getUserById(id);
+
+      // Assert
+      expect(result).toEqual(userStub());
+      expect(client.findUniqueOrThrow).toHaveBeenCalledWith({
+        where: {
+          id,
+        },
+      });
+    });
+
+    it('should return a NotFoundError if the user is not found', async () => {
+      // Arrange
+      const id = '65d9a85d64190930a909d6ba';
+
+      client.findUniqueOrThrow.mockResolvedValue(null);
+
+      // Act
+      const result = await service.getUserById(id);
+
+      // Assert
+      expect(result).toBeInstanceOf(NotFoundError);
+      expect(client.findUniqueOrThrow).toHaveBeenCalledWith({
+        where: {
+          id,
+        },
+      });
+    });
+  });
 
   // describe('getUserDevices', () => {
   //   it('should get devices of multiple users', async () => {

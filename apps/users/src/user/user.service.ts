@@ -1,12 +1,16 @@
 import { GraphQLEmailAddress, GraphQLObjectID } from 'graphql-scalars';
 import { Injectable, Logger } from '@nestjs/common';
+import {
+  InternalServerError,
+  NotFoundError,
+  UpdateUserInput,
+} from './graphql/user.schema';
+import { Membership, Prisma } from '@prisma/client';
 import { NEO4J_SERVICE, Pattern } from '@app/common';
 import { User, UserCreateInput } from '../entity/user.entity';
 
 import { ClientProxy } from '@nestjs/microservices';
-import { Membership } from '@prisma/client';
 import { ObjectId } from 'bson';
-import { UpdateUserInput } from './graphql/user.schema';
 import { UserRepository } from './service/prisma.service';
 import { lastValueFrom } from 'rxjs';
 
@@ -67,37 +71,11 @@ export class UserService {
     // }
   }
 
-  /* 
-  ? Get user details by email
-  */
-  async getUserByEmail(email: string) {
-    const result = await this.userRepository.user.findUnique({
-      where: { email: email },
-    });
-
-    const user: User = {
-      createdAt: new ObjectId(result.id).getTimestamp(),
-      id: result.id,
-      email: result.email,
-      username: result.username,
-      name: {
-        firstName: result.name.firstName,
-        middleName: result.name.middleName,
-        lastName: result.name.lastName,
-      },
-      picture: result.picture,
-      picks: result.picks,
-      devices: result.devices,
-      pings: result.pings.map((ping) => ({
-        __typename: 'Ping',
-        id: ping.id,
-      })),
-      activityCount: result.pings.length,
-    };
-
-    return user;
-  }
-
+  /**
+   * Checks if a username is available.
+   * @param username - The username to check.
+   * @returns A boolean indicating whether the username is available or not.
+   */
   async isUsernameAvailable(username: string) {
     const count = await this.userRepository.user.count({
       where: {
@@ -176,26 +154,19 @@ export class UserService {
     return updatedUser;
   }
 
-  async findOne(id: string) {
-    console.log('id', id);
+  async getUserById(id: string) {
+    try {
+      const result = await this.userRepository.user.findUniqueOrThrow({
+        where: {
+          id: GraphQLObjectID.parseValue(id),
+        },
+      });
 
-    const result = await this.userRepository.user.findUnique({
-      where: {
-        id: GraphQLObjectID.parseValue(id),
-      },
-    });
-
-    const { id: _id, email, username, name, picks, picture } = result;
-
-    return {
-      _id,
-      email,
-      username,
-      name,
-      picks,
-      picture,
-      createdAt: new ObjectId(id).getTimestamp(),
-    };
+      return User.ToEntityFromPrisma(result);
+    } catch (error) {
+      this.logger.log(`Error getting user by ID: ${id}. ${error}`);
+      return new NotFoundError();
+    }
   }
 
   async getUserDevices(users: string[]) {

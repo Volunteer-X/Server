@@ -87,7 +87,7 @@ extend type Query {
   "Get the current user. Requires authentication."
   user: UserPayload!
   "Get a user by id."
-  userById(id: ObjectID!): User!
+  userById(id: ObjectID!): UserPayload!
   "Check if a username is available."
   isUsernameAvailable(username: String!): Boolean!
 }
