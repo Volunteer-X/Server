@@ -51,8 +51,11 @@ export class UserResolver {
   }
 
   @Mutation('createUser')
-  create(@Args('payload') payload: CreateUserInput) {
-    return this.usersService.createUser(User.ToEntityFromInput(payload));
+  async create(@Args('payload') payload: CreateUserInput) {
+    const result = await this.usersService.createUser(
+      User.ToEntityFromInput(payload),
+    );
+    return this.wrapPayload.wrap(result);
   }
 
   @Mutation('updateUser')

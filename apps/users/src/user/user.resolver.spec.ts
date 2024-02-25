@@ -1,10 +1,15 @@
+import { CreateUserInput, UnauthorizedError } from './graphql/user.schema';
+import {
+  GraphQLEmailAddress,
+  GraphQLLatitude,
+  GraphQLLongitude,
+  GraphQLObjectID,
+} from 'graphql-scalars';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { AuthGuard } from '@nestjs/passport';
 import { AuthModule } from '@app/auth';
 import { CanActivate } from '@nestjs/common';
-import { GraphQLObjectID } from 'graphql-scalars';
-import { UnauthorizedError } from './graphql/user.schema';
 import { UserResolver } from './user.resolver';
 import { UserService } from './user.service';
 import { WrappedPayload } from '@user/common';
@@ -93,17 +98,50 @@ describe('UserResolver', () => {
     });
   });
 
-  // describe('createUser', () => {
-  //   it('should create a new user', () => {
-  //     // Test implementation here
-  //   });
-  // });
+  describe('createUser', () => {
+    let payload: CreateUserInput;
 
-  // describe('updateUser', () => {
-  //   it('should update a user', () => {
-  //     // Test implementation here
-  //   });
-  // });
+    beforeAll(() => {
+      payload = {
+        email: userStub().email as unknown as typeof GraphQLEmailAddress,
+        username: userStub().username,
+        firstName: userStub().name.firstName,
+        lastName: userStub().name.lastName,
+        middleName: userStub().name.middleName,
+        picture: userStub().picture,
+        picks: userStub().picks,
+        latitude: 80.23 as unknown as typeof GraphQLLatitude,
+        longitude: 90.23 as unknown as typeof GraphQLLongitude,
+        device: userStub().devices[0],
+      };
+    });
+
+    it('should create a new user', async () => {
+      const result = await resolver.create(payload);
+
+      jest.spyOn(service, 'createUser').mockResolvedValue(userStub());
+
+      expect(result).toStrictEqual(wrapPayload.wrap(userStub()));
+    });
+    it('should return an error if the user is not created', async () => {
+      jest
+        .spyOn(service, 'createUser')
+        .mockResolvedValue(new UnauthorizedError());
+
+      const result = await resolver.create(payload);
+
+      expect(result).toBeInstanceOf(UnauthorizedError);
+    });
+  });
+
+  describe('updateUser', () => {
+    it('should be defined', () => {
+      expect(resolver.updateUser).toBeDefined();
+    });
+    it('should update a user', () => {
+      // Test implementation here
+    });
+  });
 
   // describe('resolveReference', () => {
   //   it('should resolve a user reference', () => {

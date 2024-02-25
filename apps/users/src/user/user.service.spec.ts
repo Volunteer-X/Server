@@ -47,14 +47,9 @@ describe('UserService', () => {
       devices: ['device1'],
     };
 
-    let user: User;
-
-    beforeEach(async () => {
-      client.create.mockResolvedValue(userStub());
-      user = await service.createUser(input);
-    });
-
     it('then it should create a new user', async () => {
+      client.create.mockResolvedValue(userStub());
+      const user = (await service.createUser(input)) as User;
       expect(user).toBeDefined();
       expect(user.createdAt).toBeDefined();
       expect(user.id).toBeDefined();
@@ -68,6 +63,17 @@ describe('UserService', () => {
       expect(user.picture).toBe(input.picture);
       expect(user.picks).toEqual(input.picks);
       expect(user.devices).toEqual(input.devices);
+    });
+
+    it('if an error occurs then return an InternalServerError', async () => {
+      // Arrange
+      client.create.mockRejectedValue(new Error('Test error'));
+
+      // Act
+      const result = await service.createUser(input);
+
+      // Assert
+      expect(result).toBeInstanceOf(InternalServerError);
     });
   });
 

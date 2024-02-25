@@ -33,7 +33,6 @@ export class UserService {
       email,
       username,
       name,
-      // name: { firstName, middleName, lastName },
       picks,
       picture,
       latitude,
@@ -54,7 +53,8 @@ export class UserService {
       });
       return User.ToEntityFromPrisma(result);
     } catch (error) {
-      this.logger.error('Error creating user', error);
+      this.logger.error(`Error creating user: ${error.message}`);
+      return new InternalServerError();
     }
 
     // try {
