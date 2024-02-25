@@ -17,7 +17,6 @@ import { AuthModule } from '@app/auth';
 import { GraphQLModule } from '@nestjs/graphql';
 import { Module } from '@nestjs/common';
 import { PayloadResolver } from './payload.resolver';
-import { PrismaModule } from '@app/prisma';
 import { UserController } from './user.controller';
 import { UserRepository } from './service/prisma.service';
 import { UserResolver } from './user.resolver';

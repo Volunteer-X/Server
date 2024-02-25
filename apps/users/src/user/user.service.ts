@@ -1,10 +1,11 @@
-import { GraphQLEmailAddress, GraphQLObjectID } from 'graphql-scalars';
-import { Injectable, Logger } from '@nestjs/common';
 import {
+  ForbiddenError,
   InternalServerError,
   NotFoundError,
   UpdateUserInput,
 } from './graphql/user.schema';
+import { GraphQLEmailAddress, GraphQLObjectID } from 'graphql-scalars';
+import { Injectable, Logger } from '@nestjs/common';
 import { Membership, Prisma } from '@prisma/client';
 import { NEO4J_SERVICE, Pattern } from '@app/common';
 import {
@@ -15,6 +16,7 @@ import {
 
 import { ClientProxy } from '@nestjs/microservices';
 import { ObjectId } from 'bson';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { UserRepository } from './service/prisma.service';
 import { lastValueFrom } from 'rxjs';
 
@@ -53,6 +55,11 @@ export class UserService {
       });
       return User.ToEntityFromPrisma(result);
     } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          return new ForbiddenError();
+        }
+      }
       this.logger.error(`Error creating user: ${error.message}`);
       return new InternalServerError();
     }
@@ -93,27 +100,32 @@ export class UserService {
   async update(payload: PartialWithRequired<User, 'id'>) {
     const { id, email, username, name, picks, picture, devices } = payload;
 
-    const result = await this.userRepository.user.update({
-      where: {
-        id,
-      },
-      data: {
-        email: email,
-        username,
-        name: {
-          update: {
-            firstName: name?.firstName,
-            lastName: name?.lastName,
-            middleName: name?.middleName,
-          },
+    try {
+      const result = await this.userRepository.user.update({
+        where: {
+          id,
         },
-        picks,
-        picture,
-        devices,
-      },
-    });
+        data: {
+          email: email,
+          username,
+          name: {
+            update: {
+              firstName: name?.firstName,
+              lastName: name?.lastName,
+              middleName: name?.middleName,
+            },
+          },
+          picks,
+          picture,
+          devices,
+        },
+      });
 
-    return User.ToEntityFromPrisma(result);
+      return User.ToEntityFromPrisma(result);
+    } catch (error) {
+      this.logger.error(`Error updating user: ${error.message}`);
+      return new InternalServerError();
+    }
   }
 
   async getUserById(id: string) {

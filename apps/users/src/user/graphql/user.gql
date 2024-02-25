@@ -96,9 +96,9 @@ extend type Query {
 # The mutations for the user.
 extend type Mutation {
   "Create a new user. Requires authentication."
-  createUser(payload: CreateUserInput!): User!
+  createUser(payload: CreateUserInput!): UserPayload!
   "Update an existing user. Requires authentication."
-  updateUser(payload: UpdateUserInput!): User!
+  updateUser(payload: UpdateUserInput!): UserPayload!
   "Remove a user from the system. Requires authentication."
   removeUser(id: ObjectID!): User
 }

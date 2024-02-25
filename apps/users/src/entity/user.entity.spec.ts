@@ -16,7 +16,7 @@ describe('UserEntity', () => {
 
   beforeEach(() => {});
 
-  test('should create a new User with minimum required fields and valid input values', () => {
+  it('should create a new User with minimum required fields and valid input values', () => {
     const input: CreateUserInput = {
       firstName: 'John',
       lastName: 'Doe',

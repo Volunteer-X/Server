@@ -59,8 +59,11 @@ export class UserResolver {
   }
 
   @Mutation('updateUser')
-  updateUser(@Args('payload') payload: UpdateUserInput) {
-    return this.usersService.update(User.ToEntityFromUpdate(payload));
+  async updateUser(@Args('payload') payload: UpdateUserInput) {
+    const result = await this.usersService.update(
+      User.ToEntityFromUpdate(payload),
+    );
+    return this.wrapPayload.wrap(result);
   }
 
   @ResolveReference()

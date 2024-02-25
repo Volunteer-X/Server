@@ -99,9 +99,9 @@ export class Ping {
 }
 
 export abstract class IMutation {
-    abstract createUser(payload: CreateUserInput): User | Promise<User>;
+    abstract createUser(payload: CreateUserInput): UserPayload | Promise<UserPayload>;
 
-    abstract updateUser(payload: UpdateUserInput): User | Promise<User>;
+    abstract updateUser(payload: UpdateUserInput): UserPayload | Promise<UserPayload>;
 
     abstract removeUser(id: ObjectID): Nullable<User> | Promise<Nullable<User>>;
 }

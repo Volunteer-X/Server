@@ -77,12 +77,6 @@ describe('UserService', () => {
     });
   });
 
-  // describe('getUserByEmail', () => {
-  //   it('should get user details by email', async () => {
-  //     // Test implementation here
-  //   });
-  // });
-
   describe('isUsernameAvailable', () => {
     it('should return true if username is available', async () => {
       // Arrange

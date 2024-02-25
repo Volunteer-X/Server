@@ -1,4 +1,9 @@
-import { CreateUserInput, UnauthorizedError } from './graphql/user.schema';
+import {
+  CreateUserInput,
+  InternalServerError,
+  UnauthorizedError,
+  UpdateUserInput,
+} from './graphql/user.schema';
 import {
   GraphQLEmailAddress,
   GraphQLLatitude,
@@ -10,6 +15,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthModule } from '@app/auth';
 import { CanActivate } from '@nestjs/common';
+import { User } from '@user/entity/user.entity';
 import { UserResolver } from './user.resolver';
 import { UserService } from './user.service';
 import { WrappedPayload } from '@user/common';
@@ -121,25 +127,61 @@ describe('UserResolver', () => {
 
       jest.spyOn(service, 'createUser').mockResolvedValue(userStub());
 
+      expect(service.createUser).toHaveBeenCalledWith(
+        User.ToEntityFromInput(payload),
+      );
       expect(result).toStrictEqual(wrapPayload.wrap(userStub()));
     });
     it('should return an error if the user is not created', async () => {
       jest
         .spyOn(service, 'createUser')
-        .mockResolvedValue(new UnauthorizedError());
+        .mockResolvedValue(new InternalServerError());
 
       const result = await resolver.create(payload);
 
-      expect(result).toBeInstanceOf(UnauthorizedError);
+      expect(result).toBeInstanceOf(InternalServerError);
     });
   });
 
   describe('updateUser', () => {
+    let payload: UpdateUserInput;
+
+    beforeAll(() => {
+      payload = {
+        id: userStub().id as unknown as typeof GraphQLObjectID,
+        email: userStub().email as unknown as typeof GraphQLEmailAddress,
+        username: userStub().username,
+        firstName: userStub().name.firstName,
+        lastName: userStub().name.lastName,
+        middleName: userStub().name.middleName,
+        picture: userStub().picture,
+        picks: userStub().picks,
+        devices: userStub().devices,
+      };
+    });
+
     it('should be defined', () => {
       expect(resolver.updateUser).toBeDefined();
     });
-    it('should update a user', () => {
-      // Test implementation here
+    it('should update a user', async () => {
+      const result = await resolver.updateUser(payload);
+
+      jest.spyOn(service, 'update').mockResolvedValue(userStub());
+
+      expect(service.update).toHaveBeenCalledWith(
+        User.ToEntityFromUpdate(payload),
+      );
+      expect(result).toStrictEqual(userStub());
+    });
+
+    it('should return an error if the user is not updated', async () => {
+      jest
+        .spyOn(service, 'update')
+        .mockResolvedValue(new InternalServerError());
+
+      const result = await resolver.updateUser(payload);
+
+      expect(result).toBeInstanceOf(InternalServerError);
     });
   });
 
