@@ -24,9 +24,11 @@ export class Channel {
 }
 
 export abstract class IQuery {
-    abstract channel(id: ObjectID): Nullable<Channel> | Promise<Nullable<Channel>>;
+    abstract channel(id: ObjectID): Nullable<ChannelPayload> | Promise<Nullable<ChannelPayload>>;
 
-    abstract channels(admin: ObjectID): Channel[] | Promise<Channel[]>;
+    abstract adminChannels(admin: ObjectID): ChannelPayload[] | Promise<ChannelPayload[]>;
+
+    abstract userChannels(user: ObjectID): ChannelPayload[] | Promise<ChannelPayload[]>;
 }
 
 export class InvalidInputError implements BaseError {

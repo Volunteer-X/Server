@@ -2,12 +2,24 @@
 
 scalar ObjectID
 
+"Represents a channel in the forum."
 type Channel @key(fields: "id") {
+  "The unique identifier for the channel."
   id: ObjectID!
+
+  "The ID of the activity associated with the channel."
   activityID: ObjectID!
+
+  "The ping associated with the channel."
   ping: Ping!
+
+  "The title of the channel."
   title: String!
+
+  "The admin of the channel."
   admin: User!
+
+  "The participants of the channel."
   participants: [User!]!
 }
 
@@ -19,6 +31,7 @@ extend type User @key(fields: "id") {
   id: ObjectID! @external
 }
 
+"Represents a channel payload containing a channel or an error."
 union ChannelPayload =
   | Channel
   | NotFoundError
@@ -27,6 +40,12 @@ union ChannelPayload =
   | InternalServerError
 
 type Query {
-  channel(id: ObjectID!): Channel
-  channels(admin: ObjectID!): [Channel!]!
+  "Retrieves a channel by its unique identifier."
+  channel(id: ObjectID!): ChannelPayload
+
+  "Retrieves the channels associated with the specified admin."
+  adminChannels(admin: ObjectID!): [ChannelPayload!]!
+
+  "Retrieves the channels associated with the specified user."
+  userChannels(user: ObjectID!): [ChannelPayload!]!
 }

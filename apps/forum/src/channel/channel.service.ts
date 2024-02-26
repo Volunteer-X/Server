@@ -1,3 +1,4 @@
+import { CreateChannelDto, UpdateChannelDto } from './dto';
 import {
   Failure,
   InternalServerError,
@@ -5,7 +6,7 @@ import {
   Success,
 } from '@app/common';
 
-import { CreateChannelDto } from './dto/createChannel.dto';
+import { Channel } from './entity/channel';
 import { ForumRepository } from '../service/forum.service';
 import { Injectable } from '@nestjs/common';
 
@@ -26,10 +27,29 @@ export class ChannelService {
           title,
         },
       });
+      return new Success(Channel.ToEntityFromPrisma(result));
+    } catch (error) {
+      console.error(error);
+      console.log('Failed to create channel', error);
+
+      return new Failure(new InternalServerError('Failed to create channel'));
+    }
+  }
+
+  async updateChannel(id: string, payload: UpdateChannelDto) {
+    try {
+      const result = await this.channelRepository.update({
+        where: {
+          id,
+        },
+        data: {
+          ...payload,
+        },
+      });
       return new Success(result);
     } catch (error) {
       console.error(error);
-      return new Failure(new InternalServerError('Failed to create channel'));
+      return new Failure(new InternalServerError('Failed to update channel'));
     }
   }
 
@@ -40,10 +60,17 @@ export class ChannelService {
           id,
         },
       });
-      return new Success(result);
+      return result;
     } catch (error) {
       console.error(error);
-      return new Failure(new NotFoundError('Channel not found'));
+      return new NotFoundError('Channel not found');
     }
+  }
+
+  getChannelsByUser(user: string) {
+    throw new Error('Method not implemented.');
+  }
+  getChannelsByAdmin(admin: string) {
+    throw new Error('Method not implemented.');
   }
 }
