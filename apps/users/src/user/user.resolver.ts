@@ -6,31 +6,24 @@ import {
   ResolveReference,
 } from '@nestjs/graphql';
 import { UserService } from './user.service';
-import {
-  CreateUserInput,
-  IQuery,
-  NotFoundError,
-  UpdateUserInput,
-  UserPayload,
-} from './graphql/user.schema';
+import { CreateUserInput, UpdateUserInput } from './graphql/user.schema';
 import { GraphQLObjectID } from 'graphql-scalars';
-import { TUser } from '@app/common/utils/entities';
 import { Logger, UseGuards } from '@nestjs/common';
 import { CurrentUser, GqlAuthGuard } from '@app/auth';
-import { WrappedPayload } from '../common';
 import { User } from '@user/entity/user.entity';
-import { GraphQLScalarType } from 'graphql';
+import { Payload, WrappedPayload } from '@app/common';
 
 @Resolver('User')
 export class UserResolver {
   constructor(private readonly usersService: UserService) {}
   private readonly logger = new Logger(UserResolver.name);
-  private readonly wrapPayload = new WrappedPayload();
 
   @Query('user')
   @UseGuards(GqlAuthGuard)
-  getUser(@CurrentUser() user: TUser) {
-    return this.wrapPayload.wrap(user);
+  getUser(@CurrentUser() user: Payload<User>) {
+    console.log('user', WrappedPayload.wrap(user));
+
+    return WrappedPayload.wrap(user);
   }
 
   @Query('isUsernameAvailable')
@@ -47,7 +40,7 @@ export class UserResolver {
       GraphQLObjectID.parseValue(id),
     );
 
-    return this.wrapPayload.wrap(result);
+    return WrappedPayload.wrap(result);
   }
 
   @Mutation('createUser')
@@ -55,7 +48,7 @@ export class UserResolver {
     const result = await this.usersService.createUser(
       User.ToEntityFromInput(payload),
     );
-    return this.wrapPayload.wrap(result);
+    return WrappedPayload.wrap(result);
   }
 
   @Mutation('updateUser')
@@ -63,7 +56,7 @@ export class UserResolver {
     const result = await this.usersService.update(
       User.ToEntityFromUpdate(payload),
     );
-    return this.wrapPayload.wrap(result);
+    return WrappedPayload.wrap(result);
   }
 
   @ResolveReference()

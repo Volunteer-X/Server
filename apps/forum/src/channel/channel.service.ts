@@ -1,6 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { Channel } from 'apps/forum/src/common/dto/message.dto';
+import {
+  Failure,
+  InternalServerError,
+  NotFoundError,
+  Success,
+} from '@app/common';
+
+import { CreateChannelDto } from './dto/createChannel.dto';
 import { ForumRepository } from '../service/forum.service';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class ChannelService {
@@ -8,20 +15,35 @@ export class ChannelService {
 
   private readonly channelRepository = this.repository.channel;
 
-  async createChannel(channel: Channel) {
+  async createChannel(payload: CreateChannelDto) {
+    const { activityId, admin, title } = payload;
+
     try {
       const result = await this.channelRepository.create({
         data: {
-          activityID: channel.activityID,
-          admin: channel.admin,
-          title: channel.title,
-          participants: channel.participants,
+          activityId,
+          admin,
+          title,
         },
       });
-      return { success: true, message: 'Channel created', result };
+      return new Success(result);
     } catch (error) {
-      console.log(error);
-      return { success: false, message: 'Channel was not created' };
+      console.error(error);
+      return new Failure(new InternalServerError('Failed to create channel'));
+    }
+  }
+
+  async getChannel(id: string) {
+    try {
+      const result = await this.channelRepository.findUniqueOrThrow({
+        where: {
+          id,
+        },
+      });
+      return new Success(result);
+    } catch (error) {
+      console.error(error);
+      return new Failure(new NotFoundError('Channel not found'));
     }
   }
 }

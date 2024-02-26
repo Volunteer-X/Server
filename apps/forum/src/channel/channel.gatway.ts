@@ -7,7 +7,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { CreateMessage } from '../common/dto/message.dto';
+import { CreateMessage } from '../message/dto/message.dto';
 import { MessageService } from '../message/message.service';
 import { Logger } from '@nestjs/common';
 

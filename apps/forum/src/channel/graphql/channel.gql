@@ -1,6 +1,8 @@
+#import "../../../../../libs/common/src/graphql/error.gql"
+
 scalar ObjectID
 
-type Forum @key(fields: "id") {
+type Channel @key(fields: "id") {
   id: ObjectID!
   activityID: ObjectID!
   ping: Ping!
@@ -17,7 +19,14 @@ extend type User @key(fields: "id") {
   id: ObjectID! @external
 }
 
+union ChannelPayload =
+  | Channel
+  | NotFoundError
+  | UnknownError
+  | UnauthorizedError
+  | InternalServerError
+
 type Query {
-  forum(id: ObjectID!): Forum
-  forums: [Forum!]!
+  channel(id: ObjectID!): Channel
+  channels(admin: ObjectID!): [Channel!]!
 }

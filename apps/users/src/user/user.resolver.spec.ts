@@ -1,15 +1,11 @@
-import {
-  CreateUserInput,
-  InternalServerError,
-  UnauthorizedError,
-  UpdateUserInput,
-} from './graphql/user.schema';
+import { CreateUserInput, UpdateUserInput } from './graphql/user.schema';
 import {
   GraphQLEmailAddress,
   GraphQLLatitude,
   GraphQLLongitude,
   GraphQLObjectID,
 } from 'graphql-scalars';
+import { InternalServerError, UnauthorizedError } from '@app/common';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { AuthGuard } from '@nestjs/passport';
@@ -26,7 +22,6 @@ jest.mock('./user.service');
 describe('UserResolver', () => {
   let resolver: UserResolver;
   let service: UserService;
-  let wrapPayload: WrappedPayload;
 
   beforeEach(async () => {
     const mockAuthGaurd: CanActivate = { canActivate: jest.fn(() => true) };
@@ -40,7 +35,6 @@ describe('UserResolver', () => {
 
     resolver = module.get<UserResolver>(UserResolver);
     service = module.get<UserService>(UserService);
-    wrapPayload = new WrappedPayload();
     jest.clearAllMocks();
   });
 
@@ -52,10 +46,10 @@ describe('UserResolver', () => {
     it('should return the current user', () => {
       const result = resolver.getUser(userStub());
 
-      expect(result).toStrictEqual(wrapPayload.wrap(userStub()));
+      expect(result).toStrictEqual(WrappedPayload.wrap(userStub()));
     });
     it('should return an error if the user is not found', () => {
-      const result = resolver.getUser(new UnauthorizedError());
+      const result = resolver.getUser(new UnauthorizedError('Unauthorized'));
 
       expect(result).toBeInstanceOf(UnauthorizedError);
     });
@@ -96,7 +90,7 @@ describe('UserResolver', () => {
 
       jest
         .spyOn(service, 'getUserById')
-        .mockResolvedValue(new UnauthorizedError());
+        .mockResolvedValue(new UnauthorizedError('Unauthorized'));
 
       const result = await resolver.getUserById(id);
 
@@ -130,12 +124,12 @@ describe('UserResolver', () => {
       expect(service.createUser).toHaveBeenCalledWith(
         User.ToEntityFromInput(payload),
       );
-      expect(result).toStrictEqual(wrapPayload.wrap(userStub()));
+      expect(result).toStrictEqual(WrappedPayload.wrap(userStub()));
     });
     it('should return an error if the user is not created', async () => {
       jest
         .spyOn(service, 'createUser')
-        .mockResolvedValue(new InternalServerError());
+        .mockResolvedValue(new InternalServerError('Internal Server Error'));
 
       const result = await resolver.create(payload);
 
@@ -177,7 +171,7 @@ describe('UserResolver', () => {
     it('should return an error if the user is not updated', async () => {
       jest
         .spyOn(service, 'update')
-        .mockResolvedValue(new InternalServerError());
+        .mockResolvedValue(new InternalServerError('Internal Server Error'));
 
       const result = await resolver.updateUser(payload);
 

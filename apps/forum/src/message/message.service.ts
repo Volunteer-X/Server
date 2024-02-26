@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { CreateMessage } from 'apps/forum/src/common/dto/message.dto';
+import { CreateMessage } from 'apps/forum/src/message/dto/message.dto';
 import { ForumRepository } from 'apps/forum/src/service/forum.service';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class MessageService {

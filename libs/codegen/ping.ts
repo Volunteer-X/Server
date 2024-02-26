@@ -6,7 +6,7 @@ const definitionFactory = new GraphQLFederationDefinitionsFactory();
 definitionFactory.generate({
   typePaths: ['./apps/ping/src/ping/graphql/*.gql'],
   path: join(process.cwd(), 'apps/ping/src/ping/graphql/ping.schema.ts'),
-  outputAs: 'interface',
+  outputAs: 'class',
   defaultScalarType: 'unknown',
   customScalarTypeMapping: {
     DateTime: 'typeof GraphQLDateTime',

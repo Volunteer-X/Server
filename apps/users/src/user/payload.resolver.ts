@@ -2,7 +2,7 @@ import {
   InternalServerError,
   NotFoundError,
   UnauthorizedError,
-} from './graphql/user.schema';
+} from '@app/common';
 import { ResolveField, Resolver } from '@nestjs/graphql';
 
 import { Logger } from '@nestjs/common';

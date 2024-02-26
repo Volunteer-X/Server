@@ -16,7 +16,7 @@ import {
 } from './graphql/ping.schema';
 import { Logger, UseGuards } from '@nestjs/common';
 import { CurrentUser, GqlAuthGuard } from '@app/auth';
-import { User } from '@app/common/utils/entities';
+import { User } from '@app/common/utils/entity/entities';
 import { decodeFromBase64, encodeToBase64 } from '@app/common/utils/helpers';
 
 @Resolver('Ping')

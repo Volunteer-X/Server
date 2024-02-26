@@ -4,9 +4,12 @@ import { join } from 'path';
 const definitionFactory = new GraphQLFederationDefinitionsFactory();
 
 definitionFactory.generate({
-  typePaths: ['./apps/forum/src/channel/graphql/*.gql'],
+  typePaths: [
+    './apps/forum/src/channel/graphql/*.gql',
+    './libs/common/src/graphql/*.gql',
+  ],
   path: join(process.cwd(), 'apps/forum/src/channel/graphql/channel.schema.ts'),
-  outputAs: 'interface',
+  outputAs: 'class',
   defaultScalarType: 'unknown',
   customScalarTypeMapping: {
     ObjectID: 'typeof GraphQLObjectID',

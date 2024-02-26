@@ -3,7 +3,7 @@
 
 generator client {
     provider = "prisma-client-js"
-    output   = "../../../node_modules/@prisma/client-forum"
+    output   = "../../../node_modules/@prisma/forum"
 }
 
 datasource db {
@@ -21,9 +21,9 @@ model Message {
 
 model Channel {
     id           String    @id @default(auto()) @map("_id") @db.ObjectId
-    activityID   String    @db.ObjectId
+    activityId   String    @unique @db.ObjectId
     admin        String    @db.ObjectId
     title        String
-    participants String[]
+    participants String[]  @db.ObjectId
     messages     Message[]
 }

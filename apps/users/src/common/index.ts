@@ -1,1 +1,1 @@
-export * from './wrapPayload';
+export * from '../../../../libs/common/src/utils/wrapPayload';

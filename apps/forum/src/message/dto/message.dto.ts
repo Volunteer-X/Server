@@ -14,11 +14,3 @@ export type CreateMessage = {
   userID: string;
   text: string;
 };
-
-export type Channel = {
-  id: string;
-  activityID: string;
-  title: string;
-  admin: string;
-  participants?: string[];
-};
