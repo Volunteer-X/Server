@@ -1,4 +1,5 @@
 #import "../../../../../libs/common/src/graphql/error.gql"
+#import "../../../../../libs/common/src/graphql/pagination.gql"
 
 scalar ObjectID
 
@@ -31,9 +32,20 @@ extend type User @key(fields: "id") {
   id: ObjectID! @external
 }
 
+type ChannelEdge implements Edge {
+  cursor: String!
+  node: Channel!
+}
+
+type ChannelConnection implements Connection {
+  pageInfo: PageInfo!
+  edges: [ChannelEdge!]!
+}
+
 "Represents a channel payload containing a channel or an error."
 union ChannelPayload =
   | Channel
+  | ChannelConnection
   | NotFoundError
   | UnknownError
   | UnauthorizedError
@@ -44,8 +56,12 @@ type Query {
   channel(id: ObjectID!): ChannelPayload
 
   "Retrieves the channels associated with the specified admin."
-  adminChannels(admin: ObjectID!): [ChannelPayload!]!
+  adminChannels(
+    admin: ObjectID!
+    first: Int!
+    after: String
+  ): [ChannelPayload!]!
 
   "Retrieves the channels associated with the specified user."
-  userChannels(user: ObjectID!): [ChannelPayload!]!
+  userChannels(user: ObjectID!, first: Int!, after: String): [ChannelPayload!]!
 }

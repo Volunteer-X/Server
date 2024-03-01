@@ -6,9 +6,10 @@ import {
   Success,
 } from '@app/common';
 
-import { Channel } from './entity/channel';
+import { Channel } from './entity/channel.entity';
 import { ForumRepository } from '../service/forum.service';
 import { Injectable } from '@nestjs/common';
+import { channel } from 'diagnostics_channel';
 
 @Injectable()
 export class ChannelService {
@@ -83,24 +84,79 @@ export class ChannelService {
     }
   }
 
-  async getChannelsByUser(user: string) {
+  async getChannelsByUser(user: string, first: number, after?: string) {
+    const cursor = after ? { id: after } : undefined;
+
     try {
-      const channels = await this.channelRepository.findMany({
+      const result = await this.channelRepository.findMany({
         where: {
-          admin: user,
+          AND: {
+            participants: {
+              has: user,
+            },
+            AND: {
+              participants: {
+                isEmpty: false,
+              },
+            },
+          },
+        },
+        include: {
+          messages: {
+            orderBy: {
+              id: 'desc',
+            },
+            take: 1,
+          },
+        },
+        skip: 1,
+        take: first,
+        cursor,
+        orderBy: {
+          id: 'desc',
         },
       });
 
-      if (!channels.length)
+      if (!result.length)
         return new NotFoundError('No Channel under this user id found');
 
-      return channels.map(Channel.ToEntityFromPrisma);
+      return result.map(Channel.ToEntityFromPrisma);
     } catch (error) {
       console.error(error);
       return new InternalServerError('Failed to get channels');
     }
   }
-  getChannelsByAdmin(admin: string) {
-    throw new Error('Method not implemented.');
+  async getChannelsByAdmin(admin: string, first: number, after?: string) {
+    const cursor = after ? { id: after } : undefined;
+
+    try {
+      const result = await this.channelRepository.findMany({
+        where: {
+          admin,
+        },
+        include: {
+          messages: {
+            orderBy: {
+              id: 'desc',
+            },
+            take: 1,
+          },
+        },
+        skip: 1,
+        take: first,
+        cursor,
+        orderBy: {
+          id: 'desc',
+        },
+      });
+
+      if (!result.length)
+        return new NotFoundError('No Channel under this user id found');
+
+      return result.map(Channel.ToEntityFromPrisma);
+    } catch (error) {
+      console.error(error);
+      return new InternalServerError('Failed to get channels');
+    }
   }
 }

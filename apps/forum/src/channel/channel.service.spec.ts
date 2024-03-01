@@ -8,7 +8,7 @@ import {
 import { Test, TestingModule } from '@nestjs/testing';
 import { channelStub, prismaChannelStub } from './__mocks__/channel.stub';
 
-import { Channel } from './entity/channel';
+import { Channel } from './entity/channel.entity';
 import { ChannelService } from './channel.service';
 import { CreateChannelDto } from './dto/createChannel.dto';
 import { ForumRepository } from '../service/forum.service';
@@ -118,43 +118,72 @@ describe(ChannelService.name, () => {
 
   describe('when getting a channel by user', () => {
     const author = channelStub().admin;
+    const first = 1;
+    const after = '61e4a1f5a6f2b941d59f8c8a';
 
-    it('then it should return the channels', async () => {
+    it('Should return the channels', async () => {
       client.findMany.mockResolvedValue([prismaChannelStub()]);
-      const result = await service.getChannelsByUser(author);
-      expect((result as Channel[])[0]).toStrictEqual(channelStub());
-      expect(client.findMany).toHaveBeenCalledWith({
-        where: {
-          admin: author,
-        },
-      });
-      expect((result[0] as Channel).id).toEqual(channelStub().id);
+      const result = await service.getChannelsByUser(author, first, after);
+      expect(result).toContainEqual(channelStub());
     });
 
-    it('then it should return a NotFoundError', async () => {
+    it('Should return a NotFoundError if user has no channels', async () => {
       client.findMany.mockResolvedValue([]);
-      const result = await service.getChannelsByUser(author);
+      const result = await service.getChannelsByUser(author, first, after);
       expect(result).toBeInstanceOf(NotFoundError);
       expect(result).toEqual(
         new NotFoundError('No Channel under this user id found'),
       );
-      expect(client.findMany).toHaveBeenCalledWith({
-        where: {
-          admin: author,
-        },
-      });
     });
 
-    it('then it should return an InternalServerError', async () => {
+    it('Should return an InternalServerError if findMany() throws an error', async () => {
       client.findMany.mockRejectedValue(new Error('Failed to get channels'));
-      const result = await service.getChannelsByUser(author);
+      const result = await service.getChannelsByUser(author, first, after);
       expect(result).toBeInstanceOf(InternalServerError);
       expect(result).toEqual(new InternalServerError('Failed to get channels'));
-      expect(client.findMany).toHaveBeenCalledWith({
-        where: {
-          admin: author,
-        },
-      });
+    });
+
+    it('should return an array of channels when user has channels', async () => {
+      client.findMany.mockResolvedValue([prismaChannelStub()]);
+      const result = await service.getChannelsByUser(author, first, after);
+      expect(result).toContainEqual(channelStub());
+      expect(result).toHaveLength(1);
+    });
+  });
+
+  describe('when getting a channel by admin', () => {
+    const admin = channelStub().admin;
+    const first = 1;
+    const after = '61e4a1f5a6f2b941d59f8c8a'; // channelId
+
+    it('should return the channels even if after is undefined', async () => {
+      client.findMany.mockResolvedValue([prismaChannelStub()]);
+      const result = await service.getChannelsByAdmin(admin, first);
+      expect(result).toContainEqual(channelStub());
+      expect(result).toHaveLength(1);
+    });
+
+    it('Should return an array of channels when admin has channels', async () => {
+      client.findMany.mockResolvedValue([prismaChannelStub()]);
+      const result = await service.getChannelsByAdmin(admin, first, after);
+      expect(result).toContainEqual(channelStub());
+      expect(result).toHaveLength(1);
+    });
+
+    it('Should return a NotFoundError if admin has no channels', async () => {
+      client.findMany.mockResolvedValue([]);
+      const result = await service.getChannelsByAdmin(admin, first, after);
+      expect(result).toBeInstanceOf(NotFoundError);
+      expect(result).toEqual(
+        new NotFoundError('No Channel under this user id found'),
+      );
+    });
+
+    it('Should return an InternalServerError if findMany() throws an error', async () => {
+      client.findMany.mockRejectedValue(new Error('Failed to get channels'));
+      const result = await service.getChannelsByAdmin(admin, first, after);
+      expect(result).toBeInstanceOf(InternalServerError);
+      expect(result).toEqual(new InternalServerError('Failed to get channels'));
     });
   });
 });

@@ -3,7 +3,7 @@ export * from './rmq/rmq.service';
 export * from './rmq/rmq.module';
 export * from './types';
 
-export * from './services';
+export * from './constants/services';
 export * from './constants/pattern';
 
 export * from './utils/entity/entities';

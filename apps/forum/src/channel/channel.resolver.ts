@@ -2,7 +2,9 @@ import { Logger } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { GraphQLObjectID } from 'graphql-scalars';
 import { ChannelService } from './channel.service';
-import { WrappedPayload } from '@app/common';
+import { WrappedPayload, decodeFromBase64 } from '@app/common';
+import { first } from 'rxjs';
+import { after } from 'node:test';
 
 @Resolver('Forum')
 export class ChannelResolver {
@@ -16,14 +18,44 @@ export class ChannelResolver {
   }
 
   @Query('adminChannels')
-  async getChannelsByAdmin(@Args('admin') admin: string) {
-    const result = await this.channelService.getChannelsByAdmin(admin);
+  async getChannelsByAdmin(
+    @Args('admin') admin: string,
+    @Args('first') first: number,
+    @Args('after') after: string | undefined,
+  ) {
+    const result = await this.channelService.getChannelsByAdmin(
+      admin,
+      first,
+      decodeFromBase64(after),
+    );
+
+    return {
+      edges: pings.map((ping) => ({
+        node: ping,
+        cursor: encodeToBase64(ping.id),
+      })),
+      owner: { __typename: 'User', id: userID },
+      pageInfo: {
+        hasNextPage: pings.length === first,
+        endCursor:
+          pings.length > 0 ? encodeToBase64(pings[pings.length - 1].id) : null,
+      },
+    };
+
     return WrappedPayload.wrap(result);
   }
 
   @Query('userChannels')
-  async getChannelsByUser(@Args('user') user: string) {
-    const result = await this.channelService.getChannelsByUser(user);
+  async getChannelsByUser(
+    @Args('user') user: string,
+    @Args('first') first: number,
+    @Args('after') after: string | undefined,
+  ) {
+    const result = await this.channelService.getChannelsByUser(
+      user,
+      first,
+      after,
+    );
     return WrappedPayload.wrap(result);
   }
 }

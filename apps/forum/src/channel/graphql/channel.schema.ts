@@ -14,6 +14,14 @@ export interface BaseError {
     message: string;
 }
 
+export interface Edge {
+    cursor: string;
+}
+
+export interface Connection {
+    pageInfo: PageInfo;
+}
+
 export class Channel {
     id: ObjectID;
     activityID: ObjectID;
@@ -23,12 +31,22 @@ export class Channel {
     participants: User[];
 }
 
+export class ChannelEdge implements Edge {
+    cursor: string;
+    node: Channel;
+}
+
+export class ChannelConnection implements Connection {
+    pageInfo: PageInfo;
+    edges: ChannelEdge[];
+}
+
 export abstract class IQuery {
     abstract channel(id: ObjectID): Nullable<ChannelPayload> | Promise<Nullable<ChannelPayload>>;
 
-    abstract adminChannels(admin: ObjectID): ChannelPayload[] | Promise<ChannelPayload[]>;
+    abstract adminChannels(admin: ObjectID, first: number, after?: Nullable<string>): ChannelPayload[] | Promise<ChannelPayload[]>;
 
-    abstract userChannels(user: ObjectID): ChannelPayload[] | Promise<ChannelPayload[]>;
+    abstract userChannels(user: ObjectID, first: number, after?: Nullable<string>): ChannelPayload[] | Promise<ChannelPayload[]>;
 }
 
 export class InvalidInputError implements BaseError {
@@ -55,6 +73,12 @@ export class UnknownError implements BaseError {
     message: string;
 }
 
+export class PageInfo {
+    hasNextPage: boolean;
+    endCursor?: Nullable<string>;
+    totalCount?: Nullable<number>;
+}
+
 export class Ping {
     id: ObjectID;
 }
@@ -64,5 +88,5 @@ export class User {
 }
 
 export type ObjectID = typeof GraphQLObjectID;
-export type ChannelPayload = Channel | NotFoundError | UnknownError | UnauthorizedError | InternalServerError;
+export type ChannelPayload = Channel | ChannelConnection | NotFoundError | UnknownError | UnauthorizedError | InternalServerError;
 type Nullable<T> = T | null;

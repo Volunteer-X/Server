@@ -13,9 +13,9 @@ datasource db {
 
 model Message {
     id        String  @id @default(auto()) @map("_id") @db.ObjectId
-    userID    String  @db.ObjectId
-    channelID String  @db.ObjectId
-    channel   Channel @relation(fields: [channelID], references: [id])
+    userId    String  @db.ObjectId
+    channelId String  @db.ObjectId
+    channel   Channel @relation(fields: [channelId], references: [id])
     text      String
 }
 
