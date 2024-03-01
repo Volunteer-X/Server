@@ -16,6 +16,11 @@ export class ChannelService {
 
   private readonly channelRepository = this.repository.channel;
 
+  /**
+   * Creates a new channel.
+   * @param payload - The payload containing the necessary data to create the channel.
+   * @returns A Success object with the created channel if successful, or a Failure object with an error message if unsuccessful.
+   */
   async createChannel(payload: CreateChannelDto) {
     const { activityId, admin, title } = payload;
 
@@ -36,6 +41,12 @@ export class ChannelService {
     }
   }
 
+  /**
+   * Updates a channel with the specified ID.
+   * @param id - The ID of the channel to update.
+   * @param payload - The data to update the channel with.
+   * @returns A `Success` object containing the result of the update operation if successful, or a `Failure` object with an `InternalServerError` if the update fails.
+   */
   async updateChannel(id: string, payload: UpdateChannelDto) {
     try {
       const result = await this.channelRepository.update({
@@ -53,6 +64,11 @@ export class ChannelService {
     }
   }
 
+  /**
+   * Retrieves a channel by its ID.
+   * @param id - The ID of the channel to retrieve.
+   * @returns A Promise that resolves to the channel if found, or throws a NotFoundError if not found.
+   */
   async getChannel(id: string) {
     try {
       const result = await this.channelRepository.findUniqueOrThrow({
@@ -67,8 +83,22 @@ export class ChannelService {
     }
   }
 
-  getChannelsByUser(user: string) {
-    throw new Error('Method not implemented.');
+  async getChannelsByUser(user: string) {
+    try {
+      const channels = await this.channelRepository.findMany({
+        where: {
+          admin: user,
+        },
+      });
+
+      if (!channels.length)
+        return new NotFoundError('No Channel under this user id found');
+
+      return channels.map(Channel.ToEntityFromPrisma);
+    } catch (error) {
+      console.error(error);
+      return new InternalServerError('Failed to get channels');
+    }
   }
   getChannelsByAdmin(admin: string) {
     throw new Error('Method not implemented.');

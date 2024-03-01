@@ -1,7 +1,14 @@
 import { DeepMockProxy, mockDeep, mockReset } from 'jest-mock-extended';
-import { Failure, InternalServerError, Success } from '@app/common';
+import {
+  Failure,
+  InternalServerError,
+  NotFoundError,
+  Success,
+} from '@app/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { channelStub, prismaChannelStub } from './__mocks__/channel.stub';
 
+import { Channel } from './entity/channel';
 import { ChannelService } from './channel.service';
 import { CreateChannelDto } from './dto/createChannel.dto';
 import { ForumRepository } from '../service/forum.service';
@@ -70,6 +77,84 @@ describe(ChannelService.name, () => {
       expect(result).toEqual(
         new Failure(new InternalServerError('Failed to create channel')),
       );
+    });
+  });
+
+  describe('when getting a channel  by id', () => {
+    const channelId = '61e4a1f5a6f2b941d59f8c8a';
+
+    it('then it should return the channel', async () => {
+      const channel = {
+        id: channelId,
+        title: 'Test',
+        admin: '5f7d4138e8017e001fd15e6a',
+        activityId: '58a1d20c201f52270b89b2c9',
+        createdAt: new Date('2022-01-16T22:53:41.000Z'),
+      };
+      client.findUniqueOrThrow.mockResolvedValue(channel);
+
+      const result = await service.getChannel(channelId);
+      expect(result).toEqual(channel);
+      expect(client.findUniqueOrThrow).toHaveBeenCalledWith({
+        where: {
+          id: channelId,
+        },
+      });
+    });
+
+    it('then it should return a not found error', async () => {
+      const error = new Error('Channel not found');
+      client.findUniqueOrThrow.mockRejectedValue(error);
+
+      const result = await service.getChannel(channelId);
+      expect(result).toEqual(new NotFoundError('Channel not found'));
+      expect(client.findUniqueOrThrow).toHaveBeenCalledWith({
+        where: {
+          id: channelId,
+        },
+      });
+    });
+  });
+
+  describe('when getting a channel by user', () => {
+    const author = channelStub().admin;
+
+    it('then it should return the channels', async () => {
+      client.findMany.mockResolvedValue([prismaChannelStub()]);
+      const result = await service.getChannelsByUser(author);
+      expect((result as Channel[])[0]).toStrictEqual(channelStub());
+      expect(client.findMany).toHaveBeenCalledWith({
+        where: {
+          admin: author,
+        },
+      });
+      expect((result[0] as Channel).id).toEqual(channelStub().id);
+    });
+
+    it('then it should return a NotFoundError', async () => {
+      client.findMany.mockResolvedValue([]);
+      const result = await service.getChannelsByUser(author);
+      expect(result).toBeInstanceOf(NotFoundError);
+      expect(result).toEqual(
+        new NotFoundError('No Channel under this user id found'),
+      );
+      expect(client.findMany).toHaveBeenCalledWith({
+        where: {
+          admin: author,
+        },
+      });
+    });
+
+    it('then it should return an InternalServerError', async () => {
+      client.findMany.mockRejectedValue(new Error('Failed to get channels'));
+      const result = await service.getChannelsByUser(author);
+      expect(result).toBeInstanceOf(InternalServerError);
+      expect(result).toEqual(new InternalServerError('Failed to get channels'));
+      expect(client.findMany).toHaveBeenCalledWith({
+        where: {
+          admin: author,
+        },
+      });
     });
   });
 });
