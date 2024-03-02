@@ -21,3 +21,5 @@ export {
 
 export { WrappedPayload } from './utils/wrapPayload';
 export { Payload } from './utils/entity';
+
+export * from './pagination';

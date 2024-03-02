@@ -31,19 +31,6 @@ export class ChannelResolver {
     );
 
     const wrapperResult = WrappedPayload.wrap<Array<Channel>>(result);
-
-    return {
-      edges: pings.map((ping) => ({
-        node: ping,
-        cursor: encodeToBase64(ping.id),
-      })),
-      owner: { __typename: 'User', id: userID },
-      pageInfo: {
-        hasNextPage: pings.length === first,
-        endCursor:
-          pings.length > 0 ? encodeToBase64(pings[pings.length - 1].id) : null,
-      },
-    };
   }
 
   @Query('userChannels')

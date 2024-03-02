@@ -35,10 +35,24 @@ export class WrappedPayload {
     }
   }
 
-  // static wrap(T: any[] | any): Payload<typeof T> {
-  //   if (Array.isArray(T)) {
-  //     return T.map((t) => WrappedPayload.wrapper(t)) as Payload<typeof T>;
-  //   }
-  //   return WrappedPayload.wrapper(T);
-  // }
+  static wrapWithPagination<R>(T: any): Payload<R> {
+    const wrapped = this.wrap<R>(T);
+
+    if (!Array.isArray(wrapped)) return wrapped;
+
+    // Pagination
+
+    // return {
+    //   edges: pings.map((ping) => ({
+    //     node: ping,
+    //     cursor: encodeToBase64(ping.id),
+    //   })),
+    //   owner: { __typename: 'User', id: userID },
+    //   pageInfo: {
+    //     hasNextPage: pings.length === first,
+    //     endCursor:
+    //       pings.length > 0 ? encodeToBase64(pings[pings.length - 1].id) : null,
+    //   },
+    // };
+  }
 }

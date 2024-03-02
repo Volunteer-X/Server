@@ -23,7 +23,7 @@ import { PayloadResolver } from './payload.resolver';
     MessageModule,
     GraphQLModule.forRoot<ApolloFederationDriverConfig>({
       driver: ApolloFederationDriver,
-      typePaths: ['**/channel.gql', 'libs/common/src/graphql/error.gql'],
+      typePaths: ['**/channel.gql', 'libs/common/src/graphql/*.gql'],
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       resolvers: {
