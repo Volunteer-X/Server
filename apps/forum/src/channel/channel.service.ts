@@ -7,9 +7,9 @@ import {
 } from '@app/common';
 
 import { Channel } from './entity/channel.entity';
+import { CursorParams } from '@app/common/pagination/cursor/Cursor.interface';
 import { ForumRepository } from '../service/forum.service';
 import { Injectable } from '@nestjs/common';
-import { channel } from 'diagnostics_channel';
 
 @Injectable()
 export class ChannelService {
@@ -35,8 +35,7 @@ export class ChannelService {
       });
       return new Success(Channel.ToEntityFromPrisma(result));
     } catch (error) {
-      console.error(error);
-      console.log('Failed to create channel', error);
+      // console.log('Failed to create channel', error);
 
       return new Failure(new InternalServerError('Failed to create channel'));
     }
@@ -60,7 +59,6 @@ export class ChannelService {
       });
       return new Success(result);
     } catch (error) {
-      console.error(error);
       return new Failure(new InternalServerError('Failed to update channel'));
     }
   }
@@ -79,7 +77,6 @@ export class ChannelService {
       });
       return result;
     } catch (error) {
-      console.error(error);
       return new NotFoundError('Channel not found');
     }
   }
@@ -122,12 +119,13 @@ export class ChannelService {
 
       return result.map(Channel.ToEntityFromPrisma);
     } catch (error) {
-      console.error(error);
       return new InternalServerError('Failed to get channels');
     }
   }
-  async getChannelsByAdmin(admin: string, first: number, after?: string) {
-    const cursor = after ? { id: after } : undefined;
+  async getChannelsByAdmin(admin: string, first: number, after?: CursorParams) {
+    console.log('admin', admin);
+
+    const cursor = after && after;
 
     try {
       const result = await this.channelRepository.findMany({
@@ -153,10 +151,23 @@ export class ChannelService {
       if (!result.length)
         return new NotFoundError('No Channel under this user id found');
 
-      return result.map(Channel.ToEntityFromPrisma);
+      return Channel.ToEntityFromPrismaArray(result);
     } catch (error) {
-      console.error(error);
       return new InternalServerError('Failed to get channels');
+    }
+  }
+
+  async getTotalCount(admin: string) {
+    try {
+      const result = await this.channelRepository.count({
+        where: {
+          admin,
+        },
+      });
+
+      return result;
+    } catch (error) {
+      return new InternalServerError('Failed to get total count');
     }
   }
 }

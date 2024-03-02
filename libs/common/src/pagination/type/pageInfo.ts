@@ -1,8 +1,30 @@
-import { PageInfoInterface } from './pageInfo.interface';
+export class PageInfo {
+  private hasNextPage: boolean;
+  private endCursor: string | null;
+  private totalCount: number;
+  constructor() {}
 
-export class PageInfo implements PageInfoInterface {
-  constructor(
-    public hasNextPage: boolean,
-    public endCursor: string,
-  ) {}
+  setTotalCount(totalCount: number): void {
+    this.totalCount = totalCount;
+  }
+
+  getTotalCount(): number {
+    return this.totalCount;
+  }
+
+  setHasNextPage(hasNextPage: boolean): void {
+    this.hasNextPage = hasNextPage;
+  }
+
+  setEndCursor(endCursor: string | null): void {
+    this.endCursor = endCursor;
+  }
+
+  getHasNextPage(): boolean {
+    return this.hasNextPage;
+  }
+
+  getEndCursor(): string {
+    return this.endCursor;
+  }
 }

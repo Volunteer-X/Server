@@ -1,10 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
-import { GraphQLObjectID } from 'graphql-scalars';
 import { ChannelService } from './channel.service';
-import { WrappedPayload, decodeFromBase64 } from '@app/common';
-import { first } from 'rxjs';
-import { after } from 'node:test';
+import { Cursor, NotFoundError, WrappedPayload } from '@app/common';
 import { Channel } from './entity/channel.entity';
 
 @Resolver('Forum')
@@ -15,7 +12,7 @@ export class ChannelResolver {
   @Query('channel')
   async getChannel(@Args('id') id: string) {
     const result = await this.channelService.getChannel(id);
-    return WrappedPayload.wrap(result);
+    return WrappedPayload.wrap<typeof result>(result);
   }
 
   @Query('adminChannels')
@@ -24,13 +21,28 @@ export class ChannelResolver {
     @Args('first') first: number,
     @Args('after') after: string | undefined,
   ) {
+    this.logger.log(
+      `adminChannels: admin=${typeof admin}, first=${first}, after=${after}`,
+    );
+
     const result = await this.channelService.getChannelsByAdmin(
       admin,
       first,
-      decodeFromBase64(after),
+      Cursor.decode(after),
     );
 
-    const wrapperResult = WrappedPayload.wrap<Array<Channel>>(result);
+    if (!Array.isArray(result)) {
+      const wrapperResult = WrappedPayload.wrap<typeof result>(result);
+      return wrapperResult;
+    }
+
+    const count = await this.channelService.getTotalCount(admin);
+
+    console.log('count', count);
+
+    return new NotFoundError('Not found');
+
+    // return WrappedPayload.wrapWithPagination<Channel>(result, count, first);
   }
 
   @Query('userChannels')

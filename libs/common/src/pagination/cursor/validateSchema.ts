@@ -7,12 +7,10 @@ export function validateSchema<TParams = CursorParams>(
 ): TParams {
   const { error, value } = schema.validate(param);
 
-  if (error !== null) {
-    const errorMessages =
-      error.details != null
-        ? error.details.map((detail) => `- ${detail.message}`).join('\n')
-        : `- ${error.message}`;
-    throw new Error(errorMessages);
+  if (error !== undefined) {
+    console.log('error', error);
+
+    throw new Error(error.message);
   }
 
   return value;

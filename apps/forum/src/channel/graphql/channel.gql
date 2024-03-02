@@ -9,7 +9,7 @@ type Channel @key(fields: "id") {
   id: ObjectID!
 
   "The ID of the activity associated with the channel."
-  activityID: ObjectID!
+  activityId: ObjectID!
 
   "The ping associated with the channel."
   ping: Ping!
@@ -56,11 +56,7 @@ type Query {
   channel(id: ObjectID!): ChannelPayload
 
   "Retrieves the channels associated with the specified admin."
-  adminChannels(
-    admin: ObjectID!
-    first: Int!
-    after: String
-  ): [ChannelPayload!]!
+  adminChannels(admin: ObjectID!, first: Int!, after: String): ChannelPayload
 
   "Retrieves the channels associated with the specified user."
   userChannels(user: ObjectID!, first: Int!, after: String): [ChannelPayload!]!

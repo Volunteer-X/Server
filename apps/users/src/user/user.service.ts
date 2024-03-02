@@ -60,7 +60,7 @@ export class UserService {
           return new ForbiddenError();
         }
       }
-      this.logger.error(`Error creating user: ${error.message}`);
+      // this.logger.error(`Error creating user: ${error.message}`);
       return new InternalServerError();
     }
 

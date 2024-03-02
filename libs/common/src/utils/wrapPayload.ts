@@ -1,3 +1,4 @@
+import { Connection, ConnectionBuilder, CursorParams } from '../pagination';
 import {
   InternalServerError,
   NotFoundError,
@@ -30,29 +31,28 @@ export class WrappedPayload {
         if (!filteredItems.length) return new NotFoundError('Not found');
 
         return filteredItems;
+
       default:
         return new UnknownError('Unknown error');
     }
   }
 
-  static wrapWithPagination<R>(T: any): Payload<R> {
-    const wrapped = this.wrap<R>(T);
+  static wrapWithPagination<R extends CursorParams>(
+    result: R[],
+    count: Payload<number>,
+    first: number,
+  ): Payload<number> | Connection<R> {
+    if (typeof count !== 'number') {
+      return WrappedPayload.wrap<number>(count);
+    }
 
-    if (!Array.isArray(wrapped)) return wrapped;
+    const connection = new ConnectionBuilder<R>()
+      .setEdges(result)
+      .setTotalCount(count)
+      .setHasNextPage(count, first)
+      .setEndCursor(result)
+      .build();
 
-    // Pagination
-
-    // return {
-    //   edges: pings.map((ping) => ({
-    //     node: ping,
-    //     cursor: encodeToBase64(ping.id),
-    //   })),
-    //   owner: { __typename: 'User', id: userID },
-    //   pageInfo: {
-    //     hasNextPage: pings.length === first,
-    //     endCursor:
-    //       pings.length > 0 ? encodeToBase64(pings[pings.length - 1].id) : null,
-    //   },
-    // };
+    return connection;
   }
 }

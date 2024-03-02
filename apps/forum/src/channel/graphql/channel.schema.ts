@@ -24,7 +24,7 @@ export interface Connection {
 
 export class Channel {
     id: ObjectID;
-    activityID: ObjectID;
+    activityId: ObjectID;
     ping: Ping;
     title: string;
     admin: User;
@@ -44,7 +44,7 @@ export class ChannelConnection implements Connection {
 export abstract class IQuery {
     abstract channel(id: ObjectID): Nullable<ChannelPayload> | Promise<Nullable<ChannelPayload>>;
 
-    abstract adminChannels(admin: ObjectID, first: number, after?: Nullable<string>): ChannelPayload[] | Promise<ChannelPayload[]>;
+    abstract adminChannels(admin: ObjectID, first: number, after?: Nullable<string>): Nullable<ChannelPayload> | Promise<Nullable<ChannelPayload>>;
 
     abstract userChannels(user: ObjectID, first: number, after?: Nullable<string>): ChannelPayload[] | Promise<ChannelPayload[]>;
 }

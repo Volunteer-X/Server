@@ -35,4 +35,8 @@ export class Channel {
       messages: messages && messages.map(Message.ToEntityFromPrisma),
     };
   }
+
+  static ToEntityFromPrismaArray(channels: ChannelPayload[]): Channel[] {
+    return channels.map(Channel.ToEntityFromPrisma);
+  }
 }

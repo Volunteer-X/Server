@@ -1,4 +1,5 @@
 import {
+  Connection,
   InternalServerError,
   NotFoundError,
   UnauthorizedError,
@@ -19,6 +20,10 @@ export class PayloadResolver {
         return 'InternalServerError';
       case Channel:
         return 'Channel';
+      case Connection<Channel>:
+        console.log('Connection<Channel>');
+
+        return 'ChannelConnection';
       default:
         return 'UnknownError';
     }

@@ -1,7 +1,7 @@
 import { EdgeInterface } from './edge.interface';
-import { PageInfoInterface } from './pageInfo.interface';
+import { PageInfo } from './pageInfo';
 
 export interface ConnectionInterface<T> {
   edges: EdgeInterface<T>[];
-  pageInfo: PageInfoInterface;
+  pageInfo: PageInfo;
 }
