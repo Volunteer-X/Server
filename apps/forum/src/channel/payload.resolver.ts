@@ -10,7 +10,7 @@ import { Channel } from './entity/channel.entity';
 @Resolver('ChannelPayload')
 export class PayloadResolver {
   @ResolveField()
-  __resolveType(obj: any, context, info) {
+  __resolveType(obj: any) {
     switch (obj.constructor) {
       case UnauthorizedError:
         return 'UnauthorizedError';
@@ -21,8 +21,6 @@ export class PayloadResolver {
       case Channel:
         return 'Channel';
       case Connection<Channel>:
-        console.log('Connection<Channel>');
-
         return 'ChannelConnection';
       default:
         return 'UnknownError';

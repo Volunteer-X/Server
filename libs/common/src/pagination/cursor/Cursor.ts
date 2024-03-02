@@ -13,8 +13,11 @@ export class Cursor<TParams extends CursorParams> implements ICursor {
     return Buffer.from(this.toString()).toString('base64');
   }
 
-  public static decode(encodedString: string): CursorParams {
-    return JSON.parse(Buffer.from(encodedString, 'base64').toString());
+  public static decode(encodedString?: string): CursorParams | undefined {
+    return (
+      encodedString &&
+      JSON.parse(Buffer.from(encodedString, 'base64').toString())
+    );
   }
 
   public static fromString<TParams extends CursorParams = CursorParams>(

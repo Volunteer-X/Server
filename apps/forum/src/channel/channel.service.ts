@@ -123,35 +123,68 @@ export class ChannelService {
     }
   }
   async getChannelsByAdmin(admin: string, first: number, after?: CursorParams) {
-    console.log('admin', admin);
-
-    const cursor = after && after;
+    const cursor = after ? after : undefined;
 
     try {
-      const result = await this.channelRepository.findMany({
-        where: {
-          admin,
-        },
-        include: {
-          messages: {
-            orderBy: {
-              id: 'desc',
-            },
-            take: 1,
+      const [result, totalCount] = await this.repository.$transaction([
+        this.repository.channel.findMany({
+          where: {
+            admin,
           },
-        },
-        skip: 1,
-        take: first,
-        cursor,
-        orderBy: {
-          id: 'desc',
-        },
-      });
+          include: {
+            messages: {
+              orderBy: {
+                id: 'desc',
+              },
+              take: 1,
+            },
+          },
+          skip: cursor ? 1 : 0,
+          take: first,
+          cursor,
+          orderBy: {
+            id: 'asc',
+          },
+        }),
+        this.repository.channel.count({
+          where: {
+            admin,
+          },
+        }),
+        this.repository.channel.count({
+          where: {
+            admin,
+          },
+        }),
+      ]);
 
-      if (!result.length)
+      // const result = await this.channelRepository.findMany({
+      //   where: {
+      //     admin,
+      //   },
+      //   include: {
+      //     messages: {
+      //       orderBy: {
+      //         id: 'desc',
+      //       },
+      //       take: 1,
+      //     },
+      //   },
+      //   skip: cursor ? 1 : 0,
+      //   take: first,
+      //   cursor,
+      //   orderBy: {
+      //     id: 'asc',
+      //   },
+      // });
+
+      if (!result.length || !totalCount)
         return new NotFoundError('No Channel under this user id found');
 
-      return Channel.ToEntityFromPrismaArray(result);
+      return [Channel.ToEntityFromPrismaArray(result), totalCount] as [
+        Channel[],
+        number,
+      ];
     } catch (error) {
       return new InternalServerError('Failed to get channels');
     }

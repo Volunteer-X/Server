@@ -5,11 +5,15 @@ import { Edge } from './edge';
 import { PageInfo } from './pageInfo';
 
 interface Builder<T> {
-  setHasNextPage(length: number, first: number): this;
+  setHasNextPage(hasNextPage: boolean): this;
   setEndCursor(node: Array<T>): this;
   setEdges(edges: T[]): this;
 }
 
+/**
+ * Represents a builder for creating a connection object.
+ * @template T - The type of the cursor parameters.
+ */
 export class ConnectionBuilder<T extends CursorParams> implements Builder<T> {
   private connection: Connection<T>;
   private pageInfo: PageInfo;
@@ -20,6 +24,7 @@ export class ConnectionBuilder<T extends CursorParams> implements Builder<T> {
     this.pageInfo = new PageInfo();
     this.edges = new Array<Edge<T>>();
   }
+
   /**
    * Sets the edges of the connection.
    *
@@ -47,12 +52,23 @@ export class ConnectionBuilder<T extends CursorParams> implements Builder<T> {
 
   /**
    * Sets the value of the "hasNextPage" flag in the `pageInfo` object based on the length and first parameters.
-   * @param totalCount - The total count of the data.
+   * @param edgeSize - The length of the edges.
    * @param perPage - The number of items per page.
    * @returns The current instance of the `ConnectionBuilder` class.
    */
-  setHasNextPage(totalCount: number, perPage: number): this {
-    this.pageInfo.setHasNextPage(totalCount > perPage);
+  calculateHasNextPage(edgeSize: number, perPage: number): this {
+    this.pageInfo.setHasNextPage(edgeSize > perPage);
+    return this;
+  }
+
+  /**
+   * Sets the value of `hasNextPage` in the `pageInfo` object.
+   *
+   * @param hasNextPage - A boolean value indicating whether there is a next page.
+   * @returns The current instance of the `ConnectionBuilder` class.
+   */
+  setHasNextPage(hasNextPage: boolean): this {
+    this.pageInfo.setHasNextPage(hasNextPage);
     return this;
   }
 

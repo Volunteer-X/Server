@@ -19,7 +19,7 @@ export class ChannelResolver {
   async getChannelsByAdmin(
     @Args('admin') admin: string,
     @Args('first') first: number,
-    @Args('after') after: string | undefined,
+    @Args('after') after: string,
   ) {
     this.logger.log(
       `adminChannels: admin=${typeof admin}, first=${first}, after=${after}`,
@@ -27,22 +27,17 @@ export class ChannelResolver {
 
     const result = await this.channelService.getChannelsByAdmin(
       admin,
-      first,
+      first + 1, // Fetch one more than the requested amount to determine if there are more items to fetch.
       Cursor.decode(after),
     );
 
     if (!Array.isArray(result)) {
-      const wrapperResult = WrappedPayload.wrap<typeof result>(result);
-      return wrapperResult;
+      return WrappedPayload.wrap<typeof result>(result);
     }
 
-    const count = await this.channelService.getTotalCount(admin);
+    const [channels, count] = result;
 
-    console.log('count', count);
-
-    return new NotFoundError('Not found');
-
-    // return WrappedPayload.wrapWithPagination<Channel>(result, count, first);
+    return WrappedPayload.wrapWithPagination<Channel>(channels, count, first);
   }
 
   @Query('userChannels')
