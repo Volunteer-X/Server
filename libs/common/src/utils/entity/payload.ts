@@ -6,6 +6,7 @@ import {
 } from '../error';
 
 export type Payload<T> =
+  | T[]
   | T
   | UnauthorizedError
   | NotFoundError

@@ -16,6 +16,7 @@ import { MessageModule } from '../message/message.module';
 import { MessageService } from '../message/message.service';
 import { Module } from '@nestjs/common';
 import { ObjectIDResolver } from 'graphql-scalars';
+import { PayloadResolver } from './payload.resolver';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { ObjectIDResolver } from 'graphql-scalars';
   controllers: [ChannelController],
   providers: [
     ChannelResolver,
+    PayloadResolver,
     ChannelService,
     ChannelGateway,
     MessageService,

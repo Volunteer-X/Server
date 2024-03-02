@@ -23,7 +23,7 @@ export class UserResolver {
   getUser(@CurrentUser() user: Payload<User>) {
     console.log('user', WrappedPayload.wrap(user));
 
-    return WrappedPayload.wrap(user);
+    return WrappedPayload.wrap<User>(user);
   }
 
   @Query('isUsernameAvailable')

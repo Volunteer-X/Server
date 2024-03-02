@@ -5,6 +5,7 @@ import { ChannelService } from './channel.service';
 import { WrappedPayload, decodeFromBase64 } from '@app/common';
 import { first } from 'rxjs';
 import { after } from 'node:test';
+import { Channel } from './entity/channel.entity';
 
 @Resolver('Forum')
 export class ChannelResolver {
@@ -29,6 +30,8 @@ export class ChannelResolver {
       decodeFromBase64(after),
     );
 
+    const wrapperResult = WrappedPayload.wrap<Array<Channel>>(result);
+
     return {
       edges: pings.map((ping) => ({
         node: ping,
@@ -41,8 +44,6 @@ export class ChannelResolver {
           pings.length > 0 ? encodeToBase64(pings[pings.length - 1].id) : null,
       },
     };
-
-    return WrappedPayload.wrap(result);
   }
 
   @Query('userChannels')
