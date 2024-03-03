@@ -8,7 +8,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { GraphQLObjectID } from 'graphql-scalars'
+import { GraphQLObjectID, GraphQLPositiveInt } from 'graphql-scalars'
 
 export interface BaseError {
     message: string;
@@ -44,9 +44,9 @@ export class ChannelConnection implements Connection {
 export abstract class IQuery {
     abstract channel(id: ObjectID): Nullable<ChannelPayload> | Promise<Nullable<ChannelPayload>>;
 
-    abstract adminChannels(admin: ObjectID, first: number, after?: Nullable<string>): Nullable<ChannelPayload> | Promise<Nullable<ChannelPayload>>;
+    abstract adminChannels(admin: ObjectID, first: PositiveInt, after?: Nullable<string>): Nullable<ChannelPayload> | Promise<Nullable<ChannelPayload>>;
 
-    abstract userChannels(user: ObjectID, first: number, after?: Nullable<string>): ChannelPayload[] | Promise<ChannelPayload[]>;
+    abstract userChannels(user: ObjectID, first: PositiveInt, after?: Nullable<string>): ChannelPayload[] | Promise<ChannelPayload[]>;
 }
 
 export class InvalidInputError implements BaseError {
@@ -88,5 +88,6 @@ export class User {
 }
 
 export type ObjectID = typeof GraphQLObjectID;
+export type PositiveInt = typeof GraphQLPositiveInt;
 export type ChannelPayload = Channel | ChannelConnection | NotFoundError | UnknownError | UnauthorizedError | InternalServerError;
 type Nullable<T> = T | null;

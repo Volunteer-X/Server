@@ -7,10 +7,10 @@ export function validateSchema<TParams = CursorParams>(
 ): TParams {
   const { error, value } = schema.validate(param);
 
-  if (error !== undefined) {
+  if (error) {
     console.log('error', error);
 
-    throw new Error(error.message);
+    throw new Error('Invalid cursor');
   }
 
   return value;

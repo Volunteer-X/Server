@@ -3,6 +3,7 @@ import {
   ApolloFederationDriverConfig,
 } from '@nestjs/apollo';
 import { GraphQLError, GraphQLFormattedError } from 'graphql';
+import { ObjectIDResolver, PositiveIntResolver } from 'graphql-scalars';
 
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { AuthModule } from '@app/auth';
@@ -15,7 +16,6 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { MessageModule } from '../message/message.module';
 import { MessageService } from '../message/message.service';
 import { Module } from '@nestjs/common';
-import { ObjectIDResolver } from 'graphql-scalars';
 import { PayloadResolver } from './payload.resolver';
 
 @Module({
@@ -28,6 +28,7 @@ import { PayloadResolver } from './payload.resolver';
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       resolvers: {
         ObjectID: ObjectIDResolver,
+        PositiveInt: PositiveIntResolver,
       },
       formatError: (error: GraphQLError) => {
         console.log(error);

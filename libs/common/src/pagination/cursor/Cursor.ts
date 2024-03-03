@@ -1,6 +1,8 @@
+import * as Joi from 'joi';
+
 import { CursorParams, ICursor } from './Cursor.interface';
 
-import Joi from 'joi';
+import { InvalidInputError } from '@app/common';
 import { validateSchema } from './validateSchema';
 
 export class Cursor<TParams extends CursorParams> implements ICursor {
@@ -13,22 +15,22 @@ export class Cursor<TParams extends CursorParams> implements ICursor {
     return Buffer.from(this.toString()).toString('base64');
   }
 
-  public static decode(encodedString?: string): CursorParams | undefined {
-    return (
-      encodedString &&
-      JSON.parse(Buffer.from(encodedString, 'base64').toString())
-    );
+  static decode(encodedString?: string): CursorParams {
+    return JSON.parse(Buffer.from(encodedString, 'base64').toString());
   }
 
   public static fromString<TParams extends CursorParams = CursorParams>(
     encodedString: string,
-  ): Cursor<TParams> {
+  ): Cursor<TParams> | null {
+    if (!encodedString || encodedString === null) return null;
+
     const params = Cursor.decode(encodedString);
 
-    const schema = Joi.object<TParams>({
-      id: Joi.string().empty('').required(),
-    }).unknown(true);
+    // const schema = Joi.object<TParams>({
+    //   id: Joi.string().empty('').required(),
+    // }).unknown(true);
 
-    return new Cursor<TParams>(validateSchema(params, schema) as TParams);
+    // const validatedParams = validateSchema(params, schema);
+    return new Cursor<TParams>(params as TParams);
   }
 }

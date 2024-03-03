@@ -1,5 +1,6 @@
 import { CreateChannelDto, UpdateChannelDto } from './dto';
 import {
+  Cursor,
   Failure,
   InternalServerError,
   NotFoundError,
@@ -122,8 +123,12 @@ export class ChannelService {
       return new InternalServerError('Failed to get channels');
     }
   }
-  async getChannelsByAdmin(admin: string, first: number, after?: CursorParams) {
-    const cursor = after ? after : undefined;
+  async getChannelsByAdmin(
+    admin: string,
+    first: number,
+    after?: Cursor<CursorParams>,
+  ) {
+    const cursor = after ? after.parameters : undefined;
 
     try {
       const [result, totalCount] = await this.repository.$transaction([

@@ -8,10 +8,10 @@ import {
 import { Test, TestingModule } from '@nestjs/testing';
 import { channelStub, prismaChannelStub } from './__mocks__/channel.stub';
 
-import { Channel } from './entity/channel.entity';
 import { ChannelService } from './channel.service';
 import { CreateChannelDto } from './dto/createChannel.dto';
 import { ForumRepository } from '../service/forum.service';
+import e from 'express';
 
 describe(ChannelService.name, () => {
   let service: ChannelService;
@@ -80,7 +80,7 @@ describe(ChannelService.name, () => {
     });
   });
 
-  describe('when getting a channel  by id', () => {
+  describe('when getting a channel by id', () => {
     const channelId = '61e4a1f5a6f2b941d59f8c8a';
 
     it('then it should return the channel', async () => {
@@ -154,24 +154,25 @@ describe(ChannelService.name, () => {
   describe('when getting a channel by admin', () => {
     const admin = channelStub().admin;
     const first = 1;
-    const after = '61e4a1f5a6f2b941d59f8c8a'; // channelId
+    const after = { id: '61e4a1f5a6f2b941d59f8c8a' }; // channelId
 
     it('should return the channels even if after is undefined', async () => {
-      client.findMany.mockResolvedValue([prismaChannelStub()]);
+      repository.$transaction.mockResolvedValue([[prismaChannelStub()], 1]);
+
       const result = await service.getChannelsByAdmin(admin, first);
-      expect(result).toContainEqual(channelStub());
-      expect(result).toHaveLength(1);
+      expect(result[0]).toContainEqual(channelStub());
+      expect(result[1]).toEqual(1);
     });
 
     it('Should return an array of channels when admin has channels', async () => {
-      client.findMany.mockResolvedValue([prismaChannelStub()]);
+      repository.$transaction.mockResolvedValue([[prismaChannelStub()], 1]);
       const result = await service.getChannelsByAdmin(admin, first, after);
-      expect(result).toContainEqual(channelStub());
-      expect(result).toHaveLength(1);
+      expect(result[0]).toContainEqual(channelStub());
+      expect(result[1]).toEqual(1);
     });
 
     it('Should return a NotFoundError if admin has no channels', async () => {
-      client.findMany.mockResolvedValue([]);
+      repository.$transaction.mockResolvedValue([[], 0]);
       const result = await service.getChannelsByAdmin(admin, first, after);
       expect(result).toBeInstanceOf(NotFoundError);
       expect(result).toEqual(
@@ -180,10 +181,45 @@ describe(ChannelService.name, () => {
     });
 
     it('Should return an InternalServerError if findMany() throws an error', async () => {
-      client.findMany.mockRejectedValue(new Error('Failed to get channels'));
+      repository.$transaction.mockRejectedValue(
+        new Error('Failed to get channels'),
+      );
       const result = await service.getChannelsByAdmin(admin, first, after);
       expect(result).toBeInstanceOf(InternalServerError);
       expect(result).toEqual(new InternalServerError('Failed to get channels'));
+    });
+
+    it("should return all channels and the correct total count when 'first' parameter is greater than the total number of channels", async () => {
+      repository.$transaction.mockResolvedValue([[prismaChannelStub()], 1]);
+      const result = await service.getChannelsByAdmin(admin, 10);
+      expect(result[0]).toContainEqual(channelStub());
+      expect(result[1]).toEqual(1);
+      expect(repository.$transaction).toHaveBeenCalledWith([
+        client.findMany({
+          where: {
+            admin,
+          },
+          include: {
+            messages: {
+              orderBy: {
+                id: 'desc',
+              },
+              take: 1,
+            },
+          },
+          skip: after ? 1 : 0,
+          take: first,
+          cursor: after,
+          orderBy: {
+            id: 'asc',
+          },
+        }),
+        client.count({
+          where: {
+            admin,
+          },
+        }),
+      ]);
     });
   });
 });

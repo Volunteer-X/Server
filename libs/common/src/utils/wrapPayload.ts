@@ -1,6 +1,7 @@
 import { Connection, ConnectionBuilder, CursorParams } from '../pagination';
 import {
   InternalServerError,
+  InvalidInputError,
   NotFoundError,
   UnauthorizedError,
   UnknownError,
@@ -31,6 +32,8 @@ export class WrappedPayload {
         return new NotFoundError(T.message);
       case InternalServerError:
         return new InternalServerError(T.message);
+      case InvalidInputError:
+        return new InvalidInputError(T.message);
       case Object:
         return T;
       case Array:

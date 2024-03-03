@@ -2,6 +2,7 @@
 #import "../../../../../libs/common/src/graphql/pagination.gql"
 
 scalar ObjectID
+scalar PositiveInt
 
 "Represents a channel in the forum."
 type Channel @key(fields: "id") {
@@ -32,11 +33,13 @@ extend type User @key(fields: "id") {
   id: ObjectID! @external
 }
 
+"Represents an edge in a connection."
 type ChannelEdge implements Edge {
   cursor: String!
   node: Channel!
 }
 
+"Represents a connection to a list of channels."
 type ChannelConnection implements Connection {
   pageInfo: PageInfo!
   edges: [ChannelEdge!]!
@@ -56,8 +59,22 @@ type Query {
   channel(id: ObjectID!): ChannelPayload
 
   "Retrieves the channels associated with the specified admin."
-  adminChannels(admin: ObjectID!, first: Int!, after: String): ChannelPayload
+  adminChannels(
+    "The unique identifier for the admin."
+    admin: ObjectID!
+    "The number of channels to retrieve."
+    first: PositiveInt!
+    "A cursor for use in pagination."
+    after: String
+  ): ChannelPayload
 
   "Retrieves the channels associated with the specified user."
-  userChannels(user: ObjectID!, first: Int!, after: String): [ChannelPayload!]!
+  userChannels(
+    "The unique identifier for the user."
+    user: ObjectID!
+    "The number of channels to retrieve."
+    first: PositiveInt!
+    "A cursor for use in pagination."
+    after: String
+  ): [ChannelPayload!]!
 }

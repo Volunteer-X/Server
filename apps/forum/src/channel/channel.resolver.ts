@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { ChannelService } from './channel.service';
-import { Cursor, WrappedPayload } from '@app/common';
+import { Cursor, InvalidInputError, WrappedPayload } from '@app/common';
 import { Channel } from './entity/channel.entity';
 
 @Resolver('Forum')
@@ -21,14 +21,12 @@ export class ChannelResolver {
     @Args('first') first: number,
     @Args('after') after: string,
   ) {
-    this.logger.log(
-      `adminChannels: admin=${typeof admin}, first=${first}, after=${after}`,
-    );
+    const decodedCursor = Cursor.fromString(after);
 
     const result = await this.channelService.getChannelsByAdmin(
       admin,
       first + 1, // Fetch one more than the requested amount to determine if there are more items to fetch.
-      Cursor.decode(after),
+      decodedCursor,
     );
 
     if (!Array.isArray(result)) {

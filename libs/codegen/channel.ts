@@ -13,7 +13,9 @@ definitionFactory.generate({
   defaultScalarType: 'unknown',
   customScalarTypeMapping: {
     ObjectID: 'typeof GraphQLObjectID',
+    PositiveInt: 'typeof GraphQLPositiveInt',
   },
   watch: true,
-  additionalHeader: "import { GraphQLObjectID } from 'graphql-scalars'",
+  additionalHeader:
+    "import { GraphQLObjectID, GraphQLPositiveInt } from 'graphql-scalars'",
 });
