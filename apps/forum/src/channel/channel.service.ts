@@ -82,47 +82,88 @@ export class ChannelService {
     }
   }
 
-  async getChannelsByUser(user: string, first: number, after?: string) {
-    const cursor = after ? { id: after } : undefined;
+  /**
+   * Retrieves channels based on the specified user.
+   * @param user - The user identifier.
+   * @param first - The maximum number of channels to retrieve.
+   * @param after - Optional. The cursor to start retrieving channels from.
+   * @returns An array of channels that match the specified criteria.
+   * @throws {NotFoundError} If no channels are found for the specified user.
+   * @throws {InternalServerError} If an error occurs while retrieving the channels.
+   */
+  async getChannelsByUser(
+    user: string,
+    first: number,
+    after?: Cursor<CursorParams>,
+  ) {
+    const cursor = after ? after.parameters : undefined;
 
     try {
-      const result = await this.channelRepository.findMany({
-        where: {
-          AND: {
-            participants: {
-              has: user,
-            },
+      const [result, totalCount] = await this.repository.$transaction([
+        this.repository.channel.findMany({
+          where: {
             AND: {
               participants: {
-                isEmpty: false,
+                has: user,
+              },
+              AND: {
+                participants: {
+                  isEmpty: false,
+                },
               },
             },
           },
-        },
-        include: {
-          messages: {
-            orderBy: {
-              id: 'desc',
+          include: {
+            messages: {
+              orderBy: {
+                id: 'desc',
+              },
+              take: 1,
             },
-            take: 1,
           },
-        },
-        skip: 1,
-        take: first,
-        cursor,
-        orderBy: {
-          id: 'desc',
-        },
-      });
+          skip: 1,
+          take: first,
+          cursor,
+          orderBy: {
+            id: 'desc',
+          },
+        }),
+        this.repository.channel.count({
+          where: {
+            AND: {
+              participants: {
+                has: user,
+              },
+              AND: {
+                participants: {
+                  isEmpty: false,
+                },
+              },
+            },
+          },
+        }),
+      ]);
 
-      if (!result.length)
+      if (!result.length || !totalCount)
         return new NotFoundError('No Channel under this user id found');
 
-      return result.map(Channel.ToEntityFromPrisma);
+      return [Channel.ToEntityFromPrismaArray(result), totalCount] as [
+        Channel[],
+        number,
+      ];
     } catch (error) {
       return new InternalServerError('Failed to get channels');
     }
   }
+  /**
+   * Retrieves channels based on the provided admin ID.
+   * @param admin - The admin ID.
+   * @param first - The number of channels to retrieve.
+   * @param after - Optional cursor for pagination.
+   * @returns A tuple containing an array of channels and the total count.
+   * @throws {NotFoundError} if no channels are found.
+   * @throws {InternalServerError} if there is an error retrieving the channels.
+   */
   async getChannelsByAdmin(
     admin: string,
     first: number,

@@ -1,7 +1,13 @@
-export class PageInfo {
-  private hasNextPage: boolean;
-  private endCursor: string | null;
-  private totalCount: number;
+export interface IPageInfo {
+  hasNextPage: boolean;
+  endCursor: string | null;
+  totalCount: number;
+}
+
+export class PageInfo implements IPageInfo {
+  hasNextPage: boolean;
+  endCursor: string | null;
+  totalCount: number;
   constructor() {}
 
   setTotalCount(totalCount: number): void {

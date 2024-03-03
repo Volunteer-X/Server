@@ -1,17 +1,17 @@
-import { DeepMockProxy, mockDeep, mockReset } from 'jest-mock-extended';
 import {
+  Cursor,
   Failure,
   InternalServerError,
   NotFoundError,
   Success,
 } from '@app/common';
+import { DeepMockProxy, mockDeep, mockReset } from 'jest-mock-extended';
 import { Test, TestingModule } from '@nestjs/testing';
 import { channelStub, prismaChannelStub } from './__mocks__/channel.stub';
 
 import { ChannelService } from './channel.service';
 import { CreateChannelDto } from './dto/createChannel.dto';
 import { ForumRepository } from '../service/forum.service';
-import e from 'express';
 
 describe(ChannelService.name, () => {
   let service: ChannelService;
@@ -154,7 +154,7 @@ describe(ChannelService.name, () => {
   describe('when getting a channel by admin', () => {
     const admin = channelStub().admin;
     const first = 1;
-    const after = { id: '61e4a1f5a6f2b941d59f8c8a' }; // channelId
+    const after = new Cursor({ id: '61e4a1f5a6f2b941d59f8c8a' }); // channelId
 
     it('should return the channels even if after is undefined', async () => {
       repository.$transaction.mockResolvedValue([[prismaChannelStub()], 1]);

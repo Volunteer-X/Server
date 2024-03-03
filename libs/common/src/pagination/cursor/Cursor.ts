@@ -1,9 +1,4 @@
-import * as Joi from 'joi';
-
 import { CursorParams, ICursor } from './Cursor.interface';
-
-import { InvalidInputError } from '@app/common';
-import { validateSchema } from './validateSchema';
 
 export class Cursor<TParams extends CursorParams> implements ICursor {
   constructor(public parameters: TParams) {}

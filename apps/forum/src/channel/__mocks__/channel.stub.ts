@@ -1,3 +1,5 @@
+import { Connection, ConnectionBuilder } from '@app/common';
+
 import { Channel } from '../entity/channel.entity';
 
 export const channelStub = (): Channel => {
@@ -38,4 +40,13 @@ export const prismaChannelStub = (): any => {
       },
     ],
   };
+};
+
+export const paginatedChannelStub = (): Connection<Channel> => {
+  return new ConnectionBuilder<Channel>()
+    .setEdges([channelStub()])
+    .setEndCursor([channelStub()])
+    .setHasNextPage(false)
+    .setTotalCount([channelStub()].length)
+    .build();
 };

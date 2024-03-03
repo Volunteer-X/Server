@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { ChannelService } from './channel.service';
-import { Cursor, InvalidInputError, WrappedPayload } from '@app/common';
+import { Cursor, WrappedPayload } from '@app/common';
 import { Channel } from './entity/channel.entity';
 
 @Resolver('Forum')
@@ -42,13 +42,22 @@ export class ChannelResolver {
   async getChannelsByUser(
     @Args('user') user: string,
     @Args('first') first: number,
-    @Args('after') after: string | undefined,
+    @Args('after') after: string,
   ) {
+    const decodedCursor = Cursor.fromString(after);
+
     const result = await this.channelService.getChannelsByUser(
       user,
-      first,
-      after,
+      first + 1,
+      decodedCursor,
     );
-    return WrappedPayload.wrap(result);
+
+    if (!Array.isArray(result)) {
+      return WrappedPayload.wrap<typeof result>(result);
+    }
+
+    const [channels, count] = result;
+
+    return WrappedPayload.wrapWithPagination<Channel>(channels, count, first);
   }
 }

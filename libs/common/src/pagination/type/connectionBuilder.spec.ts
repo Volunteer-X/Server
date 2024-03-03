@@ -10,7 +10,7 @@ describe('ConnectionBuilder', () => {
     connectionBuilder.setEndCursor(input);
     const connection = connectionBuilder.build();
 
-    expect(connection.pageInfo.getEndCursor()).toBe(cursor.encode());
+    expect(connection.pageInfo.endCursor).toBe(cursor.encode());
   });
 
   it('should return null when the input array length is 0', () => {
@@ -18,7 +18,7 @@ describe('ConnectionBuilder', () => {
     const input = [];
     connectionBuilder.setEndCursor(input);
     const connection = connectionBuilder.build();
-    expect(connection.pageInfo.getEndCursor()).toBe(null);
+    expect(connection.pageInfo.endCursor).toBe(null);
   });
 
   it('should set the edges on the connection', () => {
@@ -62,9 +62,9 @@ describe('ConnectionBuilder', () => {
       .build();
 
     expect(connection.pageInfo).toBeInstanceOf(PageInfo);
-    expect(connection.pageInfo.getEndCursor()).toBe(pageInfo.endCursor);
-    expect(connection.pageInfo.getHasNextPage()).toBe(pageInfo.hasNextPage);
-    expect(connection.pageInfo.getTotalCount()).toBe(pageInfo.totalCount);
+    expect(connection.pageInfo.endCursor).toBe(pageInfo.endCursor);
+    expect(connection.pageInfo.hasNextPage).toBe(pageInfo.hasNextPage);
+    expect(connection.pageInfo.totalCount).toBe(pageInfo.totalCount);
     expect(connection.edges).toStrictEqual(edges);
   });
 });
