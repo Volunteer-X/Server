@@ -31,11 +31,11 @@ export class ConnectionBuilder<T extends CursorParams> implements Builder<T> {
    * @param edges - An array of edges to set.
    * @returns The instance of the connection builder.
    */
-  setEdges(edges: Array<T>): this {
-    edges.map((edge) => {
-      const cursor = new Cursor({ id: edge.id });
-      this.edges.push({ node: edge, cursor: cursor.encode() });
-    });
+  setEdges(edges: T[]): this {
+    this.edges = edges.map((edge) => ({
+      node: edge,
+      cursor: new Cursor({ id: edge.id }).encode(),
+    }));
     return this;
   }
 

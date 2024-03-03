@@ -35,8 +35,7 @@ describe('ConnectionBuilder', () => {
     }
   });
 
-  it('should build the connection with pageInfo and edges', () => {
-    const connectionBuilder = new ConnectionBuilder();
+  it('should be able to set all properties and build the connection object', () => {
     const pageInfo = {
       endCursor: 'eyJpZCI6Ijc4OSJ9',
       hasNextPage: true,
@@ -55,9 +54,9 @@ describe('ConnectionBuilder', () => {
       { node: { id: '789', name: 'test2' }, cursor: 'eyJpZCI6Ijc4OSJ9' },
     ];
 
-    const connection = connectionBuilder
+    const connection = new ConnectionBuilder()
       .setEndCursor(input)
-      .setHasNextPage(pageInfo.totalCount, 2)
+      .setHasNextPage(pageInfo.hasNextPage)
       .setTotalCount(pageInfo.totalCount)
       .setEdges(input)
       .build();

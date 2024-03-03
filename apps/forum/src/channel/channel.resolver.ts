@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { ChannelService } from './channel.service';
-import { Cursor, NotFoundError, WrappedPayload } from '@app/common';
+import { Cursor, WrappedPayload } from '@app/common';
 import { Channel } from './entity/channel.entity';
 
 @Resolver('Forum')

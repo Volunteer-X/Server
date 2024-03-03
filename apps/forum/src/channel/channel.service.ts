@@ -151,32 +151,7 @@ export class ChannelService {
             admin,
           },
         }),
-        this.repository.channel.count({
-          where: {
-            admin,
-          },
-        }),
       ]);
-
-      // const result = await this.channelRepository.findMany({
-      //   where: {
-      //     admin,
-      //   },
-      //   include: {
-      //     messages: {
-      //       orderBy: {
-      //         id: 'desc',
-      //       },
-      //       take: 1,
-      //     },
-      //   },
-      //   skip: cursor ? 1 : 0,
-      //   take: first,
-      //   cursor,
-      //   orderBy: {
-      //     id: 'asc',
-      //   },
-      // });
 
       if (!result.length || !totalCount)
         return new NotFoundError('No Channel under this user id found');
@@ -187,20 +162,6 @@ export class ChannelService {
       ];
     } catch (error) {
       return new InternalServerError('Failed to get channels');
-    }
-  }
-
-  async getTotalCount(admin: string) {
-    try {
-      const result = await this.channelRepository.count({
-        where: {
-          admin,
-        },
-      });
-
-      return result;
-    } catch (error) {
-      return new InternalServerError('Failed to get total count');
     }
   }
 }
