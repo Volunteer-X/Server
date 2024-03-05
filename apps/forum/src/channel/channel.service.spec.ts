@@ -62,7 +62,7 @@ describe(ChannelService.name, () => {
           createdAt: new Date('2022-01-16T22:53:41.000Z'),
           participants: undefined,
           ping: {
-            __typename: 'Forum',
+            __typename: 'Ping',
             id: '58a1d20c201f52270b89b2c9',
           },
         }),
@@ -117,38 +117,36 @@ describe(ChannelService.name, () => {
   });
 
   describe('when getting a channel by user', () => {
-    const author = channelStub().admin;
+    const user = channelStub().participants[0].id;
     const first = 1;
-    const after = '61e4a1f5a6f2b941d59f8c8a';
+    const after = new Cursor({ id: '61e4a1f5a6f2b941d59f8c8a' });
 
-    it('Should return the channels', async () => {
-      client.findMany.mockResolvedValue([prismaChannelStub()]);
-      const result = await service.getChannelsByUser(author, first, after);
-      expect(result).toContainEqual(channelStub());
+    it('should return an array of channels when user has channels', async () => {
+      repository.$transaction.mockResolvedValue([[prismaChannelStub()], 1]);
+      const result = await service.getChannelsByUser(user, first, after);
+      expect(result[0][0]).toStrictEqual(channelStub());
+      expect(result[1]).toEqual(1);
     });
 
-    it('Should return a NotFoundError if user has no channels', async () => {
-      client.findMany.mockResolvedValue([]);
-      const result = await service.getChannelsByUser(author, first, after);
+    it('should return a NotFoundError if user has no channels', async () => {
+      repository.$transaction.mockResolvedValue([[], 0]);
+      const result = await service.getChannelsByUser(user, first, after);
       expect(result).toBeInstanceOf(NotFoundError);
       expect(result).toEqual(
         new NotFoundError('No Channel under this user id found'),
       );
     });
 
-    it('Should return an InternalServerError if findMany() throws an error', async () => {
-      client.findMany.mockRejectedValue(new Error('Failed to get channels'));
-      const result = await service.getChannelsByUser(author, first, after);
+    it('should return an InternalServerError if findMany() throws an error', async () => {
+      repository.$transaction.mockRejectedValue(
+        new InternalServerError('Failed to get channels'),
+      );
+      const result = await service.getChannelsByUser(user, first, after);
       expect(result).toBeInstanceOf(InternalServerError);
       expect(result).toEqual(new InternalServerError('Failed to get channels'));
     });
 
-    it('should return an array of channels when user has channels', async () => {
-      client.findMany.mockResolvedValue([prismaChannelStub()]);
-      const result = await service.getChannelsByUser(author, first, after);
-      expect(result).toContainEqual(channelStub());
-      expect(result).toHaveLength(1);
-    });
+    it('should handle gracefully if the cursor is not a valid Cursor object', async () => {});
   });
 
   describe('when getting a channel by admin', () => {
@@ -199,7 +197,11 @@ describe(ChannelService.name, () => {
           where: {
             admin,
           },
-          include: {
+          select: {
+            id: true,
+            title: true,
+            admin: true,
+            activityId: true,
             messages: {
               orderBy: {
                 id: 'desc',
@@ -207,9 +209,9 @@ describe(ChannelService.name, () => {
               take: 1,
             },
           },
-          skip: after ? 1 : 0,
+          skip: after.parameters ? 1 : 0,
           take: first,
-          cursor: after,
+          cursor: after.parameters,
           orderBy: {
             id: 'asc',
           },

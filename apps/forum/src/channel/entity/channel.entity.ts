@@ -2,9 +2,18 @@ import { Message } from '../../message/entity/message.entity';
 import { ObjectId } from 'bson';
 import { Prisma } from '@prisma/forum';
 
-type ChannelPayload = Prisma.ChannelGetPayload<true> & {
-  messages?: Prisma.MessageGetPayload<true>[];
-};
+type ChannelPayload = Prisma.ChannelGetPayload<{
+  select: {
+    id: true;
+    title: true;
+    admin: true;
+    activityId: true;
+    messages: true;
+  };
+}>;
+// & {
+//   messages?: Prisma.MessageGetPayload<true>[];
+// };
 
 export class Channel {
   id: string;
@@ -12,11 +21,11 @@ export class Channel {
   admin: string;
   activityId: string;
   createdAt: Date;
-  ping: { __typename: 'Forum'; id: string };
+  ping: { __typename: 'Ping'; id: string };
   participants?: { __typename: 'User'; id: string }[];
   messages?: Message[];
 
-  static ToEntityFromPrisma(channel: ChannelPayload): Channel {
+  static ToEntityFromPrisma(channel: any): Channel {
     const { id, title, admin, activityId, messages, participants } = channel;
 
     return {
@@ -25,10 +34,10 @@ export class Channel {
       admin,
       activityId,
       createdAt: new ObjectId(id as string).getTimestamp(),
-      ping: { __typename: 'Forum', id: activityId },
+      ping: { __typename: 'Ping', id: activityId },
       participants:
         participants &&
-        participants.map((participant) => ({
+        participants.map((participant: string) => ({
           __typename: 'User',
           id: participant,
         })),
@@ -36,7 +45,7 @@ export class Channel {
     };
   }
 
-  static ToEntityFromPrismaArray(channels: ChannelPayload[]): Channel[] {
+  static ToEntityFromPrismaArray(channels: any): Channel[] {
     return channels.map(Channel.ToEntityFromPrisma);
   }
 }

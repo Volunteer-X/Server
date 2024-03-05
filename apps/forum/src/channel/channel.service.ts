@@ -97,20 +97,13 @@ export class ChannelService {
     after?: Cursor<CursorParams>,
   ) {
     const cursor = after ? after.parameters : undefined;
-
     try {
       const [result, totalCount] = await this.repository.$transaction([
         this.repository.channel.findMany({
           where: {
-            AND: {
-              participants: {
-                has: user,
-              },
-              AND: {
-                participants: {
-                  isEmpty: false,
-                },
-              },
+            participants: {
+              isEmpty: false,
+              has: user,
             },
           },
           include: {
@@ -130,28 +123,32 @@ export class ChannelService {
         }),
         this.repository.channel.count({
           where: {
-            AND: {
-              participants: {
-                has: user,
-              },
-              AND: {
-                participants: {
-                  isEmpty: false,
-                },
-              },
+            participants: {
+              isEmpty: false,
+              has: user,
             },
           },
         }),
       ]);
 
+      console.log(
+        '🚀 ~ file: channel.service.ts:156 ~ ChannelService ~ result:',
+        result,
+      );
+      console.log(
+        '🚀 ~ file: channel.service.ts:164 ~ ChannelService ~ totalCount:',
+        totalCount,
+      );
+
       if (!result.length || !totalCount)
         return new NotFoundError('No Channel under this user id found');
-
       return [Channel.ToEntityFromPrismaArray(result), totalCount] as [
         Channel[],
         number,
       ];
     } catch (error) {
+      console.error('Failed to get channels', error);
+
       return new InternalServerError('Failed to get channels');
     }
   }
@@ -177,7 +174,11 @@ export class ChannelService {
           where: {
             admin,
           },
-          include: {
+          select: {
+            id: true,
+            title: true,
+            admin: true,
+            activityId: true,
             messages: {
               orderBy: {
                 id: 'desc',

@@ -24,6 +24,6 @@ model Channel {
     activityId   String    @unique @db.ObjectId
     admin        String    @db.ObjectId
     title        String
-    participants String[]  @db.ObjectId
+    participants String[]  @default([]) @db.ObjectId
     messages     Message[]
 }
