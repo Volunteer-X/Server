@@ -1,4 +1,4 @@
-import { CreateMessage } from 'apps/forum/src/message/dto/message.dto';
+import { CreateMessageDto } from 'apps/forum/src/message/dto/createMessage.dto';
 import { ForumRepository } from 'apps/forum/src/service/forum.service';
 import { Injectable } from '@nestjs/common';
 
@@ -6,10 +6,10 @@ import { Injectable } from '@nestjs/common';
 export class MessageService {
   constructor(private readonly forumRepository: ForumRepository) {}
 
-  async getMessages(channelID: string, limit: number, cursor: string) {
+  async getMessages(channelId: string, limit: number, cursor: string) {
     try {
       const messages = await this.forumRepository.message.findMany({
-        where: { channelID },
+        where: { channelId },
         take: limit,
         cursor: { id: cursor },
         orderBy: { id: 'asc' },
@@ -23,12 +23,12 @@ export class MessageService {
     }
   }
 
-  async addMessage(message: CreateMessage) {
+  async addMessage(message: CreateMessageDto) {
     try {
       await this.forumRepository.message.create({
         data: {
-          userID: message.userID,
-          channelID: message.channelID,
+          userId: message.userID,
+          channelId: message.channelID,
           text: message.text,
         },
       });

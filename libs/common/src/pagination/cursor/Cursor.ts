@@ -1,5 +1,7 @@
 import { CursorParams, ICursor } from './Cursor.interface';
 
+import { ObjectId } from 'bson';
+
 export class Cursor<TParams extends CursorParams> implements ICursor {
   constructor(public parameters: TParams) {}
 
@@ -35,7 +37,8 @@ export class Cursor<TParams extends CursorParams> implements ICursor {
       return (
         typeof decoded === 'object' &&
         decoded !== null &&
-        typeof decoded.id === 'string'
+        typeof decoded.id === 'string' &&
+        ObjectId.isValid(decoded.id)
       );
     } catch (e) {
       return false;

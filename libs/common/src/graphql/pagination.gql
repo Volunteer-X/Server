@@ -1,15 +1,17 @@
+scalar Cursor
+
 type PageInfo {
   "When paginating forwards, are there more items?"
   hasNextPage: Boolean!
   "When paginating forwards, the cursor to continue."
-  endCursor: String
+  endCursor: Cursor
   "total count of items in the connection."
   totalCount: Int
 }
 
 interface Edge {
   "A cursor for use in pagination."
-  cursor: String!
+  cursor: Cursor!
 }
 
 interface Connection {

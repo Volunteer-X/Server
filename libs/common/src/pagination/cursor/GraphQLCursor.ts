@@ -2,10 +2,14 @@ import { GraphQLError, GraphQLScalarType, Kind } from 'graphql';
 
 import { Cursor } from './cursor';
 
+/**
+ * Represents a GraphQL scalar type for cursor-based pagination.
+ * A cursor is a Base64 encoded JSON object with an id property of type string.
+ */
 export const GraphQLCursor = new GraphQLScalarType<string, string>({
   name: 'Cursor',
   description:
-    'Cursor for pagination: Base64 encoded JSON object with an id property of type string',
+    'Cursor for pagination: Base64 encoded JSON object with an id property of ObjectID, type string',
   serialize(value: string) {
     if (typeof value !== 'string') {
       throw new GraphQLError('GraphQLCursor can only serialize string');

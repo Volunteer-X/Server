@@ -18,7 +18,7 @@ describe('Cursor', () => {
   });
 
   it('should return a base64 encoded string of the parameters when encode method is called', () => {
-    const params = { id: '123' };
+    const params = { id: '65e6df249199a1be94471dfb' };
     const cursor = new Cursor(params);
 
     const encodedString = cursor.encode();
@@ -42,5 +42,19 @@ describe('Cursor', () => {
     const cursor = Cursor.fromString(encodedString);
 
     expect(cursor).toBeNull();
+  });
+
+  it('should return true when given a valid encoded cursor string', () => {
+    const validCursor = new Cursor({ id: '65e6db49718cf25e29ffeb54' });
+    const encodedString = validCursor.encode();
+    const result = Cursor.isCursor(encodedString);
+    expect(result).toBe(true);
+  });
+
+  it('should return false when given a string that is not a valid base64 encoding', () => {
+    const invalidCursor = new Cursor({ id: 'invalid' });
+    const invalidEncodedString = invalidCursor.encode();
+    const result = Cursor.isCursor(invalidEncodedString);
+    expect(result).toBe(false);
   });
 });

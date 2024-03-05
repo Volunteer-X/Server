@@ -14,8 +14,9 @@ definitionFactory.generate({
   customScalarTypeMapping: {
     ObjectID: 'typeof GraphQLObjectID',
     PositiveInt: 'typeof GraphQLPositiveInt',
+    Cursor: 'typeof GraphQLCursor',
   },
   watch: true,
   additionalHeader:
-    "import { GraphQLObjectID, GraphQLPositiveInt } from 'graphql-scalars'",
+    "import { GraphQLObjectID, GraphQLPositiveInt } from 'graphql-scalars' \nimport { GraphQLCursor } from '@app/common'",
 });

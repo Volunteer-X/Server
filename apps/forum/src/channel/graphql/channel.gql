@@ -3,6 +3,7 @@
 
 scalar ObjectID
 scalar PositiveInt
+scalar Cursor
 
 "Represents a channel in the forum."
 type Channel @key(fields: "id") {
@@ -35,7 +36,7 @@ extend type User @key(fields: "id") {
 
 "Represents an edge in a connection."
 type ChannelEdge implements Edge {
-  cursor: String!
+  cursor: Cursor!
   node: Channel!
 }
 
@@ -65,7 +66,7 @@ type Query {
     "The number of channels to retrieve."
     first: PositiveInt!
     "A cursor for use in pagination."
-    after: String
+    after: Cursor
   ): ChannelPayload
 
   "Retrieves the channels associated with the specified user."
@@ -75,6 +76,6 @@ type Query {
     "The number of channels to retrieve."
     first: PositiveInt!
     "A cursor for use in pagination."
-    after: String
+    after: Cursor
   ): [ChannelPayload!]!
 }

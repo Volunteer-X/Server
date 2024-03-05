@@ -48,7 +48,7 @@ export class ChannelResolver {
 
     const result = await this.channelService.getChannelsByUser(
       user,
-      first + 1,
+      first + 1, // Fetch one more than the requested amount to determine if there are more items to fetch.
       decodedCursor,
     );
 
