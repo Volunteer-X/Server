@@ -94,5 +94,7 @@ describe('ChannelResolver', () => {
       expect(result).toStrictEqual(expectedError);
       expect(result).toBeInstanceOf(NotFoundError);
     });
+
+    it('should handle gracefully if the cursor is not a valid Cursor object', async () => {});
   });
 });

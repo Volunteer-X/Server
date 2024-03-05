@@ -28,4 +28,17 @@ export class Cursor<TParams extends CursorParams> implements ICursor {
     // const validatedParams = validateSchema(params, schema);
     return new Cursor<TParams>(params as TParams);
   }
+
+  public static isCursor(value: string): boolean {
+    try {
+      const decoded = Cursor.decode(value);
+      return (
+        typeof decoded === 'object' &&
+        decoded !== null &&
+        typeof decoded.id === 'string'
+      );
+    } catch (e) {
+      return false;
+    }
+  }
 }
