@@ -22,10 +22,14 @@ import { PayloadResolver } from './payload.resolver';
 
 @Module({
   imports: [
-    MessageModule,
+    // MessageModule,
     GraphQLModule.forRoot<ApolloFederationDriverConfig>({
+      path: 'channel',
       driver: ApolloFederationDriver,
-      typePaths: ['**/channel.gql', 'libs/common/src/graphql/*.gql'],
+      typePaths: [
+        'apps/forum/src/channel/**/*.gql',
+        'libs/common/src/graphql/*.gql',
+      ],
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       resolvers: {
@@ -52,8 +56,8 @@ import { PayloadResolver } from './payload.resolver';
     ChannelResolver,
     PayloadResolver,
     ChannelService,
-    ChannelGateway,
-    MessageService,
+    // ChannelGateway,
+    // MessageService,
     ForumRepository,
   ],
 })

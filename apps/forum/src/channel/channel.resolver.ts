@@ -4,7 +4,7 @@ import { ChannelService } from './channel.service';
 import { Cursor, WrappedPayload } from '@app/common';
 import { Channel } from './entity/channel.entity';
 
-@Resolver('Forum')
+@Resolver('channel')
 export class ChannelResolver {
   private readonly logger = new Logger(ChannelResolver.name);
   constructor(private readonly channelService: ChannelService) {}
