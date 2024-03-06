@@ -3,7 +3,9 @@ import { DeletionServiceService } from './deletion-service.service';
 
 @Controller()
 export class DeletionServiceController {
-  constructor(private readonly deletionServiceService: DeletionServiceService) {}
+  constructor(
+    private readonly deletionServiceService: DeletionServiceService,
+  ) {}
 
   @Get()
   getHello(): string {

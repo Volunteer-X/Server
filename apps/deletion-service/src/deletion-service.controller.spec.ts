@@ -11,7 +11,9 @@ describe('DeletionServiceController', () => {
       providers: [DeletionServiceService],
     }).compile();
 
-    deletionServiceController = app.get<DeletionServiceController>(DeletionServiceController);
+    deletionServiceController = app.get<DeletionServiceController>(
+      DeletionServiceController,
+    );
   });
 
   describe('root', () => {
