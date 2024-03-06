@@ -11,6 +11,7 @@ import { Channel } from './entity/channel.entity';
 import { CursorParams } from '@app/common/pagination/cursor/Cursor.interface';
 import { ForumRepository } from '../service/forum.service';
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ChannelService {
