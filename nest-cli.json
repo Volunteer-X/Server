@@ -142,6 +142,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/forum/tsconfig.app.json"
       }
+    },
+    "subscription": {
+      "type": "application",
+      "root": "apps/subscription",
+      "entryFile": "main",
+      "sourceRoot": "apps/subscription/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/subscription/tsconfig.app.json"
+      }
     }
   }
 }

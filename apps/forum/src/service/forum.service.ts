@@ -1,8 +1,9 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { PrismaClient as ForumClient } from '@prisma/client-forum';
+
+import { PrismaClient } from '@prisma/forum';
 
 @Injectable()
-export class ForumRepository extends ForumClient implements OnModuleInit {
+export class ForumRepository extends PrismaClient implements OnModuleInit {
   async onModuleInit() {
     await this.$connect();
   }

@@ -16,7 +16,6 @@ import {
 } from './graphql/ping.schema';
 import { Logger, UseGuards } from '@nestjs/common';
 import { CurrentUser, GqlAuthGuard } from '@app/auth';
-import { User } from '@app/common/utils/entities';
 import { decodeFromBase64, encodeToBase64 } from '@app/common/utils/helpers';
 
 @Resolver('Ping')
@@ -37,14 +36,14 @@ export class PingResolver {
 
   @Query('getPing')
   @UseGuards(GqlAuthGuard)
-  getPing(@Args('id') id: string, @CurrentUser() user: User) {
+  getPing(@Args('id') id: string, @CurrentUser() user) {
     return this.pingService.getPing(id, user.id);
   }
 
   @Query('getAllPing')
   @UseGuards(GqlAuthGuard)
   async getAllPing(
-    @CurrentUser() user: User,
+    @CurrentUser() user,
     @Args('first') first: number,
     @Args('after') after: string,
     @Args('userID') userID?: string,

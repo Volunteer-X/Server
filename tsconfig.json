@@ -18,6 +18,9 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
+      "@user/*": [
+        "apps/users/src/*"
+      ],
       "@generated/*": [
         "apps/__generated__/*"
       ],

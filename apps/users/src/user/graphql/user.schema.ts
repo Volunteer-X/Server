@@ -35,6 +35,7 @@ export class UpdateUserInput {
     devices?: Nullable<string[]>;
     latitude?: Nullable<Latitude>;
     longitude?: Nullable<Longitude>;
+    pings?: Nullable<string[]>;
 }
 
 export interface BaseError {
@@ -63,7 +64,7 @@ export class User {
 export abstract class IQuery {
     abstract user(): UserPayload | Promise<UserPayload>;
 
-    abstract userById(id: ObjectID): User | Promise<User>;
+    abstract userById(id: ObjectID): UserPayload | Promise<UserPayload>;
 
     abstract isUsernameAvailable(username: string): boolean | Promise<boolean>;
 }
@@ -98,9 +99,9 @@ export class Ping {
 }
 
 export abstract class IMutation {
-    abstract createUser(payload: CreateUserInput): User | Promise<User>;
+    abstract createUser(payload: CreateUserInput): UserPayload | Promise<UserPayload>;
 
-    abstract updateUser(payload: UpdateUserInput): User | Promise<User>;
+    abstract updateUser(payload: UpdateUserInput): UserPayload | Promise<UserPayload>;
 
     abstract removeUser(id: ObjectID): Nullable<User> | Promise<Nullable<User>>;
 }

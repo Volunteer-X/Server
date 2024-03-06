@@ -8,22 +8,22 @@ import {
 import { UserService } from './user.service';
 import { CreateUserInput, UpdateUserInput } from './graphql/user.schema';
 import { GraphQLObjectID } from 'graphql-scalars';
-import { TUser } from '@app/common/utils/entities';
 import { Logger, UseGuards } from '@nestjs/common';
 import { CurrentUser, GqlAuthGuard } from '@app/auth';
-import { WrappedPayload } from '../common';
-import { User } from 'apps/users/src/entity/user.entity';
+import { User } from '@user/entity/user.entity';
+import { Payload, WrappedPayload } from '@app/common';
 
 @Resolver('User')
 export class UserResolver {
   constructor(private readonly usersService: UserService) {}
   private readonly logger = new Logger(UserResolver.name);
-  private readonly wrapPayload = new WrappedPayload();
 
   @Query('user')
   @UseGuards(GqlAuthGuard)
-  getUser(@CurrentUser() user: TUser) {
-    return this.wrapPayload.wrap(user);
+  getUser(@CurrentUser() user: Payload<User>) {
+    console.log('user', WrappedPayload.wrap(user));
+
+    return WrappedPayload.wrap<User>(user);
   }
 
   @Query('isUsernameAvailable')
@@ -32,21 +32,31 @@ export class UserResolver {
   }
 
   @Query('userById')
-  getUserById(
-    @Args({ name: 'id', type: () => GraphQLObjectID })
+  async getUserById(
+    @Args({ name: 'id' })
     id: typeof GraphQLObjectID,
   ) {
-    return this.usersService.findOne(GraphQLObjectID.parseValue(id));
+    const result = await this.usersService.getUserById(
+      GraphQLObjectID.parseValue(id),
+    );
+
+    return WrappedPayload.wrap(result);
   }
 
   @Mutation('createUser')
-  create(@Args('payload') payload: CreateUserInput) {
-    return this.usersService.createUser(User.ToEntityFromInput(payload));
+  async create(@Args('payload') payload: CreateUserInput) {
+    const result = await this.usersService.createUser(
+      User.ToEntityFromInput(payload),
+    );
+    return WrappedPayload.wrap(result);
   }
 
   @Mutation('updateUser')
-  updateUser(@Args('payload') payload: UpdateUserInput) {
-    return this.usersService.update(payload);
+  async updateUser(@Args('payload') payload: UpdateUserInput) {
+    const result = await this.usersService.update(
+      User.ToEntityFromUpdate(payload),
+    );
+    return WrappedPayload.wrap(result);
   }
 
   @ResolveReference()
@@ -54,9 +64,9 @@ export class UserResolver {
     __typename: string;
     id: typeof GraphQLObjectID;
   }) {
-    console.log('reference', reference);
-
-    return this.usersService.findOne(GraphQLObjectID.parseValue(reference.id));
+    return this.usersService.getUserById(
+      GraphQLObjectID.parseValue(reference.id),
+    );
   }
 
   // @ResolveField('ping')

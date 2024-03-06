@@ -30,3 +30,6 @@ README.md
 Makefile
 
 apps/**/Dockerfile
+
+/documentation
+/coverage

@@ -1,13 +1,16 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { ChannelService } from './channel.service';
+import { Body, Controller, Get, Logger, Post } from '@nestjs/common';
 import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
-import { Channel } from 'apps/forum/src/common/dto/message.dto';
+
+import { ChannelService } from './channel.service';
+import { CreateChannelDto } from './dto/createChannel.dto';
 import { RMQService } from '@app/common';
 
 @Controller()
 export class ChannelController {
+  private readonly logger = new Logger(ChannelController.name);
   constructor(
-    private readonly channelService: ChannelService, // private readonly rmqService: RMQService,
+    private readonly channelService: ChannelService,
+    // private readonly rmqService: RMQService,
   ) {}
 
   // @EventPattern('createChannel')
@@ -15,9 +18,9 @@ export class ChannelController {
   //   return await this.channelService.createChannel(channel);
   // }
 
-  @Post('createChannel')
-  async createChannel(@Body() channel: Channel) {
-    const result = await this.channelService.createChannel(channel);
-    return result;
-  }
+  // @Post('createChannel')
+  // async createChannel(@Body() payload: CreateChannelDto) {
+  //   const result = await this.channelService.createChannel(payload);
+  //   return result;
+  // }
 }

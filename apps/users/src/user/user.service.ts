@@ -1,19 +1,30 @@
+import {
+  ForbiddenError,
+  InternalServerError,
+  NotFoundError,
+  UpdateUserInput,
+} from './graphql/user.schema';
 import { GraphQLEmailAddress, GraphQLObjectID } from 'graphql-scalars';
+import { Injectable, Logger } from '@nestjs/common';
+import { Membership, Prisma } from '@prisma/client';
 import { NEO4J_SERVICE, Pattern } from '@app/common';
-import { User, UserCreateInput } from 'apps/users/src/entity/user.entity';
+import {
+  PartialWithRequired,
+  User,
+  UserCreateInput,
+} from '../entity/user.entity';
 
 import { ClientProxy } from '@nestjs/microservices';
-import { Injectable } from '@nestjs/common';
-import { Membership } from '@prisma/client';
 import { ObjectId } from 'bson';
-import { UpdateUserInput } from './graphql/user.schema';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { UserRepository } from './service/prisma.service';
 import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class UserService {
+  private readonly logger = new Logger(UserService.name);
   constructor(
-    private readonly userRepository: UserRepository['user'],
+    private readonly userRepository: UserRepository,
     // @Inject(NEO4J_SERVICE) private readonly neo4jClient: ClientProxy,
   ) {}
   /*
@@ -24,7 +35,6 @@ export class UserService {
       email,
       username,
       name,
-      // name: { firstName, middleName, lastName },
       picks,
       picture,
       latitude,
@@ -32,21 +42,27 @@ export class UserService {
       devices,
     } = input;
 
-    const result = await this.userRepository.create({
-      data: {
-        email,
-        username,
-        name,
-        // name: {
-        //   firstName,
-        //   middleName,
-        //   lastName,
-        // },
-        picture,
-        picks,
-        devices,
-      },
-    });
+    try {
+      const result = await this.userRepository.user.create({
+        data: {
+          email,
+          username,
+          name,
+          picture,
+          picks,
+          devices,
+        },
+      });
+      return User.ToEntityFromPrisma(result);
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          return new ForbiddenError();
+        }
+      }
+      // this.logger.error(`Error creating user: ${error.message}`);
+      return new InternalServerError();
+    }
 
     // try {
     //   await lastValueFrom(
@@ -64,60 +80,15 @@ export class UserService {
     // } catch (error) {
     //   console.log('Neo4J error', error);
     // }
-
-    return User.ToEntityFromPrisma(result);
-
-    // const user = {
-    //   createdAt: new ObjectId(result.id).getTimestamp(),
-    //   id: result.id,
-    //   email: result.email,
-    //   username: result.username,
-    //   name: {
-    //     firstName: result.name.firstName,
-    //     middleName: result.name.middleName,
-    //     lastName: result.name.lastName,
-    //   },
-    //   picture: result.picture,
-    //   picks: result.picks,
-    //   devices: result.devices,
-    // };
-
-    // return user;
   }
 
-  /* 
-  ? Get user details by email
-  */
-  async getUserByEmail(email: string) {
-    const result = await this.userRepository.findUnique({
-      where: { email: email },
-    });
-
-    const user: User = {
-      createdAt: new ObjectId(result.id).getTimestamp(),
-      id: result.id,
-      email: result.email,
-      username: result.username,
-      name: {
-        firstName: result.name.firstName,
-        middleName: result.name.middleName,
-        lastName: result.name.lastName,
-      },
-      picture: result.picture,
-      picks: result.picks,
-      devices: result.devices,
-      pings: result.pings.map((ping) => ({
-        __typename: 'Ping',
-        id: ping.id,
-      })),
-      activityCount: result.pings.length,
-    };
-
-    return user;
-  }
-
+  /**
+   * Checks if a username is available.
+   * @param username - The username to check.
+   * @returns A boolean indicating whether the username is available or not.
+   */
   async isUsernameAvailable(username: string) {
-    const count = await this.userRepository.count({
+    const count = await this.userRepository.user.count({
       where: {
         username: username,
       },
@@ -126,34 +97,22 @@ export class UserService {
     return count > 0 ? false : true;
   }
 
-  async update(payload: UpdateUserInput) {
-    const {
-      id,
-      email,
-      username,
-      lastName,
-      firstName,
-      middleName,
-      picks,
-      picture,
-      devices,
-    } = payload;
+  async update(payload: PartialWithRequired<User, 'id'>) {
+    const { id, email, username, name, picks, picture, devices } = payload;
 
-    let dbResult;
-
-    if (lastName || firstName || middleName) {
-      dbResult = await this.userRepository.update({
+    try {
+      const result = await this.userRepository.user.update({
         where: {
-          id: GraphQLObjectID.parseValue(id),
+          id,
         },
         data: {
-          email: email ? GraphQLEmailAddress.parseValue(email) : undefined,
+          email: email,
           username,
           name: {
             update: {
-              firstName,
-              lastName,
-              middleName,
+              firstName: name?.firstName,
+              lastName: name?.lastName,
+              middleName: name?.middleName,
             },
           },
           picks,
@@ -161,64 +120,32 @@ export class UserService {
           devices,
         },
       });
+
+      return User.ToEntityFromPrisma(result);
+    } catch (error) {
+      this.logger.error(`Error updating user: ${error.message}`);
+      return new InternalServerError();
     }
-
-    dbResult = await this.userRepository.update({
-      where: {
-        id: GraphQLObjectID.parseValue(id),
-      },
-      data: {
-        email: email ? GraphQLEmailAddress.parseValue(email) : undefined,
-        username,
-        picks,
-        picture,
-        devices,
-      },
-    });
-
-    const updatedUser = {
-      createdAt: new ObjectId(dbResult.id).getTimestamp(),
-      id: dbResult.id,
-      email: dbResult.email,
-      username: dbResult.username,
-      name: {
-        firstName: dbResult.name.firstName,
-        middleName: dbResult.name.middleName,
-        lastName: dbResult.name.lastName,
-      },
-      picture: dbResult.picture,
-      picks: dbResult.picks,
-      devices: dbResult.devices,
-    };
-
-    return updatedUser;
   }
 
-  async findOne(id: string) {
-    console.log('id', id);
+  async getUserById(id: string) {
+    try {
+      const result = await this.userRepository.user.findUniqueOrThrow({
+        where: {
+          id: GraphQLObjectID.parseValue(id),
+        },
+      });
 
-    const result = await this.userRepository.findUnique({
-      where: {
-        id: GraphQLObjectID.parseValue(id),
-      },
-    });
-
-    const { id: _id, email, username, name, picks, picture } = result;
-
-    return {
-      _id,
-      email,
-      username,
-      name,
-      picks,
-      picture,
-      createdAt: new ObjectId(id).getTimestamp(),
-    };
+      return User.ToEntityFromPrisma(result);
+    } catch (error) {
+      this.logger.log(`Error getting user by ID: ${id}. ${error}`);
+      return new NotFoundError();
+    }
   }
 
   async getUserDevices(users: string[]) {
     try {
-      const result = await this.userRepository.findMany({
+      const result = await this.userRepository.user.findMany({
         where: {
           id: {
             in: users,
@@ -239,7 +166,7 @@ export class UserService {
 
   async addMembership(userID: string, id: string, membership: Membership) {
     try {
-      await this.userRepository.update({
+      await this.userRepository.user.update({
         where: {
           id: userID,
         },
@@ -261,7 +188,7 @@ export class UserService {
 
   async removeMembership(userID: string, id: string) {
     try {
-      const exisitngPings = await this.userRepository.findUnique({
+      const exisitngPings = await this.userRepository.user.findUnique({
         where: {
           id: GraphQLObjectID.parseValue(userID),
         },
@@ -272,7 +199,7 @@ export class UserService {
 
       const updatedPing = exisitngPings.pings.filter((ping) => ping.id !== id);
 
-      await this.userRepository.update({
+      await this.userRepository.user.update({
         where: {
           id: GraphQLObjectID.parseValue(userID),
         },

@@ -1,0 +1,16 @@
+"Represents a message in a channel"
+type Message {
+  id: ID!
+  text: String!
+  user: User!
+  channelId: ID!
+}
+
+extend type User @key(fields: "id") {
+  id: ID! @external
+}
+
+type Query {
+  addMessage(channelId: ID!, userId: ID!, text: String!): Message
+  deleteMessage(id: ID!): Message
+}

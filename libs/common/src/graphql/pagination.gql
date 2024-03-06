@@ -1,0 +1,20 @@
+scalar Cursor
+
+type PageInfo {
+  "When paginating forwards, are there more items?"
+  hasNextPage: Boolean!
+  "When paginating forwards, the cursor to continue."
+  endCursor: Cursor
+  "total count of items in the connection."
+  totalCount: Int
+}
+
+interface Edge {
+  "A cursor for use in pagination."
+  cursor: Cursor!
+}
+
+interface Connection {
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+}
