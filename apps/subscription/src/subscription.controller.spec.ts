@@ -11,7 +11,9 @@ describe('SubscriptionController', () => {
       providers: [SubscriptionService],
     }).compile();
 
-    subscriptionController = app.get<SubscriptionController>(SubscriptionController);
+    subscriptionController = app.get<SubscriptionController>(
+      SubscriptionController,
+    );
   });
 
   describe('root', () => {
