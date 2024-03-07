@@ -24,11 +24,7 @@ import { lastValueFrom } from 'rxjs';
 export class UserService {
   private readonly logger = new Logger(UserService.name);
   constructor(
-<<<<<<< HEAD
-    private readonly repository: UserRepository,
-=======
     private readonly userRepository: UserRepository,
->>>>>>> 8af9ac5b04fea04a28945a2c943ff2d7a73b6132
     // @Inject(NEO4J_SERVICE) private readonly neo4jClient: ClientProxy,
   ) {}
   /*
@@ -46,23 +42,6 @@ export class UserService {
       devices,
     } = input;
 
-<<<<<<< HEAD
-    const result = await this.repository.user.create({
-      data: {
-        email,
-        username,
-        name,
-        // name: {
-        //   firstName,
-        //   middleName,
-        //   lastName,
-        // },
-        picture,
-        picks,
-        devices,
-      },
-    });
-=======
     try {
       const result = await this.userRepository.user.create({
         data: {
@@ -84,7 +63,6 @@ export class UserService {
       // this.logger.error(`Error creating user: ${error.message}`);
       return new InternalServerError();
     }
->>>>>>> 8af9ac5b04fea04a28945a2c943ff2d7a73b6132
 
     // try {
     //   await lastValueFrom(
@@ -102,59 +80,6 @@ export class UserService {
     // } catch (error) {
     //   console.log('Neo4J error', error);
     // }
-<<<<<<< HEAD
-
-    return User.ToEntityFromPrisma(result);
-
-    // const user = {
-    //   createdAt: new ObjectId(result.id).getTimestamp(),
-    //   id: result.id,
-    //   email: result.email,
-    //   username: result.username,
-    //   name: {
-    //     firstName: result.name.firstName,
-    //     middleName: result.name.middleName,
-    //     lastName: result.name.lastName,
-    //   },
-    //   picture: result.picture,
-    //   picks: result.picks,
-    //   devices: result.devices,
-    // };
-
-    // return user;
-  }
-
-  /* 
-  ? Get user details by email
-  */
-  async getUserByEmail(email: string) {
-    const result = await this.repository.user.findUnique({
-      where: { email: email },
-    });
-
-    const user: User = {
-      createdAt: new ObjectId(result.id).getTimestamp(),
-      id: result.id,
-      email: result.email,
-      username: result.username,
-      name: {
-        firstName: result.name.firstName,
-        middleName: result.name.middleName,
-        lastName: result.name.lastName,
-      },
-      picture: result.picture,
-      picks: result.picks,
-      devices: result.devices,
-      pings: result.pings.map((ping) => ({
-        __typename: 'Ping',
-        id: ping.id,
-      })),
-      activityCount: result.pings.length,
-    };
-
-    return user;
-=======
->>>>>>> 8af9ac5b04fea04a28945a2c943ff2d7a73b6132
   }
 
   /**
@@ -163,11 +88,7 @@ export class UserService {
    * @returns A boolean indicating whether the username is available or not.
    */
   async isUsernameAvailable(username: string) {
-<<<<<<< HEAD
-    const count = await this.repository.user.count({
-=======
     const count = await this.userRepository.user.count({
->>>>>>> 8af9ac5b04fea04a28945a2c943ff2d7a73b6132
       where: {
         username: username,
       },
@@ -179,15 +100,8 @@ export class UserService {
   async update(payload: PartialWithRequired<User, 'id'>) {
     const { id, email, username, name, picks, picture, devices } = payload;
 
-<<<<<<< HEAD
-    let dbResult;
-
-    if (lastName || firstName || middleName) {
-      dbResult = await this.repository.user.update({
-=======
     try {
       const result = await this.userRepository.user.update({
->>>>>>> 8af9ac5b04fea04a28945a2c943ff2d7a73b6132
         where: {
           id,
         },
@@ -212,39 +126,6 @@ export class UserService {
       this.logger.error(`Error updating user: ${error.message}`);
       return new InternalServerError();
     }
-<<<<<<< HEAD
-
-    dbResult = await this.repository.user.update({
-      where: {
-        id: GraphQLObjectID.parseValue(id),
-      },
-      data: {
-        email: email ? GraphQLEmailAddress.parseValue(email) : undefined,
-        username,
-        picks,
-        picture,
-        devices,
-      },
-    });
-
-    const updatedUser = {
-      createdAt: new ObjectId(dbResult.id).getTimestamp(),
-      id: dbResult.id,
-      email: dbResult.email,
-      username: dbResult.username,
-      name: {
-        firstName: dbResult.name.firstName,
-        middleName: dbResult.name.middleName,
-        lastName: dbResult.name.lastName,
-      },
-      picture: dbResult.picture,
-      picks: dbResult.picks,
-      devices: dbResult.devices,
-    };
-
-    return updatedUser;
-=======
->>>>>>> 8af9ac5b04fea04a28945a2c943ff2d7a73b6132
   }
 
   async getUserById(id: string) {
@@ -255,40 +136,16 @@ export class UserService {
         },
       });
 
-<<<<<<< HEAD
-    const result = await this.repository.user.findUnique({
-      where: {
-        id: GraphQLObjectID.parseValue(id),
-      },
-    });
-
-    const { id: _id, email, username, name, picks, picture } = result;
-
-    return {
-      _id,
-      email,
-      username,
-      name,
-      picks,
-      picture,
-      createdAt: new ObjectId(id).getTimestamp(),
-    };
-=======
       return User.ToEntityFromPrisma(result);
     } catch (error) {
       this.logger.log(`Error getting user by ID: ${id}. ${error}`);
       return new NotFoundError();
     }
->>>>>>> 8af9ac5b04fea04a28945a2c943ff2d7a73b6132
   }
 
   async getUserDevices(users: string[]) {
     try {
-<<<<<<< HEAD
-      const result = await this.repository.user.findMany({
-=======
       const result = await this.userRepository.user.findMany({
->>>>>>> 8af9ac5b04fea04a28945a2c943ff2d7a73b6132
         where: {
           id: {
             in: users,
@@ -309,11 +166,7 @@ export class UserService {
 
   async addMembership(userID: string, id: string, membership: Membership) {
     try {
-<<<<<<< HEAD
-      await this.repository.user.update({
-=======
       await this.userRepository.user.update({
->>>>>>> 8af9ac5b04fea04a28945a2c943ff2d7a73b6132
         where: {
           id: userID,
         },
@@ -335,11 +188,7 @@ export class UserService {
 
   async removeMembership(userID: string, id: string) {
     try {
-<<<<<<< HEAD
-      const exisitngPings = await this.repository.user.findUnique({
-=======
       const exisitngPings = await this.userRepository.user.findUnique({
->>>>>>> 8af9ac5b04fea04a28945a2c943ff2d7a73b6132
         where: {
           id: GraphQLObjectID.parseValue(userID),
         },
@@ -350,11 +199,7 @@ export class UserService {
 
       const updatedPing = exisitngPings.pings.filter((ping) => ping.id !== id);
 
-<<<<<<< HEAD
-      await this.repository.user.update({
-=======
       await this.userRepository.user.update({
->>>>>>> 8af9ac5b04fea04a28945a2c943ff2d7a73b6132
         where: {
           id: GraphQLObjectID.parseValue(userID),
         },
