@@ -1,4 +1,9 @@
-import { Resolver } from '@nestjs/graphql';
+import { Query, Resolver } from '@nestjs/graphql';
 
-@Resolver()
-export class MessageResolver {}
+@Resolver('message')
+export class MessageResolver {
+  @Query('getHello')
+  getHello() {
+    return 'Hello World!';
+  }
+}

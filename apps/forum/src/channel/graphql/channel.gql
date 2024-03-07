@@ -1,11 +1,28 @@
-scalar ObjectID
+#import "../../../../../libs/common/src/graphql/error.gql"
+#import "../../../../../libs/common/src/graphql/pagination.gql"
 
-type Forum @key(fields: "id") {
+scalar ObjectID
+scalar PositiveInt
+scalar Cursor
+
+"Represents a channel in the forum."
+type Channel @key(fields: "id") {
+  "The unique identifier for the channel."
   id: ObjectID!
-  activityID: ObjectID!
+
+  "The ID of the activity associated with the channel."
+  activityId: ObjectID!
+
+  "The ping associated with the channel."
   ping: Ping!
+
+  "The title of the channel."
   title: String!
+
+  "The admin of the channel."
   admin: User!
+
+  "The participants of the channel."
   participants: [User!]!
 }
 
@@ -17,7 +34,48 @@ extend type User @key(fields: "id") {
   id: ObjectID! @external
 }
 
+"Represents an edge in a connection."
+type ChannelEdge implements Edge {
+  cursor: Cursor!
+  node: Channel!
+}
+
+"Represents a connection to a list of channels."
+type ChannelConnection implements Connection {
+  pageInfo: PageInfo!
+  edges: [ChannelEdge!]!
+}
+
+"Represents a channel payload containing a channel or an error."
+union ChannelPayload =
+  | Channel
+  | ChannelConnection
+  | NotFoundError
+  | UnknownError
+  | UnauthorizedError
+  | InternalServerError
+
 type Query {
-  forum(id: ObjectID!): Forum
-  forums: [Forum!]!
+  "Retrieves a channel by its unique identifier."
+  channel(id: ObjectID!): ChannelPayload
+
+  "Retrieves the channels associated with the specified admin."
+  adminChannels(
+    "The unique identifier for the admin."
+    admin: ObjectID!
+    "The number of channels to retrieve."
+    first: PositiveInt!
+    "A cursor for use in pagination."
+    after: Cursor
+  ): ChannelPayload
+
+  "Retrieves the channels associated with the specified user."
+  userChannels(
+    "The unique identifier for the user."
+    user: ObjectID!
+    "The number of channels to retrieve."
+    first: PositiveInt!
+    "A cursor for use in pagination."
+    after: Cursor
+  ): [ChannelPayload!]!
 }

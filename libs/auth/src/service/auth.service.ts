@@ -1,9 +1,10 @@
 import { InjectRepository, PrismaService } from '@app/prisma';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { AuthEntity } from '@app/auth/entity/auth.entity';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
   constructor(
     @InjectRepository('user')
     private readonly userRepo: PrismaService['user'],
@@ -12,12 +13,17 @@ export class AuthService {
   /*
   ? Get user details by email
   */
-  async findUser(email: string): Promise<AuthEntity> {
-    const result = await this.userRepo.findUnique({
-      where: { email: email },
-    });
+  async findUser(email: string): Promise<AuthEntity | undefined> {
+    try {
+      const result = await this.userRepo.findUnique({
+        where: { email: email },
+      });
 
-    return AuthEntity.ToEntityFromPrisma(result);
+      return AuthEntity.ToEntityFromPrisma(result);
+    } catch (error) {
+      this.logger.error(`Error finding user by email: ${email}`, error);
+      return undefined;
+    }
 
     // return {
     //   id: result.id,

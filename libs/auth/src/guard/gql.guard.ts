@@ -2,7 +2,7 @@ import { ExecutionContext, Injectable, Logger } from '@nestjs/common';
 
 import { AuthGuard } from '@nestjs/passport';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { UnauthorizedError } from 'apps/users/src/user/graphql/user.schema';
+import { UnauthorizedError } from '@app/common';
 
 @Injectable()
 export class GqlAuthGuard extends AuthGuard() {
@@ -22,8 +22,10 @@ export class GqlAuthGuard extends AuthGuard() {
     status?: any,
   ): TUser {
     if (err || !user) {
-      // this.logger.error('Unauthorized');
-      return new UnauthorizedError() as TUser;
+      this.logger.error('Unauthorized');
+      return new UnauthorizedError(
+        'User is not authorized to access this data',
+      ) as TUser;
     }
 
     return user as TUser;

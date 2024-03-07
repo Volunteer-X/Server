@@ -1,10 +1,14 @@
 import {
+  CreateUserInput as GraphQLCreateInput,
+  UpdateUserInput,
+} from '../user/graphql/user.schema';
+import {
   GraphQLEmailAddress,
   GraphQLLatitude,
   GraphQLLongitude,
+  GraphQLObjectID,
 } from 'graphql-scalars';
 
-import { CreateUserInput as GraphQLCreateInput } from '../user/graphql/user.schema';
 import { ObjectId } from 'bson';
 
 type Ping = {
@@ -25,6 +29,23 @@ export type UserCreateInput = Omit<
   latitude: number;
   longitude: number;
 };
+
+/**
+ * Represents a type that ensures at least one property of the given type is present.
+ * @template T - The type to check for at least one property.
+ * @template U - The intermediate type used for checking.
+ */
+type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
+  U[keyof U];
+
+/**
+ * Represents a type that makes all properties optional from type T, except for the properties specified by R.
+ * At least one property from the remaining properties is required.
+ * @template T - The original type.
+ * @template R - The properties to exclude from the required properties.
+ */
+export type PartialWithRequired<T, R extends keyof T> = AtLeastOne<Omit<T, R>> &
+  Required<Pick<T, R>>;
 
 /**
  * Maps user data between different representations.
@@ -93,6 +114,36 @@ export class User {
   }
 
   /**
+   * Maps update input data to a user entity.
+   *
+   * @param input The input data.
+   * @returns The user entity.
+   */
+  static ToEntityFromUpdate(
+    input: UpdateUserInput,
+  ): PartialWithRequired<User, 'id'> {
+    return {
+      id: GraphQLObjectID.parseValue(input.id),
+      name: {
+        firstName: input.firstName,
+        lastName: input.lastName,
+        middleName: input.middleName,
+      },
+      email: input.email && GraphQLEmailAddress.parseValue(input.email),
+      username: input.username,
+      picture: input.picture,
+      picks: input.picks,
+      devices: input.devices,
+      pings:
+        input.pings &&
+        input.pings.map((id) => ({
+          __typename: 'Ping',
+          id: id,
+        })),
+    };
+  }
+
+  /**
    * Maps a Prisma result to a user entity.
    *
    * @param result The Prisma result.
@@ -112,13 +163,15 @@ export class User {
       picture: result.picture,
       picks: result.picks,
       devices: result.devices,
-      pings: result.pings.map(
-        (ping: Ping): Ping => ({
-          __typename: ping.__typename,
-          id: ping.id,
-        }),
-      ),
-      activityCount: result.pings.length,
+      pings:
+        result.pings &&
+        result.pings.map(
+          (ping: Ping): Ping => ({
+            __typename: ping.__typename,
+            id: ping.id,
+          }),
+        ),
+      activityCount: result.pings && result.pings.length,
     };
   }
 }

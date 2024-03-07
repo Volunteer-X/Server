@@ -4,13 +4,19 @@ import { join } from 'path';
 const definitionFactory = new GraphQLFederationDefinitionsFactory();
 
 definitionFactory.generate({
-  typePaths: ['./apps/forum/src/channel/graphql/*.gql'],
+  typePaths: [
+    './apps/forum/src/channel/graphql/*.gql',
+    './libs/common/src/graphql/*.gql',
+  ],
   path: join(process.cwd(), 'apps/forum/src/channel/graphql/channel.schema.ts'),
-  outputAs: 'interface',
+  outputAs: 'class',
   defaultScalarType: 'unknown',
   customScalarTypeMapping: {
     ObjectID: 'typeof GraphQLObjectID',
+    PositiveInt: 'typeof GraphQLPositiveInt',
+    Cursor: 'typeof GraphQLCursor',
   },
   watch: true,
-  additionalHeader: "import { GraphQLObjectID } from 'graphql-scalars'",
+  additionalHeader:
+    "import { GraphQLObjectID, GraphQLPositiveInt } from 'graphql-scalars' \nimport { GraphQLCursor } from '@app/common'",
 });

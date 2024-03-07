@@ -1,4 +1,13 @@
 {
     "files.eol": "\n",
+<<<<<<< HEAD
     "typescript.tsdk": "node_modules\\typescript\\lib"
+=======
+    "testing.openTesting": "neverOpen",
+    "jest.outputConfig": {
+        "revealOn": "run",
+        "revealWithFocus": "none",
+        "clearOnRun": "none"
+    }
+>>>>>>> 8af9ac5b04fea04a28945a2c943ff2d7a73b6132
 }
