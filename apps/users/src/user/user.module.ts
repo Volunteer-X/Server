@@ -29,6 +29,7 @@ import { UserService } from './user.service';
       driver: ApolloFederationDriver,
       typePaths: ['**/user.gql', 'libs/common/src/graphql/error.gql'],
       playground: false,
+      path: 'user',
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       resolvers: {
         DateTime: DateTimeResolver,
