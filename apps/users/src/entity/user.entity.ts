@@ -24,10 +24,11 @@ type Name = {
 
 export type UserCreateInput = Omit<
   User,
-  'id' | 'createdAt' | 'activityCount' | 'ping'
+  'id' | 'createdAt' | 'activityCount' | 'ping' | 'devices'
 > & {
   latitude: number;
   longitude: number;
+  device: string;
 };
 
 /**
@@ -102,7 +103,7 @@ export class User {
       GraphQLEmailAddress.parseValue(input.email),
       input.username,
       input.picks,
-      [input.device],
+      undefined,
       input.picture,
     );
 
@@ -110,6 +111,7 @@ export class User {
       ...user,
       latitude: GraphQLLatitude.parseValue(input.latitude),
       longitude: GraphQLLongitude.parseValue(input.longitude),
+      device: input.device,
     };
   }
 

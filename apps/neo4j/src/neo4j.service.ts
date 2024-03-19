@@ -1,7 +1,14 @@
-import { BROADCAST_SERVICE, PingNode, UserNode } from '@app/common';
+import {
+  BROADCAST_SERVICE,
+  Failure,
+  PingNode,
+  Success,
+  UserNode,
+} from '@app/common';
 import { Neo4jCommonService } from '@app/neo4j';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { CreateUserPayload } from '../dto/CreateUserPayload.dto';
 
 @Injectable()
 export class Neo4jService {
@@ -13,23 +20,29 @@ export class Neo4jService {
   private readonly logger = new Logger(Neo4jService.name);
 
   // Add a new user to the database
-  async createUser(user: UserNode) {
+  async createUser(user: CreateUserPayload) {
+    const { id, picks, latitude, longitude } = user;
+
     const cypher = `
       CREATE (u:User {id: $id, picks: $picks, latitude: $latitude, longitude: $longitude})
       RETURN u
     `;
 
-    const result = await this.neo4jCommon.write(cypher, {
-      id: user.id,
-      picks: user.picks,
-      latitude: user.latitude,
-      longitude: user.longitude,
-    });
+    try {
+      const result = await this.neo4jCommon.write(cypher, {
+        id,
+        picks,
+        latitude,
+        longitude,
+      });
+      if (result.records.length === 0) {
+        throw new Error('User not created');
+      }
 
-    // console.log(result.records[0].get('u').properties);
-
-    if (result.records.length === 0) {
-      throw new Error('User not created');
+      return new Success(result.records[0].get('u').properties);
+    } catch (err) {
+      this.logger.error(err);
+      return new Failure<Error>(err);
     }
   }
 

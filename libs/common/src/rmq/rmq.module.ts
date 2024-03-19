@@ -1,11 +1,12 @@
-import { DynamicModule, Module } from '@nestjs/common';
-import { RMQService } from './rmq.service';
 import {
   ClientsModule,
   ClientsModuleAsyncOptions,
   Transport,
 } from '@nestjs/microservices';
+import { DynamicModule, Module } from '@nestjs/common';
+
 import { ConfigService } from '@nestjs/config';
+import { RMQService } from './rmq.service';
 
 interface RmqModuleOptions {
   name: string[];
@@ -16,41 +17,24 @@ interface RmqModuleOptions {
   exports: [RMQService],
 })
 export class RmqModule {
-  static register({ name }: RmqModuleOptions): DynamicModule {
-    function getImports(name: string[]): ClientsModuleAsyncOptions {
-      return name.map((queue) => ({
-        name: queue,
-        useFactory: (configService: ConfigService) => ({
-          transport: Transport.RMQ,
-          options: {
-            urls: [configService.get<string>('RABBITMQ_URI')],
-            queue: configService.get<string>(`RABBITMQ_${queue}_QUEUE`),
-          },
-        }),
-        inject: [ConfigService],
-      }));
-    }
+  private static getImports(name: string[]): ClientsModuleAsyncOptions {
+    return name.map((queue) => ({
+      name: queue,
+      useFactory: (configService: ConfigService) => ({
+        transport: Transport.RMQ,
+        options: {
+          urls: [configService.get<string>('RABBITMQ_URI')],
+          queue: configService.get<string>(`RABBITMQ_${queue}_QUEUE`),
+        },
+      }),
+      inject: [ConfigService],
+    }));
+  }
 
+  static register({ name }: RmqModuleOptions): DynamicModule {
     return {
       module: RmqModule,
-      imports: [
-        ClientsModule.registerAsync(
-          //   [
-          //   {
-          //     name: name,
-          //     useFactory: (configService: ConfigService) => ({
-          //       transport: Transport.RMQ,
-          //       options: {
-          //         urls: [configService.get<string>('RABBITMQ_URI')],
-          //         queue: configService.get<string>(`RABBITMQ_${name}_QUEUE`),
-          //       },
-          //     }),
-          //     inject: [ConfigService],
-          //   },
-          // ]
-          getImports(name),
-        ),
-      ],
+      imports: [ClientsModule.registerAsync(this.getImports(name))],
       exports: [ClientsModule],
     };
   }

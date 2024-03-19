@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UseFilters } from '@nestjs/common';
 import { Neo4jService } from './neo4j.service';
 import {
   Ctx,
@@ -9,6 +9,8 @@ import {
 } from '@nestjs/microservices';
 import { Pattern } from '@app/common';
 import { PingNode, RMQService, UserNode } from '@app/common';
+import { Neo4jErrorFilter } from '@app/neo4j';
+import { CreateUserPayload } from '../dto/CreateUserPayload.dto';
 
 @Controller()
 export class Neo4jController {
@@ -17,10 +19,14 @@ export class Neo4jController {
     private readonly rmqService: RMQService,
   ) {}
 
-  @EventPattern(Pattern.userCreated)
-  async handleUserCreated(@Payload() user: string, @Ctx() context: RmqContext) {
-    await this.neo4jService.createUser(JSON.parse(user) as UserNode);
+  @UseFilters(new Neo4jErrorFilter())
+  @MessagePattern(Pattern.userCreated)
+  async handleUserCreated(
+    @Payload() user: CreateUserPayload,
+    @Ctx() context: RmqContext,
+  ) {
     this.rmqService.ack(context);
+    return await this.neo4jService.createUser(user);
   }
 
   @EventPattern(Pattern.pingCreated)

@@ -9,7 +9,7 @@ import { UserService } from './user.service';
 import { CreateUserInput, UpdateUserInput } from './graphql/user.schema';
 import { GraphQLObjectID } from 'graphql-scalars';
 import { Logger, UseGuards } from '@nestjs/common';
-import { CurrentUser, GqlAuthGuard } from '@app/auth';
+import { CurrentUser, GqlAuthGuard, GqlAuthGuardWithoutThrow } from '@app/auth';
 import { User } from '@user/entity/user.entity';
 import { Payload, WrappedPayload } from '@app/common';
 
@@ -21,8 +21,6 @@ export class UserResolver {
   @Query('user')
   @UseGuards(GqlAuthGuard)
   getUser(@CurrentUser() user: Payload<User>) {
-    console.log('user', WrappedPayload.wrap(user));
-
     return WrappedPayload.wrap<User>(user);
   }
 
@@ -31,6 +29,7 @@ export class UserResolver {
     return this.usersService.isUsernameAvailable(username);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Query('userById')
   async getUserById(
     @Args({ name: 'id' })
@@ -39,6 +38,8 @@ export class UserResolver {
     const result = await this.usersService.getUserById(
       GraphQLObjectID.parseValue(id),
     );
+
+    this.logger.log(result);
 
     return WrappedPayload.wrap(result);
   }
@@ -51,6 +52,7 @@ export class UserResolver {
     return WrappedPayload.wrap(result);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation('updateUser')
   async updateUser(@Args('payload') payload: UpdateUserInput) {
     const result = await this.usersService.update(

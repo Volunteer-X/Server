@@ -1,13 +1,13 @@
+import { GraphQLObjectID } from 'graphql-scalars';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Membership } from '@prisma/client';
 import {
   ForbiddenError,
   InternalServerError,
+  NEO4J_SERVICE,
   NotFoundError,
-  UpdateUserInput,
-} from './graphql/user.schema';
-import { GraphQLEmailAddress, GraphQLObjectID } from 'graphql-scalars';
-import { Injectable, Logger } from '@nestjs/common';
-import { Membership, Prisma } from '@prisma/client';
-import { NEO4J_SERVICE, Pattern } from '@app/common';
+  Pattern,
+} from '@app/common';
 import {
   PartialWithRequired,
   User,
@@ -15,17 +15,17 @@ import {
 } from '../entity/user.entity';
 
 import { ClientProxy } from '@nestjs/microservices';
-import { ObjectId } from 'bson';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { UserRepository } from './service/prisma.service';
 import { lastValueFrom } from 'rxjs';
+import { Neo4jCreateUserDto } from './dto/neo4jCreateUser.dto';
 
 @Injectable()
 export class UserService {
   private readonly logger = new Logger(UserService.name);
   constructor(
     private readonly userRepository: UserRepository,
-    // @Inject(NEO4J_SERVICE) private readonly neo4jClient: ClientProxy,
+    @Inject(NEO4J_SERVICE) private readonly neo4jClient: ClientProxy,
   ) {}
   /*
    ? Create new user
@@ -39,47 +39,57 @@ export class UserService {
       picture,
       latitude,
       longitude,
-      devices,
+      device,
     } = input;
 
     try {
-      const result = await this.userRepository.user.create({
-        data: {
-          email,
-          username,
-          name,
-          picture,
-          picks,
-          devices,
-        },
+      const result = await this.userRepository.$transaction(async (tx) => {
+        const user = await tx.user.create({
+          data: {
+            email,
+            username,
+            name,
+            picture,
+            picks,
+            devices: [device],
+          },
+        });
+
+        const { id, devices } = user;
+
+        try {
+          this.neo4jClient
+            .send<string, Neo4jCreateUserDto>(Pattern.userCreated, {
+              id,
+              picks,
+              longitude,
+              latitude,
+              devices,
+            })
+            .subscribe({
+              next: (value) => this.logger.log(value),
+              error: (err) => {
+                throw new Error(err);
+              },
+              complete: () => {
+                this.logger.log('completed');
+              },
+            });
+        } catch (e) {
+          throw new Error('Neo4J failure');
+        }
+
+        return user;
       });
+
       return User.ToEntityFromPrisma(result);
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          return new ForbiddenError();
-        }
+        return new ForbiddenError(`Prisma Error: ${error}`);
       }
-      // this.logger.error(`Error creating user: ${error.message}`);
-      return new InternalServerError();
+      this.logger.error(`Error creating user: ${error.message}`);
+      return new InternalServerError('Internal server error');
     }
-
-    // try {
-    //   await lastValueFrom(
-    //     this.neo4jClient.emit<string, string>(
-    //       Pattern.userCreated,
-    //       JSON.stringify({
-    //         id: result.id,
-    //         picks: picks,
-    //         longitude,
-    //         latitude,
-    //         devices: [device],
-    //       }),
-    //     ),
-    //   );
-    // } catch (error) {
-    //   console.log('Neo4J error', error);
-    // }
   }
 
   /**
@@ -124,7 +134,7 @@ export class UserService {
       return User.ToEntityFromPrisma(result);
     } catch (error) {
       this.logger.error(`Error updating user: ${error.message}`);
-      return new InternalServerError();
+      return new InternalServerError(`Error updating user: ${error.message}`);
     }
   }
 
@@ -139,7 +149,7 @@ export class UserService {
       return User.ToEntityFromPrisma(result);
     } catch (error) {
       this.logger.log(`Error getting user by ID: ${id}. ${error}`);
-      return new NotFoundError();
+      return new NotFoundError(`Error getting user by ID ${id}`);
     }
   }
 

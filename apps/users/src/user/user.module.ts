@@ -47,7 +47,7 @@ import { UserService } from './user.service';
     }),
     AuthModule,
     // RmqModule,
-    // RmqModule.register({ name: [NEO4J_SERVICE] }),
+    RmqModule.register({ name: [NEO4J_SERVICE] }),
   ],
   // controllers: [UserController],
   providers: [UserResolver, PayloadResolver, UserService, UserRepository],

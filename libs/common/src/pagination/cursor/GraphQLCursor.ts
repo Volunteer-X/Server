@@ -1,6 +1,6 @@
 import { GraphQLError, GraphQLScalarType, Kind } from 'graphql';
 
-import { Cursor } from './cursor';
+import { Cursor } from './Cursor';
 
 /**
  * Represents a GraphQL scalar type for cursor-based pagination.

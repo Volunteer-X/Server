@@ -5,6 +5,7 @@ import { AuthEntity } from '@app/auth/entity/auth.entity';
 import { AuthService } from '@app/auth/service/auth.service';
 import { ConfigService } from '@nestjs/config';
 import { JwtPayload } from './jwt-payload.interface';
+import { NotFoundError } from '@app/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { passportJwtSecret } from 'jwks-rsa';
 
@@ -37,7 +38,7 @@ export class JwtStrategy extends PassportStrategy(BaseStrategy) {
     });
   }
 
-  async validate(payload: JwtPayload): Promise<AuthEntity> {
+  async validate(payload: JwtPayload): Promise<AuthEntity | NotFoundError> {
     // get user info from payload
 
     const minimumScope = ['openid', 'profile', 'email'];

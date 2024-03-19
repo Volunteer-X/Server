@@ -1,6 +1,7 @@
 import { InjectRepository, PrismaService } from '@app/prisma';
 import { Injectable, Logger } from '@nestjs/common';
 import { AuthEntity } from '@app/auth/entity/auth.entity';
+import { NotFoundError } from '@app/common';
 
 @Injectable()
 export class AuthService {
@@ -13,16 +14,18 @@ export class AuthService {
   /*
   ? Get user details by email
   */
-  async findUser(email: string): Promise<AuthEntity | undefined> {
+  async findUser(email: string): Promise<AuthEntity | NotFoundError> {
     try {
-      const result = await this.userRepo.findUnique({
+      const result = await this.userRepo.findUniqueOrThrow({
         where: { email: email },
       });
 
       return AuthEntity.ToEntityFromPrisma(result);
     } catch (error) {
-      this.logger.error(`Error finding user by email: ${email}`, error);
-      return undefined;
+      this.logger.error(`Error finding user by ${email}\n ${error}`);
+      return new NotFoundError(
+        'No user under this authentication, user needs to login to volunteerx',
+      );
     }
 
     // return {

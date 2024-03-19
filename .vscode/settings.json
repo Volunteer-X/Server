@@ -1,11 +1,10 @@
 {
-    "typescript.tsdk": "node_modules\\typescript\\lib"
-    // "files.eol": "auto",
-    // "typescript.tsdk": "node_modules\\typescript\\lib",
-    // "testing.openTesting": "neverOpen",
-    // "jest.outputConfig": {
-    //     "revealOn": "run",
-    //     "revealWithFocus": "none",
-    //     "clearOnRun": "none"
-    // }
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "files.eol": "\n",
+    "testing.openTesting": "neverOpen",
+    "jest.outputConfig": {
+        "revealOn": "run",
+        "revealWithFocus": "none",
+        "clearOnRun": "none"
+    }
 }
