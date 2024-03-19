@@ -1,4 +1,9 @@
-import { ExecutionContext, Injectable, Logger } from '@nestjs/common';
+import {
+  ExecutionContext,
+  Injectable,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
 
 import { AuthEntity } from '../entity/auth.entity';
 import { AuthGuard } from '@nestjs/passport';
@@ -27,7 +32,11 @@ export class GqlAuthGuard extends AuthGuard() {
       this.logger.error('Unauthorized');
       throw (
         err ||
-        new UnauthorizedError('User is not authorized to access this data')
+        new UnauthorizedException({
+          statusCode: 401,
+          message: 'User is not authorized to access this data',
+        })
+        // new UnauthorizedError('User is not authorized to access this data')
       );
     }
 
@@ -37,7 +46,6 @@ export class GqlAuthGuard extends AuthGuard() {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    console.log('getHandler', context);
     const result = super.canActivate(context) as boolean;
     return result;
   }

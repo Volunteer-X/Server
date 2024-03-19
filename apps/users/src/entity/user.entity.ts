@@ -152,28 +152,51 @@ export class User {
    * @returns The user entity.
    */
   static ToEntityFromPrisma(result: any): User {
-    return {
-      createdAt: new ObjectId(result.id).getTimestamp(),
-      id: result.id,
-      email: result.email,
-      username: result.username,
-      name: {
+    return new User(
+      {
         firstName: result.name.firstName,
         middleName: result.name.middleName,
         lastName: result.name.lastName,
       },
-      picture: result.picture,
-      picks: result.picks,
-      devices: result.devices,
-      pings:
-        result.pings &&
+      result.email,
+      result.username,
+      result.picks,
+      result.devices,
+      result.picture,
+      result.pings &&
         result.pings.map(
           (ping: Ping): Ping => ({
             __typename: ping.__typename,
             id: ping.id,
           }),
         ),
-      activityCount: result.pings && result.pings.length,
-    };
+      result.id,
+      new ObjectId(result.id).getTimestamp(),
+      result.pings && result.pings.length,
+    );
+
+    // return {
+    //   createdAt: new ObjectId(result.id).getTimestamp(),
+    //   id: result.id,
+    //   email: result.email,
+    //   username: result.username,
+    //   name: {
+    //     firstName: result.name.firstName,
+    //     middleName: result.name.middleName,
+    //     lastName: result.name.lastName,
+    //   },
+    //   picture: result.picture,
+    //   picks: result.picks,
+    //   devices: result.devices,
+    //   pings:
+    //     result.pings &&
+    //     result.pings.map(
+    //       (ping: Ping): Ping => ({
+    //         __typename: ping.__typename,
+    //         id: ping.id,
+    //       }),
+    //     ),
+    //   activityCount: result.pings && result.pings.length,
+    // };
   }
 }

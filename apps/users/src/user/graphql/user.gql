@@ -75,12 +75,7 @@ input UpdateUserInput {
 }
 
 "The payload for the user."
-union UserPayload =
-  | User
-  | NotFoundError
-  | UnknownError
-  | UnauthorizedError
-  | InternalServerError
+union UserPayload = User | NotFoundError | UnknownError | InternalServerError
 
 # The queries for the user.
 extend type Query {
@@ -94,7 +89,7 @@ extend type Query {
 
 # The mutations for the user.
 extend type Mutation {
-  "Create a new user. Requires authentication."
+  "Create a new user."
   createUser(payload: CreateUserInput!): UserPayload!
   "Update an existing user. Requires authentication."
   updateUser(payload: UpdateUserInput!): UserPayload!

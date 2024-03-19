@@ -1,8 +1,4 @@
-import {
-  InternalServerError,
-  NotFoundError,
-  UnauthorizedError,
-} from '@app/common';
+import { InternalServerError, NotFoundError } from '@app/common';
 import { ResolveField, Resolver } from '@nestjs/graphql';
 
 import { Logger } from '@nestjs/common';
@@ -13,13 +9,9 @@ export class PayloadResolver {
   private logger = new Logger(PayloadResolver.name);
 
   @ResolveField()
-  __resolveType(obj, context, info) {
-    // if (obj instanceof NotFoundError) {
-    //   return 'NotFoundError';
-    // }
+  __resolveType(obj: any) {
+    this.logger.log(typeof obj);
     switch (obj.constructor) {
-      case UnauthorizedError:
-        return 'UnauthorizedError';
       case NotFoundError:
         return 'NotFoundError';
       case InternalServerError:

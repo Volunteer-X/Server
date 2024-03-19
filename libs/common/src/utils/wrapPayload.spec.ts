@@ -1,6 +1,8 @@
-import { NotFoundError, UnauthorizedError, UnknownError } from './error';
+import { NotFoundError, UnknownError } from './error';
 
+import { User } from '@user/entity/user.entity';
 import { WrappedPayload } from './wrapPayload';
+import { userStub } from '@user/user/__mocks__/stubs/user.stub';
 
 describe('wrapPayload', () => {
   it("should return the same object when it's not an error", () => {
@@ -13,12 +15,6 @@ describe('wrapPayload', () => {
     const result = WrappedPayload.wrap(null);
     expect(result).toEqual({ message: 'Unknown error' });
     expect(result).toBeInstanceOf(UnknownError);
-  });
-
-  it('should wrap an UnauthorizedError object correctly', () => {
-    const error = new UnauthorizedError('Unauthorized');
-    const result = WrappedPayload.wrap(error);
-    expect(result).toEqual(error);
   });
 
   it('should return an UnknownError when input is undefined', () => {
@@ -50,5 +46,12 @@ describe('wrapPayload', () => {
     const result = WrappedPayload.wrap(input);
     const expected = [{ data: 'test' }];
     expect(result).toEqual(expected);
+  });
+
+  it('should return correct type when there is no error', () => {
+    const payload = userStub();
+    const result = WrappedPayload.wrap<User>(payload);
+    expect(result).toEqual(payload);
+    expect(result).toBeInstanceOf(User);
   });
 });

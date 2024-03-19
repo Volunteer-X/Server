@@ -8,7 +8,7 @@ import {
   RmqContext,
 } from '@nestjs/microservices';
 import { Pattern } from '@app/common';
-import { PingNode, RMQService, UserNode } from '@app/common';
+import { PingNode, RMQService } from '@app/common';
 import { Neo4jErrorFilter } from '@app/neo4j';
 import { CreateUserPayload } from '../dto/CreateUserPayload.dto';
 

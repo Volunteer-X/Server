@@ -1,10 +1,4 @@
-import {
-  BROADCAST_SERVICE,
-  Failure,
-  PingNode,
-  Success,
-  UserNode,
-} from '@app/common';
+import { BROADCAST_SERVICE, Failure, PingNode, Success } from '@app/common';
 import { Neo4jCommonService } from '@app/neo4j';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
@@ -42,7 +36,7 @@ export class Neo4jService {
       return new Success(result.records[0].get('u').properties);
     } catch (err) {
       this.logger.error(err);
-      return new Failure<Error>(err);
+      return new Failure<Error>(err.message, 'User not created');
     }
   }
 

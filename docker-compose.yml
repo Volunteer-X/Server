@@ -2,39 +2,32 @@ version: '3.8'
 
 name: volunteerx
 services:
-  # gateway:
-  #   image: gateway
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/gateway/Dockerfile
-  #     target: development
-  #   command: npm run start:dev
-  #   depends_on:
-  #     users:
-  #       condition: service_healthy
-  # ping:
-  #   condition: service_healthy
-  # rabbitmq:
-  #   condition: service_healthy
-  # - rabbitmq
-  # - neo4j
-  # - users
-  # - ping
-  # - activity
-  # env_file:
-  #   - ./apps/gateway/.env
-  # volumes:
-  #   - .:/usr/src/volunteerx
-  #   - /usr/src/volunteerx/node_modules
-  # ports:
-  #   - '3500:3500'
-  # expose:
-  #   - 3500
-  # networks:
-  #   - volunteerx
-  # environment:
-  #   - WATCHPACK_POLLING=true
-  # restart: on-failure
+  gateway:
+    image: gateway
+    build:
+      context: .
+      dockerfile: ./apps/gateway/Dockerfile
+      target: development
+    command: npm run start:dev
+    depends_on:
+      ping:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    env_file:
+      - ./apps/gateway/.env
+    volumes:
+      - .:/usr/src/volunteerx
+      - /usr/src/volunteerx/node_modules
+    ports:
+      - '3500:3500'
+    expose:
+      - 3500
+    networks:
+      - volunteerx
+    environment:
+      - WATCHPACK_POLLING=true
+    restart: on-failure
 
   users:
     image: users
@@ -69,38 +62,38 @@ services:
       retries: 10
     restart: always
 
-  # ping:
-  #   image: ping
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/ping/Dockerfile
-  #     target: development
-  #   command: npm run start:dev ping
-  #   env_file:
-  #     - ./apps/ping/.env
-  #   volumes:
-  #     - .:/usr/src/volunteerx
-  #     - /usr/src/volunteerx/node_modules
-  #   ports:
-  #     - '3520:3520'
-  #   expose:
-  #     - 3520
-  #   depends_on:
-  #     users:
-  #       condition: service_healthy
-  #   networks:
-  #     - volunteerx
-  #     - rabbitmq
-  #   environment:
-  #     - WATCHPACK_POLLING=true
-  #   healthcheck:
-  #     test:
-  #       ['CMD-SHELL', 'wget --spider -q http://localhost:3520/health || exit 1']
-  #     interval: 10s
-  #     timeout: 30s
-  #     start_period: 30s
-  #     retries: 10
-  #   restart: always
+  ping:
+    image: ping
+    build:
+      context: .
+      dockerfile: ./apps/ping/Dockerfile
+      target: development
+    command: npm run start:dev ping
+    env_file:
+      - ./apps/ping/.env
+    volumes:
+      - .:/usr/src/volunteerx
+      - /usr/src/volunteerx/node_modules
+    ports:
+      - '3520:3520'
+    expose:
+      - 3520
+    depends_on:
+      users:
+        condition: service_healthy
+    networks:
+      - volunteerx
+      - rabbitmq
+    environment:
+      - WATCHPACK_POLLING=true
+    healthcheck:
+      test:
+        ['CMD-SHELL', 'wget --spider -q http://localhost:3520/health || exit 1']
+      interval: 10s
+      timeout: 30s
+      start_period: 30s
+      retries: 10
+    restart: always
 
   # broadcast:
   #   image: broadcast-service

@@ -1,3 +1,4 @@
+
 /*
  * -------------------------------------------------------
  * THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
@@ -39,6 +40,14 @@ export class UpdateUserInput {
 
 export interface BaseError {
     message: string;
+}
+
+export interface Edge {
+    cursor: Cursor;
+}
+
+export interface Connection {
+    pageInfo: PageInfo;
 }
 
 export class Name {
@@ -92,6 +101,12 @@ export class UnknownError implements BaseError {
     message: string;
 }
 
+export class PageInfo {
+    hasNextPage: boolean;
+    endCursor?: Nullable<Cursor>;
+    totalCount?: Nullable<number>;
+}
+
 export class Ping {
     id: ObjectID;
     user?: Nullable<User>;
@@ -110,5 +125,6 @@ export type EmailAddress = typeof GraphQLEmailAddress;
 export type ObjectID = typeof GraphQLObjectID;
 export type Longitude = typeof GraphQLLongitude;
 export type Latitude = typeof GraphQLLatitude;
-export type UserPayload = User | NotFoundError | UnauthorizedError | UnknownError | InternalServerError;
+export type Cursor = unknown;
+export type UserPayload = User | NotFoundError | UnknownError | InternalServerError;
 type Nullable<T> = T | null;

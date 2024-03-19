@@ -38,11 +38,21 @@ import { UserService } from './user.service';
         Longitude: LongitudeResolver,
       },
       formatError: (error: GraphQLError) => {
-        console.log(error);
-        const graphQLFormattedError: GraphQLFormattedError = {
-          message: error?.message,
+        console.error(error);
+        const originalError = error.extensions?.originalError as
+          | { message: string; code: string }
+          | undefined;
+
+        if (!originalError) {
+          return {
+            message: error.message,
+            code: error.extensions?.code,
+          };
+        }
+        return {
+          message: originalError.message,
+          code: error.extensions?.code,
         };
-        return graphQLFormattedError;
       },
     }),
     AuthModule,

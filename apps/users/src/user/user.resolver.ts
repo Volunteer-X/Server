@@ -9,7 +9,7 @@ import { UserService } from './user.service';
 import { CreateUserInput, UpdateUserInput } from './graphql/user.schema';
 import { GraphQLObjectID } from 'graphql-scalars';
 import { Logger, UseGuards } from '@nestjs/common';
-import { CurrentUser, GqlAuthGuard, GqlAuthGuardWithoutThrow } from '@app/auth';
+import { CurrentUser, GqlAuthGuard } from '@app/auth';
 import { User } from '@user/entity/user.entity';
 import { Payload, WrappedPayload } from '@app/common';
 
@@ -41,7 +41,7 @@ export class UserResolver {
 
     this.logger.log(result);
 
-    return WrappedPayload.wrap(result);
+    return WrappedPayload.wrap<User>(result);
   }
 
   @Mutation('createUser')
@@ -49,7 +49,9 @@ export class UserResolver {
     const result = await this.usersService.createUser(
       User.ToEntityFromInput(payload),
     );
-    return WrappedPayload.wrap(result);
+
+    const wrapped = WrappedPayload.wrap<User>(result);
+    return wrapped;
   }
 
   @UseGuards(GqlAuthGuard)

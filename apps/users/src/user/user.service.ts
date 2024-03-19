@@ -2,11 +2,13 @@ import { GraphQLObjectID } from 'graphql-scalars';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Membership } from '@prisma/client';
 import {
+  Failure,
   ForbiddenError,
   InternalServerError,
   NEO4J_SERVICE,
   NotFoundError,
   Pattern,
+  Success,
 } from '@app/common';
 import {
   PartialWithRequired,
@@ -27,8 +29,14 @@ export class UserService {
     private readonly userRepository: UserRepository,
     @Inject(NEO4J_SERVICE) private readonly neo4jClient: ClientProxy,
   ) {}
-  /*
-   ? Create new user
+
+  /**
+   * Creates a new user.
+   *
+   * @param input - The input data for creating the user.
+   * @returns A Promise that resolves to the created user entity.
+   * @throws {ForbiddenError} If there is a Prisma error.
+   * @throws {InternalServerError} If there is an internal server error.
    */
   async createUser(input: UserCreateInput) {
     const {
@@ -57,26 +65,21 @@ export class UserService {
 
         const { id, devices } = user;
 
-        try {
-          this.neo4jClient
-            .send<string, Neo4jCreateUserDto>(Pattern.userCreated, {
-              id,
-              picks,
-              longitude,
-              latitude,
-              devices,
-            })
-            .subscribe({
-              next: (value) => this.logger.log(value),
-              error: (err) => {
-                throw new Error(err);
-              },
-              complete: () => {
-                this.logger.log('completed');
-              },
-            });
-        } catch (e) {
-          throw new Error('Neo4J failure');
+        const neo4jPayload = await lastValueFrom(
+          this.neo4jClient.send<
+            { data: object | string; success: boolean },
+            Neo4jCreateUserDto
+          >(Pattern.userCreated, {
+            id,
+            picks,
+            longitude,
+            latitude,
+            devices,
+          }),
+        );
+
+        if (!neo4jPayload.success) {
+          throw new Error(neo4jPayload.data as string);
         }
 
         return user;

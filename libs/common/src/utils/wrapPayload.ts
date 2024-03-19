@@ -3,11 +3,11 @@ import {
   InternalServerError,
   InvalidInputError,
   NotFoundError,
-  UnauthorizedError,
   UnknownError,
 } from './error';
 
 import { Payload } from './entity';
+import { User } from '@user/entity/user.entity';
 
 /**
  * Represents a utility class for wrapping payloads.
@@ -26,14 +26,13 @@ export class WrappedPayload {
     if (!T || T === null) return new UnknownError('Unknown error');
 
     switch (T.constructor) {
-      case UnauthorizedError:
-        return new UnauthorizedError(T.message);
       case NotFoundError:
         return new NotFoundError(T.message);
       case InternalServerError:
         return new InternalServerError(T.message);
       case InvalidInputError:
         return new InvalidInputError(T.message);
+      case User:
       case Object:
         return T;
       case Array:

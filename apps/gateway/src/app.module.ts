@@ -35,13 +35,13 @@ import { portConfig } from '@app/common';
           subgraphs: [
             {
               name: 'users',
-              url: 'http://localhost:3510/user',
-              // url: 'http://users:3510/graphql',
+              // url: 'http://localhost:3510/user',
+              url: 'http://users:3510/user',
             },
             {
               name: 'ping',
-              url: 'http://localhost:3520/ping',
-              // url: 'http://ping:3520/graphql',
+              // url: 'http://localhost:3520/ping',
+              url: 'http://ping:3520/ping',
             },
           ],
         }),
