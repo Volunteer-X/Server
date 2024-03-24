@@ -9,11 +9,11 @@ import {
   LongitudeResolver,
   ObjectIDResolver,
 } from 'graphql-scalars';
-import { GraphQLError, GraphQLFormattedError } from 'graphql';
 import { NEO4J_SERVICE, RmqModule } from '@app/common';
 
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { AuthModule } from '@app/auth';
+import { GraphQLError } from 'graphql';
 import { GraphQLModule } from '@nestjs/graphql';
 import { Module } from '@nestjs/common';
 import { PayloadResolver } from './payload.resolver';

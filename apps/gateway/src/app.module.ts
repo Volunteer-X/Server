@@ -34,7 +34,7 @@ import { portConfig } from '@app/common';
           subgraphHealthCheck: true,
           subgraphs: [
             {
-              name: 'users',
+              name: 'user',
               // url: 'http://localhost:3510/user',
               url: 'http://users:3510/user',
             },
